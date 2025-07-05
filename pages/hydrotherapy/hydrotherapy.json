@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "水疗功能",
+  "navigationStyle": "custom",
+  "renderer": "webview",
+  "usingComponents": {
+    "navigation-bar": "/components/navigation-bar/navigation-bar"
+  }
+} 

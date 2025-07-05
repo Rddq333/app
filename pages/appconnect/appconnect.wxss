@@ -1,0 +1,89 @@
+.appconnect-container {
+  padding: 40rpx;
+  font-size: 32rpx;
+}
+.label {
+  margin-top: 30rpx;
+  font-size: 32rpx;
+  color: #4caf50;
+}
+.picker {
+  margin: 10rpx 0 20rpx 0;
+  padding: 16rpx 24rpx;
+  background: #f0f0f0;
+  border-radius: 8rpx;
+  font-size: 32rpx;
+}
+.device-item {
+  margin: 20rpx 0;
+  padding: 20rpx;
+  background: #f9f9f9;
+  border-radius: 8rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+button {
+  margin: 10rpx 0 10rpx 20rpx;
+}
+.btn-group {
+  margin-top: 40rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 32rpx;
+}
+.custom-navbar {
+  display: flex;
+  align-items: center;
+  height: 88rpx;
+  padding: 0 24rpx;
+  background: #ffffff;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.04);
+  border-radius: 0 0 24rpx 24rpx;
+  margin-bottom: 32rpx;
+}
+.navbar-title {
+  flex: 1;
+  text-align: center;
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #222;
+}
+.back-btn {
+  margin-top: 0;
+  margin-bottom: 0;
+  width: 120rpx;
+}
+.page-content {
+  padding: 32rpx;
+}
+.card {
+  background: #fff;
+  border-radius: 24rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0,0,0,0.08);
+  padding: 32rpx;
+  margin-bottom: 32rpx;
+}
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  margin: 32rpx 0 16rpx 0;
+}
+.bluetooth-section {
+  margin-bottom: 40rpx;
+}
+.searching-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60rpx 0;
+  background: #f8f9fa;
+  border-radius: 16rpx;
+  margin: 20rpx 0;
+}
+.connected-device-section {
+  background: #e8f5e8;
+  border-radius: 16rpx;
+  padding: 20rpx;
+  margin: 20rpx 0;
+} 

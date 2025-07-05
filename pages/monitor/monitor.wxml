@@ -1,0 +1,75 @@
+<navigation-bar title="实时监测" back="true" homeButton="true"></navigation-bar>
+<view class="page-content">
+  <!-- 当前理疗模式状态 -->
+  <view wx:if="{{currentTherapyMode}}" class="therapy-mode-card">
+    <view class="section-title">当前理疗模式</view>
+    <view class="mode-info">
+      <view class="mode-header">
+        <van-icon name="{{currentTherapyMode.icon}}" size="40px" color="{{currentTherapyMode.color}}" />
+        <view class="mode-details">
+          <view class="mode-name">{{currentTherapyMode.name}}</view>
+          <view class="mode-desc">{{currentTherapyMode.description}}</view>
+        </view>
+      </view>
+      <view class="mode-stats">
+        <view class="stat-item">
+          <text class="stat-label">运行时长</text>
+          <text class="stat-value">{{runningTime}}</text>
+        </view>
+        <view class="stat-item">
+          <text class="stat-label">剩余时间</text>
+          <text class="stat-value">{{remainingTime}}</text>
+        </view>
+      </view>
+      <view class="mode-features">
+        <text class="features-title">包含功能：</text>
+        <view class="feature-tags">
+          <van-tag wx:for="{{currentTherapyMode.features}}" wx:key="*this" type="primary" size="small">{{item}}</van-tag>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="section-title">水质监测</view>
+    <van-cell-group>
+      <van-cell title="pH值" value="{{waterQuality.ph}}" />
+      <van-cell title="浊度" value="{{waterQuality.turbidity}}" />
+      <van-cell title="余氯" value="{{waterQuality.chlorine}}" />
+    </van-cell-group>
+  </view>
+  <view class="card">
+    <view class="section-title">健康检查</view>
+    <van-cell-group>
+      <van-cell title="心率" value="{{health.heartRate}} 次/分" />
+      <van-cell title="血压" value="{{health.bloodPressure}}" />
+      <van-cell title="体温" value="{{health.bodyTemp}} ℃" />
+    </van-cell-group>
+  </view>
+  <view class="card">
+    <view class="section-title">环境监测</view>
+    <van-cell-group>
+      <van-cell title="温度" value="{{environment.temp}} ℃" />
+      <van-cell title="湿度" value="{{environment.humidity}} %" />
+      <van-cell title="CO₂" value="{{environment.co2}} ppm" />
+    </van-cell-group>
+  </view>
+  <view class="card">
+    <view class="section-title">安全检测</view>
+    <van-cell-group>
+      <van-cell title="烟雾">
+        <van-tag type="{{safety.smoke ? 'danger' : 'success'}}">{{safety.smoke ? '异常' : '正常'}}</van-tag>
+      </van-cell>
+      <van-cell title="漏水">
+        <van-tag type="{{safety.leak ? 'danger' : 'success'}}">{{safety.leak ? '异常' : '正常'}}</van-tag>
+      </van-cell>
+      <van-cell title="门状态">
+        <van-tag type="{{safety.door === 'closed' ? 'success' : 'warning'}}">{{safety.door === 'closed' ? '关闭' : '打开'}}</van-tag>
+      </van-cell>
+    </van-cell-group>
+  </view>
+  <view class="card">
+    <view class="section-title">数据可视化</view>
+    <view class="chart-placeholder">[图表区域]</view>
+  </view>
+</view> 

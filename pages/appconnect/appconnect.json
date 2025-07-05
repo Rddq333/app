@@ -1,0 +1,11 @@
+{
+  "navigationBarTitleText": "App连接",
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "navigation-bar": "/components/navigation-bar/navigation-bar",
+    "van-cell": "@vant/weapp/cell/index",
+    "van-cell-group": "@vant/weapp/cell-group/index",
+    "van-button": "@vant/weapp/button/index",
+    "van-switch": "@vant/weapp/switch/index"
+  }
+} 

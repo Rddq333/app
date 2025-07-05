@@ -1,0 +1,28 @@
+<navigation-bar title="艾灸功能" back="true" homeButton="true"></navigation-bar>
+<scroll-view class="page-content" scroll-y>
+  <view class="card">
+    <view class="section-title">艾灸设置</view>
+    <van-cell-group>
+      <van-cell title="当前状态" value="{{status}}" />
+      <van-cell title="温度调节">
+        <van-slider min="40" max="60" value="{{temp}}" show-value bind:change="onTempChange" />
+      </van-cell>
+      <van-cell title="时间设置">
+        <van-picker columns="{{timeOptions}}" value="{{timeOptions.indexOf(time)}}" bind:change="onTimeChange" />
+      </van-cell>
+      <van-cell title="部位选择">
+        <van-picker columns="{{partOptions}}" value="{{partOptions.indexOf(part)}}" bind:change="onPartChange" />
+      </van-cell>
+      <van-cell title="强度调节">
+        <van-picker columns="{{intensityOptions}}" value="{{intensityOptions.indexOf(intensity)}}" bind:change="onIntensityChange" />
+      </van-cell>
+      <van-cell title="艾灸模式">
+        <van-picker columns="{{modeOptions}}" value="{{modeOptions.indexOf(mode)}}" bind:change="onModeChange" />
+      </van-cell>
+    </van-cell-group>
+    <view class="btn-group">
+      <van-button type="primary" block bind:tap="startMoxibustion">启动艾灸</van-button>
+      <van-button type="danger" block bind:tap="stopMoxibustion">停止艾灸</van-button>
+    </view>
+  </view>
+</scroll-view> 

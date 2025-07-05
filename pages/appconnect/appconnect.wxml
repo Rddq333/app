@@ -1,0 +1,66 @@
+<navigation-bar title="App连接" back="true" homeButton="true"></navigation-bar>
+<view class="page-content">
+  <!-- 蓝牙开关 -->
+  <view class="bluetooth-section">
+    <view class="section-title">蓝牙控制</view>
+    <van-button type="{{bluetoothEnabled ? 'success' : 'primary'}}" 
+                size="large" 
+                block 
+                bind:tap="toggleBluetooth">
+      {{bluetoothEnabled ? '蓝牙已开启' : '开启蓝牙'}}
+    </van-button>
+  </view>
+
+  <!-- 搜索状态 -->
+  <view wx:if="{{bluetoothEnabled && isSearching}}" class="searching-section">
+    <van-loading type="spinner" color="#1989fa" />
+    <text style="margin-left: 20rpx; color: #666;">正在搜索附近设备...</text>
+  </view>
+
+  <!-- 可连接设备 -->
+  <view class="section-title" wx:if="{{bluetoothEnabled && !isSearching}}">附近设备</view>
+  <van-cell-group wx:if="{{bluetoothEnabled && !isSearching}}">
+    <van-cell wx:for="{{availableDevices}}" wx:key="id" 
+              title="{{item.name}}" 
+              label="信号强度: {{item.signalStrength}}dBm"
+              bind:tap="connectDevice" 
+              data-device="{{item}}">
+      <van-button size="mini" 
+                  type="{{item.connected ? 'danger' : 'primary'}}" 
+                  bind:tap="connectDevice" 
+                  data-device="{{item}}">
+        {{item.connected ? '断开' : '连接'}}
+      </van-button>
+    </van-cell>
+  </van-cell-group>
+
+  <!-- 当前连接状态 -->
+  <view wx:if="{{currentConnectedDevice}}" class="connected-device-section">
+    <view class="section-title" style="margin-top:40rpx;">当前连接</view>
+    <van-cell title="{{currentConnectedDevice.name}}" 
+              label="连接时间: {{currentConnectedDevice.connectTime}}"
+              value="已连接" />
+  </view>
+
+  <!-- 运行控制 -->
+  <view class="section-title" wx:if="{{hasConnectedDevice}}" style="margin-top:40rpx;">运行控制</view>
+  <view wx:if="{{hasConnectedDevice}}" style="margin: 20rpx 0;">
+    <van-button type="{{deviceRunning ? 'danger' : 'success'}}" 
+                size="large" 
+                block 
+                bind:tap="toggleDeviceRunning"
+                style="margin-bottom: 20rpx;">
+      {{deviceRunning ? '停止设备' : '启动设备'}}
+    </van-button>
+    <van-cell title="设备运行状态" value="{{deviceRunning ? '运行中' : '已停止'}}" />
+  </view>
+
+  <!-- 历史连接设备 -->
+  <view class="section-title" style="margin-top:40rpx;">历史连接设备</view>
+  <van-cell-group>
+    <van-cell wx:for="{{historyDevices}}" wx:key="id" 
+              title="{{item.name}}" 
+              label="{{item.connectTime}}"
+              value="{{item.connected ? '已连接' : '未连接'}}" />
+  </van-cell-group>
+</view>

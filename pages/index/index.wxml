@@ -1,0 +1,97 @@
+<!--index.wxml-->
+<scroll-view class="scrollarea" scroll-y type="list">
+  <view class="container">
+    <view class="main-bg">
+      <!-- 设备状态卡片 -->
+      <view class="device-card shadow">
+        <view class="device-title">{{currentRunningDevice || deviceName}}</view>
+        <view class="device-en">{{deviceNameEn}}</view>
+        <view class="device-status">
+          <van-tag type="{{status === '运行' ? 'success' : 'default'}}">{{status}}</van-tag>
+          <text class="device-temp">{{temp}}</text>
+        </view>
+      </view>
+
+      <!-- 模式选择区域 -->
+      <view class="mode-selection">
+        <view class="section-title">理疗模式选择</view>
+        <view class="mode-grid">
+          <!-- 经典理疗模式 -->
+          <view class="mode-card shadow" bindtap="selectMode" data-mode="classic">
+            <view class="mode-icon">
+              <van-icon name="star" size="40px" color="#f59e0b" />
+            </view>
+            <view class="mode-title">经典理疗</view>
+            <view class="mode-desc">艾灸 + 药浴 + 音乐</view>
+            <view class="mode-duration">60分钟</view>
+          </view>
+
+          <!-- 深度放松模式 -->
+          <view class="mode-card shadow" bindtap="selectMode" data-mode="relax">
+            <view class="mode-icon">
+              <van-icon name="flower-o" size="40px" color="#8b5cf6" />
+            </view>
+            <view class="mode-title">深度放松</view>
+            <view class="mode-desc">超音波水疗 + 香氛 + 音乐</view>
+            <view class="mode-duration">45分钟</view>
+          </view>
+
+          <!-- 康复理疗模式 -->
+          <view class="mode-card shadow" bindtap="selectMode" data-mode="recovery">
+            <view class="mode-icon">
+              <van-icon name="like" size="40px" color="#10b981" />
+            </view>
+            <view class="mode-title">康复理疗</view>
+            <view class="mode-desc">红外理疗 + 艾灸 + 药浴</view>
+            <view class="mode-duration">90分钟</view>
+          </view>
+
+          <!-- 快速舒缓模式 -->
+          <view class="mode-card shadow" bindtap="selectMode" data-mode="quick">
+            <view class="mode-icon">
+              <van-icon name="clock" size="40px" color="#3b82f6" />
+            </view>
+            <view class="mode-title">快速舒缓</view>
+            <view class="mode-desc">超音波水疗 + 香氛</view>
+            <view class="mode-duration">30分钟</view>
+          </view>
+
+          <!-- 全身调理模式 -->
+          <view class="mode-card shadow" bindtap="selectMode" data-mode="fullbody">
+            <view class="mode-icon">
+              <van-icon name="user-circle-o" size="40px" color="#ef4444" />
+            </view>
+            <view class="mode-title">全身调理</view>
+            <view class="mode-desc">全功能组合</view>
+            <view class="mode-duration">120分钟</view>
+          </view>
+
+          <!-- 自定义模式 -->
+          <view class="mode-card shadow" bindtap="selectMode" data-mode="custom">
+            <view class="mode-icon">
+              <van-icon name="setting-o" size="40px" color="#6b7280" />
+            </view>
+            <view class="mode-title">自定义模式</view>
+            <view class="mode-desc">自由组合功能</view>
+            <view class="mode-duration">自定义</view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 功能快捷入口 -->
+      <view class="quick-actions">
+        <view class="section-title">快捷功能</view>
+        <view class="action-grid">
+          <view class="action-card shadow" bindtap="goToMonitor">
+            <van-icon name="eye-o" size="28px" color="#3b82f6" />
+            <text>实时监测</text>
+          </view>
+          <view class="action-card shadow" bindtap="goToAppConnect">
+            <van-icon name="link-o" size="28px" color="#10b981" />
+            <text>设备连接</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</scroll-view>
