@@ -1,4 +1,4 @@
-<navigation-bar title="水疗功能" back="true" homeButton="true"></navigation-bar>
+<navigation-bar title="水疗功能" back="true"></navigation-bar>
 <view class="page-content">
   <view wx:if="{{loading}}" class="loading-container">
     <view class="loading">加载中...</view>

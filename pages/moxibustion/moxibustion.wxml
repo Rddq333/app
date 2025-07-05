@@ -1,4 +1,4 @@
-<navigation-bar title="艾灸功能" back="true" homeButton="true"></navigation-bar>
+<navigation-bar title="艾灸功能" back="true"></navigation-bar>
 <scroll-view class="page-content" scroll-y>
   <view class="card">
     <view class="section-title">艾灸设置</view>

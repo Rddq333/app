@@ -243,7 +243,7 @@ Page({
   },
 
   goToMonitor() {
-    wx.navigateTo({ url: '/pages/monitor/monitor' });
+    wx.navigateTo({ url: '/pages/monitoring/monitoring' });
   },
   goToHydrotherapy() {
     wx.navigateTo({ url: '/pages/hydrotherapy/hydrotherapy' });

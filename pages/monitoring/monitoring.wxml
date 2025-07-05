@@ -1,0 +1,264 @@
+<navigation-bar title="实时监测" back="true"></navigation-bar>
+<view class="page-content">
+  <!-- 系统状态概览 -->
+  <view class="overview-card">
+    <view class="overview-header">
+      <van-icon name="chart-trending-o" size="40px" color="#1890ff" />
+      <view class="overview-info">
+        <view class="overview-title">智能监测系统</view>
+        <view class="overview-desc">实时监控，安全保障</view>
+      </view>
+      <van-tag type="{{systemStatus === 'normal' ? 'success' : 'danger'}}" size="large">
+        {{systemStatus === 'normal' ? '系统正常' : '异常警告'}}
+      </van-tag>
+    </view>
+    <view class="overview-stats">
+      <view class="stat-item">
+        <text class="stat-value">{{normalCount}}</text>
+        <text class="stat-label">正常</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-value warning">{{warningCount}}</text>
+        <text class="stat-label">警告</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-value danger">{{dangerCount}}</text>
+        <text class="stat-label">危险</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 水质监测子系统 -->
+  <view class="monitor-card">
+    <view class="card-header">
+      <van-icon name="water-o" size="24px" color="#1890ff" />
+      <text class="card-title">水质监测</text>
+      <van-tag type="{{waterQualityStatus === 'normal' ? 'success' : 'danger'}}" size="small">
+        {{waterQualityStatus === 'normal' ? '正常' : '异常'}}
+      </van-tag>
+    </view>
+    <view class="parameter-grid">
+      <view class="parameter-item {{waterParams.ph.status}}">
+        <view class="param-header">
+          <text class="param-name">PH值</text>
+          <text class="param-value">{{waterParams.ph.value}}</text>
+        </view>
+        <view class="param-range">范围: 0-14 | 精度: ±0.1</view>
+        <view class="param-threshold">阈值: 6.5-8.5</view>
+      </view>
+      <view class="parameter-item {{waterParams.turbidity.status}}">
+        <view class="param-header">
+          <text class="param-name">浊度(NTU)</text>
+          <text class="param-value">{{waterParams.turbidity.value}}</text>
+        </view>
+        <view class="param-range">范围: 0-100 | 精度: ±0.5</view>
+        <view class="param-threshold">阈值: &lt;5</view>
+      </view>
+      <view class="parameter-item {{waterParams.chlorine.status}}">
+        <view class="param-header">
+          <text class="param-name">余氯(mg/L)</text>
+          <text class="param-value">{{waterParams.chlorine.value}}</text>
+        </view>
+        <view class="param-range">范围: 0-5 | 精度: ±0.05</view>
+        <view class="param-threshold">阈值: 0.2-1.0</view>
+      </view>
+      <view class="parameter-item {{waterParams.temperature.status}}">
+        <view class="param-header">
+          <text class="param-name">水温(℃)</text>
+          <text class="param-value">{{waterParams.temperature.value}}</text>
+        </view>
+        <view class="param-range">范围: 20-50 | 精度: ±0.2</view>
+        <view class="param-threshold">阈值: 30-45</view>
+      </view>
+      <view class="parameter-item {{waterParams.tds.status}}">
+        <view class="param-header">
+          <text class="param-name">TDS(ppm)</text>
+          <text class="param-value">{{waterParams.tds.value}}</text>
+        </view>
+        <view class="param-range">范围: 0-1000 | 精度: ±10</view>
+        <view class="param-threshold">阈值: &lt;500</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 健康监测子系统 -->
+  <view class="monitor-card">
+    <view class="card-header">
+      <van-icon name="heart-o" size="24px" color="#52c41a" />
+      <text class="card-title">健康监测</text>
+      <van-tag type="{{healthStatus === 'normal' ? 'success' : 'danger'}}" size="small">
+        {{healthStatus === 'normal' ? '正常' : '异常'}}
+      </van-tag>
+    </view>
+    <view class="parameter-grid">
+      <view class="parameter-item {{healthParams.heartRate.status}}">
+        <view class="param-header">
+          <text class="param-name">心率(bpm)</text>
+          <text class="param-value">{{healthParams.heartRate.value}}</text>
+        </view>
+        <view class="param-range">范围: 40-180 | 精度: ±1</view>
+        <view class="param-threshold">阈值: 50-120</view>
+      </view>
+      <view class="parameter-item {{healthParams.bloodOxygen.status}}">
+        <view class="param-header">
+          <text class="param-name">血氧(%)</text>
+          <text class="param-value">{{healthParams.bloodOxygen.value}}</text>
+        </view>
+        <view class="param-range">范围: 70-100 | 精度: ±1</view>
+        <view class="param-threshold">阈值: &gt;90</view>
+      </view>
+      <view class="parameter-item {{healthParams.skinResistance.status}}">
+        <view class="param-header">
+          <text class="param-name">皮肤电阻(kΩ)</text>
+          <text class="param-value">{{healthParams.skinResistance.value}}</text>
+        </view>
+        <view class="param-range">范围: 100-5000 | 精度: ±50</view>
+        <view class="param-threshold">阈值: 200-3000</view>
+      </view>
+      <view class="parameter-item {{healthParams.bodyTemp.status}}">
+        <view class="param-header">
+          <text class="param-name">体表温度(℃)</text>
+          <text class="param-value">{{healthParams.bodyTemp.value}}</text>
+        </view>
+        <view class="param-range">范围: 30-42 | 精度: ±0.3</view>
+        <view class="param-threshold">阈值: 35-40</view>
+      </view>
+      <view class="parameter-item {{healthParams.bloodPressure.status}}">
+        <view class="param-header">
+          <text class="param-name">血压(mmHg)</text>
+          <text class="param-value">{{healthParams.bloodPressure.value}}</text>
+        </view>
+        <view class="param-range">范围: 60-200 | 精度: ±3</view>
+        <view class="param-threshold">阈值: 90/60-140/90</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 环境监测子系统 -->
+  <view class="monitor-card">
+    <view class="card-header">
+      <van-icon name="environment-o" size="24px" color="#722ed1" />
+      <text class="card-title">环境监测</text>
+      <van-tag type="{{environmentStatus === 'normal' ? 'success' : 'danger'}}" size="small">
+        {{environmentStatus === 'normal' ? '正常' : '异常'}}
+      </van-tag>
+    </view>
+    <view class="parameter-grid">
+      <view class="parameter-item {{environmentParams.roomTemp.status}}">
+        <view class="param-header">
+          <text class="param-name">室温(℃)</text>
+          <text class="param-value">{{environmentParams.roomTemp.value}}</text>
+        </view>
+        <view class="param-range">范围: 10-40 | 精度: ±0.5</view>
+        <view class="param-threshold">阈值: 18-32</view>
+      </view>
+      <view class="parameter-item {{environmentParams.humidity.status}}">
+        <view class="param-header">
+          <text class="param-name">湿度(%)</text>
+          <text class="param-value">{{environmentParams.humidity.value}}</text>
+        </view>
+        <view class="param-range">范围: 20-95 | 精度: ±2</view>
+        <view class="param-threshold">阈值: 30-80</view>
+      </view>
+      <view class="parameter-item {{environmentParams.pm25.status}}">
+        <view class="param-header">
+          <text class="param-name">PM2.5(μg/m³)</text>
+          <text class="param-value">{{environmentParams.pm25.value}}</text>
+        </view>
+        <view class="param-range">范围: 0-500 | 精度: ±5</view>
+        <view class="param-threshold">阈值: &lt;75</view>
+      </view>
+      <view class="parameter-item {{environmentParams.co2.status}}">
+        <view class="param-header">
+          <text class="param-name">CO₂(ppm)</text>
+          <text class="param-value">{{environmentParams.co2.value}}</text>
+        </view>
+        <view class="param-range">范围: 400-5000 | 精度: ±20</view>
+        <view class="param-threshold">阈值: &lt;1000</view>
+      </view>
+      <view class="parameter-item {{environmentParams.light.status}}">
+        <view class="param-header">
+          <text class="param-name">光照(lux)</text>
+          <text class="param-value">{{environmentParams.light.value}}</text>
+        </view>
+        <view class="param-range">范围: 0-10000 | 精度: ±50</view>
+        <view class="param-threshold">阈值: &lt;800</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 安全监测子系统 -->
+  <view class="monitor-card">
+    <view class="card-header">
+      <van-icon name="shield-o" size="24px" color="#fa8c16" />
+      <text class="card-title">安全监测</text>
+      <van-tag type="{{safetyStatus === 'normal' ? 'success' : 'danger'}}" size="small">
+        {{safetyStatus === 'normal' ? '安全' : '危险'}}
+      </van-tag>
+    </view>
+    <view class="parameter-grid">
+      <view class="parameter-item {{safetyParams.leakage.status}}">
+        <view class="param-header">
+          <text class="param-name">漏电电流(mA)</text>
+          <text class="param-value">{{safetyParams.leakage.value}}</text>
+        </view>
+        <view class="param-range">范围: 0-30 | 精度: ±0.1</view>
+        <view class="param-threshold">阈值: &lt;5</view>
+      </view>
+      <view class="parameter-item {{safetyParams.waterLevel.status}}">
+        <view class="param-header">
+          <text class="param-name">水位状态</text>
+          <text class="param-value">{{safetyParams.waterLevel.value}}</text>
+        </view>
+        <view class="param-range">状态: 低/正常/高</view>
+        <view class="param-threshold">响应: 低水位补水</view>
+      </view>
+      <view class="parameter-item {{safetyParams.doorLock.status}}">
+        <view class="param-header">
+          <text class="param-name">门锁状态</text>
+          <text class="param-value">{{safetyParams.doorLock.value}}</text>
+        </view>
+        <view class="param-range">状态: 开/关</view>
+        <view class="param-threshold">响应: 开启时禁用加热</view>
+      </view>
+      <view class="parameter-item {{safetyParams.emergency.status}}">
+        <view class="param-header">
+          <text class="param-name">紧急按钮</text>
+          <text class="param-value">{{safetyParams.emergency.value}}</text>
+        </view>
+        <view class="param-range">状态: 按下/释放</view>
+        <view class="param-threshold">响应: 立即全系统停止</view>
+      </view>
+      <view class="parameter-item {{safetyParams.tilt.status}}">
+        <view class="param-header">
+          <text class="param-name">设备倾斜角(°)</text>
+          <text class="param-value">{{safetyParams.tilt.value}}</text>
+        </view>
+        <view class="param-range">范围: 0-30 | 精度: ±1</view>
+        <view class="param-threshold">阈值: &lt;15</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 控制按钮 -->
+  <view class="control-buttons">
+    <van-button 
+      type="primary" 
+      size="large" 
+      block 
+      bind:tap="refreshMonitoring"
+      loading="{{refreshing}}"
+    >
+      刷新监测数据
+    </van-button>
+    <van-button 
+      type="warning" 
+      size="large" 
+      block 
+      bind:tap="exportReport"
+      style="margin-top: 16px;"
+    >
+      导出监测报告
+    </van-button>
+  </view>
+</view> 

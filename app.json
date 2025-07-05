@@ -2,6 +2,7 @@
   "pages": [
     "pages/index/index",
     "pages/monitor/monitor",
+    "pages/monitoring/monitoring",
     "pages/hydrotherapy/hydrotherapy",
     "pages/moxibustion/moxibustion",
     "pages/appconnect/appconnect",

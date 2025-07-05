@@ -1,4 +1,4 @@
-<navigation-bar title="App连接" back="true" homeButton="true"></navigation-bar>
+<navigation-bar title="App连接" back="true"></navigation-bar>
 <view class="page-content">
   <!-- 蓝牙开关 -->
   <view class="bluetooth-section">

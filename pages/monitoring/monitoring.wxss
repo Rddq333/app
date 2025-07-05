@@ -1,0 +1,300 @@
+.page-content {
+  padding: 16px;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+}
+
+/* 系统状态概览 */
+.overview-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
+  color: white;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.overview-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.overview-info {
+  flex: 1;
+  margin-left: 12px;
+}
+
+.overview-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.overview-desc {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.overview-stats {
+  display: flex;
+  justify-content: space-around;
+  text-align: center;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.stat-value.warning {
+  color: #faad14;
+}
+
+.stat-value.danger {
+  color: #ff4d4f;
+}
+
+.stat-label {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+/* 监测卡片 */
+.monitor-card {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.card-title {
+  flex: 1;
+  font-size: 16px;
+  font-weight: bold;
+  margin-left: 8px;
+  color: #333;
+}
+
+/* 参数网格 */
+.parameter-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.parameter-item {
+  background: #fafafa;
+  border-radius: 8px;
+  padding: 12px;
+  border-left: 4px solid #d9d9d9;
+  transition: all 0.3s ease;
+}
+
+.parameter-item.normal {
+  border-left-color: #52c41a;
+  background: #f6ffed;
+}
+
+.parameter-item.warning {
+  border-left-color: #faad14;
+  background: #fffbe6;
+}
+
+.parameter-item.danger {
+  border-left-color: #ff4d4f;
+  background: #fff2f0;
+}
+
+.param-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.param-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+
+.param-value {
+  font-size: 16px;
+  font-weight: bold;
+  color: #1890ff;
+}
+
+.param-range {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.param-threshold {
+  font-size: 12px;
+  color: #999;
+}
+
+/* 控制按钮 */
+.control-buttons {
+  margin-top: 24px;
+  padding: 0 16px;
+}
+
+/* 响应式设计 */
+@media (min-width: 768px) {
+  .parameter-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* 状态颜色 */
+.status-normal {
+  color: #52c41a;
+}
+
+.status-warning {
+  color: #faad14;
+}
+
+.status-danger {
+  color: #ff4d4f;
+}
+
+/* 动画效果 */
+.parameter-item {
+  animation: fadeInUp 0.3s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 刷新动画 */
+.refreshing {
+  animation: rotate 1s linear infinite;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 卡片悬停效果 */
+.monitor-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+}
+
+/* 参数项悬停效果 */
+.parameter-item:hover {
+  transform: scale(1.02);
+  transition: transform 0.2s ease;
+}
+
+/* 状态指示器 */
+.status-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 8px;
+}
+
+.status-indicator.normal {
+  background-color: #52c41a;
+}
+
+.status-indicator.warning {
+  background-color: #faad14;
+}
+
+.status-indicator.danger {
+  background-color: #ff4d4f;
+}
+
+/* 数据更新提示 */
+.data-update {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  z-index: 1000;
+  animation: slideInRight 0.3s ease-out;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* 加载状态 */
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+}
+
+/* 紧急状态样式 */
+.emergency-mode {
+  background: linear-gradient(135deg, #ff4d4f 0%, #ff7875 100%);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 77, 79, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(255, 77, 79, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 77, 79, 0);
+  }
+} 

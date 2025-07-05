@@ -1,4 +1,4 @@
-<navigation-bar title="实时监测" back="true" homeButton="true"></navigation-bar>
+<navigation-bar title="实时监测" back="true"></navigation-bar>
 <view class="page-content">
   <!-- 当前理疗模式状态 -->
   <view wx:if="{{currentTherapyMode}}" class="therapy-mode-card">

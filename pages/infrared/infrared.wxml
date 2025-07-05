@@ -1,4 +1,4 @@
-<navigation-bar title="红外理疗" back="true" homeButton="true"></navigation-bar>
+<navigation-bar title="红外理疗" back="true"></navigation-bar>
 <view class="page-content">
   <!-- 当前状态 -->
   <view class="status-card">
