@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "红外理疗",
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "navigation-bar": "/components/navigation-bar/navigation-bar"
+  }
+} 

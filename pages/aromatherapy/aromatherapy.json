@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "香氛疗愈",
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "navigation-bar": "/components/navigation-bar/navigation-bar"
+  }
+} 

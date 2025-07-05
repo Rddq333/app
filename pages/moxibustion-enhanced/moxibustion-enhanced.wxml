@@ -1,0 +1,118 @@
+<navigation-bar title="艾灸理疗" back="true" homeButton="true"></navigation-bar>
+<view class="page-content">
+  <!-- 当前状态 -->
+  <view class="status-card">
+    <view class="status-header">
+      <van-icon name="fire-o" size="40px" color="#ef4444" />
+      <view class="status-info">
+        <view class="status-title">艾灸理疗系统</view>
+        <view class="status-desc">传统艾灸，智能调节</view>
+      </view>
+      <van-tag type="{{isRunning ? 'success' : 'default'}}" size="large">
+        {{isRunning ? '运行中' : '已停止'}}
+      </van-tag>
+    </view>
+  </view>
+
+  <!-- 温度控制 -->
+  <view class="config-card">
+    <view class="section-title">温度控制</view>
+    <van-cell-group>
+      <van-cell title="当前温度" value="{{currentTemp}}°C" />
+      <van-cell title="艾灸模式" is-link bind:tap="selectMoxibustionMode">
+        <text>{{moxibustionMode}}</text>
+      </van-cell>
+      <van-cell title="目标温度">
+        <van-slider 
+          min="40" 
+          max="60" 
+          value="{{targetTemp}}" 
+          show-value 
+          bind:change="onTempChange"
+          active-color="#ef4444"
+        />
+      </van-cell>
+      <van-cell title="智能调节" value="{{smartAdjustment ? '开启' : '关闭'}}">
+        <van-switch checked="{{smartAdjustment}}" bind:change="onSmartAdjustmentChange" />
+      </van-cell>
+    </van-cell-group>
+  </view>
+
+  <!-- 烟雾处理 -->
+  <view class="config-card">
+    <view class="section-title">烟雾处理</view>
+    <van-cell-group>
+      <van-cell title="净化系统" value="三级净化" />
+      <van-cell title="烟雾浓度" value="{{smokeLevel}}%" />
+      <van-cell title="自动排风" value="{{autoVentilation ? '开启' : '关闭'}}">
+        <van-switch checked="{{autoVentilation}}" bind:change="onAutoVentilationChange" />
+      </van-cell>
+      <van-cell title="实时监测" value="{{smokeMonitoring ? '开启' : '关闭'}}">
+        <van-switch checked="{{smokeMonitoring}}" bind:change="onSmokeMonitoringChange" />
+      </van-cell>
+    </van-cell-group>
+  </view>
+
+  <!-- 穴位定位 -->
+  <view class="config-card">
+    <view class="section-title">穴位定位</view>
+    <van-cell-group>
+      <van-cell title="定位模式" is-link bind:tap="selectLocationMode">
+        <text>{{locationMode}}</text>
+      </van-cell>
+      <van-cell title="预设穴位" is-link bind:tap="selectPresetAcupoints">
+        <text>{{selectedAcupoints.length}}个穴位</text>
+      </van-cell>
+      <van-cell title="AR辅助定位" value="{{arAssistance ? '开启' : '关闭'}}">
+        <van-switch checked="{{arAssistance}}" bind:change="onArAssistanceChange" />
+      </van-cell>
+      <van-cell title="智能避让" value="{{smartAvoidance ? '开启' : '关闭'}}">
+        <van-switch checked="{{smartAvoidance}}" bind:change="onSmartAvoidanceChange" />
+      </van-cell>
+    </van-cell-group>
+  </view>
+
+  <!-- 时间控制 -->
+  <view class="config-card">
+    <view class="section-title">时间控制</view>
+    <van-cell-group>
+      <van-cell title="治疗模式" is-link bind:tap="selectTreatmentMode">
+        <text>{{treatmentMode}}</text>
+      </van-cell>
+      <van-cell title="单穴位时间" wx:if="{{showSinglePointTime}}">
+        <van-slider 
+          min="5" 
+          max="15" 
+          value="{{singlePointTime}}" 
+          show-value 
+          bind:change="onSinglePointTimeChange"
+          active-color="#ef4444"
+        />
+      </van-cell>
+      <van-cell title="全疗程时间" wx:if="{{showFullCourseTime}}">
+        <van-slider 
+          min="30" 
+          max="60" 
+          value="{{fullCourseTime}}" 
+          show-value 
+          bind:change="onFullCourseTimeChange"
+          active-color="#ef4444"
+        />
+      </van-cell>
+      <van-cell title="剩余时间" value="{{remainingTime}}" />
+    </van-cell-group>
+  </view>
+
+  <!-- 控制按钮 -->
+  <view class="control-buttons">
+    <van-button 
+      type="{{isRunning ? 'danger' : 'primary'}}" 
+      size="large" 
+      block 
+      bind:tap="toggleMoxibustion"
+      loading="{{loading}}"
+    >
+      {{isRunning ? '停止艾灸' : '启动艾灸'}}
+    </van-button>
+  </view>
+</view> 

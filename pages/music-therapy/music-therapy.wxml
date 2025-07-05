@@ -1,0 +1,104 @@
+<navigation-bar title="音乐疗愈" back="true" homeButton="true"></navigation-bar>
+<view class="page-content">
+  <!-- 当前状态 -->
+  <view class="status-card">
+    <view class="status-header">
+      <van-icon name="music-o" size="40px" color="#10b981" />
+      <view class="status-info">
+        <view class="status-title">音乐疗愈系统</view>
+        <view class="status-desc">3D环绕声，脑波同步</view>
+      </view>
+      <van-tag type="{{isRunning ? 'success' : 'default'}}" size="large">
+        {{isRunning ? '播放中' : '已停止'}}
+      </van-tag>
+    </view>
+  </view>
+
+  <!-- 音频库 -->
+  <view class="config-card">
+    <view class="section-title">音频库</view>
+    <van-cell-group>
+      <van-cell title="音频分类" is-link bind:tap="selectAudioCategory">
+        <text>{{selectedCategory}}</text>
+      </van-cell>
+      <van-cell title="当前曲目" is-link bind:tap="selectTrack">
+        <text>{{currentTrack.name}}</text>
+      </van-cell>
+      <van-cell title="曲目时长" value="{{currentTrack.duration}}" />
+      <van-cell title="播放模式" is-link bind:tap="selectPlayMode">
+        <text>{{playMode}}</text>
+      </van-cell>
+    </van-cell-group>
+  </view>
+
+  <!-- 声场处理 -->
+  <view class="config-card">
+    <view class="section-title">声场处理</view>
+    <van-cell-group>
+      <van-cell title="3D环绕声" value="{{surround3d ? '开启' : '关闭'}}">
+        <van-switch checked="{{surround3d}}" bind:change="onSurround3dChange" />
+      </van-cell>
+      <van-cell title="水声掩蔽" value="{{waterMasking ? '开启' : '关闭'}}">
+        <van-switch checked="{{waterMasking}}" bind:change="onWaterMaskingChange" />
+      </van-cell>
+      <van-cell title="动态音量平衡" value="{{dynamicBalance ? '开启' : '关闭'}}">
+        <van-switch checked="{{dynamicBalance}}" bind:change="onDynamicBalanceChange" />
+      </van-cell>
+      <van-cell title="音量调节">
+        <van-slider 
+          min="0" 
+          max="100" 
+          value="{{volume}}" 
+          show-value 
+          bind:change="onVolumeChange"
+          active-color="#10b981"
+        />
+      </van-cell>
+    </van-cell-group>
+  </view>
+
+  <!-- 脑波同步 -->
+  <view class="config-card">
+    <view class="section-title">脑波同步</view>
+    <van-cell-group>
+      <van-cell title="双耳节拍" value="{{binauralBeats ? '开启' : '关闭'}}">
+        <van-switch checked="{{binauralBeats}}" bind:change="onBinauralBeatsChange" />
+      </van-cell>
+      <van-cell title="频率选择" is-link bind:tap="selectFrequency">
+        <text>{{selectedFrequency}}Hz</text>
+      </van-cell>
+      <van-cell title="EEG反馈" value="{{eegFeedback ? '开启' : '关闭'}}">
+        <van-switch checked="{{eegFeedback}}" bind:change="onEegFeedbackChange" />
+      </van-cell>
+      <van-cell title="脑波状态" value="{{brainwaveStatus}}" />
+    </van-cell-group>
+  </view>
+
+  <!-- 播放控制 -->
+  <view class="config-card">
+    <view class="section-title">播放控制</view>
+    <van-cell-group>
+      <van-cell title="播放进度" value="{{playProgress}}%" />
+      <van-cell title="剩余时间" value="{{remainingTime}}" />
+      <van-cell title="自动停止" value="{{autoStop ? '开启' : '关闭'}}">
+        <van-switch checked="{{autoStop}}" bind:change="onAutoStopChange" />
+      </van-cell>
+      <van-cell wx:if="{{autoStop}}" title="停止时间" is-link bind:tap="selectStopTime">
+        <text>{{stopTime}}</text>
+      </van-cell>
+    </van-cell-group>
+  </view>
+
+  <!-- 控制按钮 -->
+  <view class="control-buttons">
+    <van-button 
+      type="{{isRunning ? 'danger' : 'primary'}}" 
+      size="large" 
+      block 
+      bind:tap="toggleMusicTherapy"
+      loading="{{loading}}"
+    >
+      {{isRunning ? '停止音乐' : '播放音乐'}}
+    </van-button>
+  </view>
+</view> 

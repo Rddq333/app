@@ -1,0 +1,98 @@
+<navigation-bar title="红外理疗" back="true" homeButton="true"></navigation-bar>
+<view class="page-content">
+  <!-- 当前状态 -->
+  <view class="status-card">
+    <view class="status-header">
+      <van-icon name="bulb-o" size="40px" color="#f59e0b" />
+      <view class="status-info">
+        <view class="status-title">红外理疗系统</view>
+        <view class="status-desc">深层加热，可达关节</view>
+      </view>
+      <van-tag type="{{isRunning ? 'success' : 'default'}}" size="large">
+        {{isRunning ? '运行中' : '已停止'}}
+      </van-tag>
+    </view>
+  </view>
+
+  <!-- 温度控制 -->
+  <view class="config-card">
+    <view class="section-title">温度控制</view>
+    <van-cell-group>
+      <van-cell title="当前温度" value="{{currentTemp}}°C" />
+      <van-cell title="目标温度">
+        <van-slider 
+          min="40" 
+          max="{{isProfessionalMode ? 70 : 65}}" 
+          value="{{targetTemp}}" 
+          show-value 
+          bind:change="onTempChange"
+          active-color="#f59e0b"
+        />
+      </van-cell>
+      <van-cell title="专业模式" is-link bind:tap="toggleProfessionalMode">
+        <van-switch checked="{{isProfessionalMode}}" bind:change="onProfessionalModeChange" />
+      </van-cell>
+      <van-cell title="精度控制" value="±0.5°C" />
+      <van-cell title="梯度升温" value="每5分钟升温不超过5°C" />
+    </van-cell-group>
+  </view>
+
+  <!-- 波长选择 -->
+  <view class="config-card">
+    <view class="section-title">波长选择</view>
+    <van-cell-group>
+      <van-cell 
+        wx:for="{{wavelengthOptions}}" 
+        wx:key="value"
+        title="{{item.label}}" 
+        label="{{item.description}}"
+        is-link 
+        bind:tap="selectWavelength" 
+        data-wavelength="{{item.value}}"
+      >
+        <van-icon wx:if="{{selectedWavelength === item.value}}" name="success" color="#07c160" />
+      </van-cell>
+    </van-cell-group>
+  </view>
+
+  <!-- 照射区域 -->
+  <view class="config-card">
+    <view class="section-title">照射区域</view>
+    <van-cell-group>
+      <van-cell title="照射模式" is-link bind:tap="selectIrradiationMode">
+        <text>{{irradiationMode}}</text>
+      </van-cell>
+      <van-cell wx:if="{{showFocusArea}}" title="重点区域" is-link bind:tap="selectFocusArea">
+        <text>{{focusArea}}</text>
+      </van-cell>
+    </van-cell-group>
+  </view>
+
+  <!-- 安全设置 -->
+  <view class="config-card">
+    <view class="section-title">安全保护</view>
+    <van-cell-group>
+      <van-cell title="温度异常断电" value="{{safetySettings.tempProtection ? '开启' : '关闭'}}">
+        <van-switch checked="{{safetySettings.tempProtection}}" bind:change="onTempProtectionChange" />
+      </van-cell>
+      <van-cell title="人体距离检测" value="{{safetySettings.distanceDetection ? '开启' : '关闭'}}">
+        <van-switch checked="{{safetySettings.distanceDetection}}" bind:change="onDistanceDetectionChange" />
+      </van-cell>
+      <van-cell title="使用时间限制" value="单次≤60分钟" />
+      <van-cell title="剩余时间" value="{{remainingTime}}" />
+    </van-cell-group>
+  </view>
+
+  <!-- 控制按钮 -->
+  <view class="control-buttons">
+    <van-button 
+      type="{{isRunning ? 'danger' : 'primary'}}" 
+      size="large" 
+      block 
+      bind:tap="toggleInfrared"
+      loading="{{loading}}"
+    >
+      {{isRunning ? '停止红外理疗' : '启动红外理疗'}}
+    </van-button>
+  </view>
+</view> 

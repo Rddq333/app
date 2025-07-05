@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "药浴理疗",
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "navigation-bar": "/components/navigation-bar/navigation-bar"
+  }
+} 

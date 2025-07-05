@@ -14,7 +14,8 @@ Page({
         duration: '60分钟',
         icon: 'star',
         color: '#f59e0b',
-        features: ['艾灸理疗', '药浴子系统', '音乐疗愈']
+        features: ['艾灸理疗', '药浴子系统', '音乐疗愈'],
+        page: 'moxibustion-enhanced'
       },
       relax: {
         name: '深度放松',
@@ -22,7 +23,8 @@ Page({
         duration: '45分钟',
         icon: 'flower-o',
         color: '#8b5cf6',
-        features: ['超音波水疗', '香氛疗愈', '音乐疗愈']
+        features: ['超音波水疗', '香氛疗愈', '音乐疗愈'],
+        page: 'hydrotherapy'
       },
       recovery: {
         name: '康复理疗',
@@ -30,7 +32,8 @@ Page({
         duration: '90分钟',
         icon: 'like',
         color: '#10b981',
-        features: ['红外理疗', '艾灸理疗', '药浴子系统']
+        features: ['红外理疗', '艾灸理疗', '药浴子系统'],
+        page: 'infrared'
       },
       quick: {
         name: '快速舒缓',
@@ -38,7 +41,8 @@ Page({
         duration: '30分钟',
         icon: 'clock',
         color: '#3b82f6',
-        features: ['超音波水疗', '香氛疗愈']
+        features: ['超音波水疗', '香氛疗愈'],
+        page: 'hydrotherapy'
       },
       fullbody: {
         name: '全身调理',
@@ -46,7 +50,8 @@ Page({
         duration: '120分钟',
         icon: 'user-circle-o',
         color: '#ef4444',
-        features: ['艾灸理疗', '药浴子系统', '超音波水疗', '红外理疗', '香氛疗愈', '音乐疗愈']
+        features: ['艾灸理疗', '药浴子系统', '超音波水疗', '红外理疗', '香氛疗愈', '音乐疗愈'],
+        page: 'monitor'
       },
       custom: {
         name: '自定义模式',
@@ -54,7 +59,8 @@ Page({
         duration: '自定义',
         icon: 'setting-o',
         color: '#6b7280',
-        features: []
+        features: [],
+        page: 'custom'
       }
     }
   },
@@ -176,50 +182,50 @@ Page({
     });
 
     // 根据模式跳转到相应的功能页面
-    this.navigateToModeFunction(modeKey);
+    this.navigateToModeFunction(modeKey, mode);
   },
 
   // 根据模式跳转到相应功能页面
-  navigateToModeFunction(modeKey) {
+  navigateToModeFunction(modeKey, mode) {
     switch (modeKey) {
       case 'classic':
-        // 经典理疗 - 跳转到艾灸页面
-        this.goToMoxibustion();
+        // 经典理疗 - 跳转到增强版艾灸页面
+        wx.navigateTo({ url: '/pages/moxibustion-enhanced/moxibustion-enhanced' });
         break;
       case 'relax':
         // 深度放松 - 跳转到水疗页面
-        this.goToHydrotherapy();
+        wx.navigateTo({ url: '/pages/hydrotherapy/hydrotherapy' });
         break;
       case 'recovery':
-        // 康复理疗 - 跳转到艾灸页面
-        this.goToMoxibustion();
+        // 康复理疗 - 跳转到红外理疗页面
+        wx.navigateTo({ url: '/pages/infrared/infrared' });
         break;
       case 'quick':
         // 快速舒缓 - 跳转到水疗页面
-        this.goToHydrotherapy();
+        wx.navigateTo({ url: '/pages/hydrotherapy/hydrotherapy' });
         break;
       case 'fullbody':
         // 全身调理 - 跳转到监测页面查看全功能
-        this.goToMonitor();
+        wx.navigateTo({ url: '/pages/monitor/monitor' });
         break;
       case 'custom':
         // 自定义模式 - 显示功能选择
         this.showCustomModeSelection();
         break;
       default:
-        this.goToMonitor();
+        wx.navigateTo({ url: '/pages/monitor/monitor' });
     }
   },
 
   // 显示自定义模式选择
   showCustomModeSelection() {
     const features = [
-      { name: '艾灸理疗', icon: 'fire-o', color: '#ef4444' },
-      { name: '药浴子系统', icon: 'hot-o', color: '#f59e42' },
-      { name: '超音波水疗', icon: 'sound', color: '#3b82f6' },
-      { name: '红外理疗', icon: 'bulb-o', color: '#f59e0b' },
-      { name: '香氛疗愈', icon: 'flower-o', color: '#8b5cf6' },
-      { name: '音乐疗愈', icon: 'music-o', color: '#10b981' }
+      { name: '艾灸理疗', page: 'moxibustion-enhanced', icon: 'fire-o', color: '#ef4444' },
+      { name: '药浴子系统', page: 'herbal-bath', icon: 'hot-o', color: '#f59e42' },
+      { name: '超音波水疗', page: 'hydrotherapy', icon: 'sound', color: '#3b82f6' },
+      { name: '红外理疗', page: 'infrared', icon: 'bulb-o', color: '#f59e0b' },
+      { name: '香氛疗愈', page: 'aromatherapy', icon: 'flower-o', color: '#8b5cf6' },
+      { name: '音乐疗愈', page: 'music-therapy', icon: 'music-o', color: '#10b981' }
     ];
 
     wx.showActionSheet({
@@ -230,8 +236,8 @@ Page({
           title: `已选择${selectedFeature.name}`,
           icon: 'success'
         });
-        // 这里可以根据选择的功能跳转到相应页面
-        this.goToMonitor();
+        // 跳转到对应的功能页面
+        wx.navigateTo({ url: `/pages/${selectedFeature.page}/${selectedFeature.page}` });
       }
     });
   },

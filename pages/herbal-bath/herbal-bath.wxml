@@ -1,0 +1,107 @@
+<navigation-bar title="药浴理疗" back="true" homeButton="true"></navigation-bar>
+<view class="page-content">
+  <!-- 当前状态 -->
+  <view class="status-card">
+    <view class="status-header">
+      <van-icon name="hot-o" size="40px" color="#f59e42" />
+      <view class="status-info">
+        <view class="status-title">药浴理疗系统</view>
+        <view class="status-desc">中药配方，智能制备</view>
+      </view>
+      <van-tag type="{{isRunning ? 'success' : 'default'}}" size="large">
+        {{isRunning ? '运行中' : '已停止'}}
+      </van-tag>
+    </view>
+  </view>
+
+  <!-- 药材选择 -->
+  <view class="config-card">
+    <view class="section-title">药材选择</view>
+    <van-cell-group>
+      <van-cell title="预设配方" is-link bind:tap="selectPresetFormula">
+        <text>{{selectedFormula.name}}</text>
+      </van-cell>
+      <van-cell title="配方功效" label="{{selectedFormula.effect}}" />
+      <van-cell title="适用症状" label="{{selectedFormula.symptoms}}" />
+      <van-cell title="自定义混合" is-link bind:tap="customizeFormula">
+        <text>{{customRatio ? '已设置' : '未设置'}}</text>
+      </van-cell>
+    </van-cell-group>
+  </view>
+
+  <!-- 制备过程 -->
+  <view class="config-card">
+    <view class="section-title">制备过程</view>
+    <van-cell-group>
+      <van-cell title="研磨状态" value="{{grindingStatus}}" />
+      <van-cell title="颗粒度控制" value="{{particleSize}}目" />
+      <van-cell title="萃取温度">
+        <van-slider 
+          min="55" 
+          max="65" 
+          value="{{extractionTemp}}" 
+          show-value 
+          bind:change="onExtractionTempChange"
+          active-color="#f59e42"
+        />
+      </van-cell>
+      <van-cell title="药液比例" is-link bind:tap="selectMedicineRatio">
+        <text>1:{{medicineRatio}}</text>
+      </van-cell>
+      <van-cell title="制备进度" value="{{preparationProgress}}%" />
+    </van-cell-group>
+  </view>
+
+  <!-- 循环系统 -->
+  <view class="config-card">
+    <view class="section-title">循环系统</view>
+    <van-cell-group>
+      <van-cell title="过滤级别" value="三级过滤" />
+      <van-cell title="流速控制">
+        <van-slider 
+          min="5" 
+          max="15" 
+          value="{{flowRate}}" 
+          show-value 
+          bind:change="onFlowRateChange"
+          active-color="#f59e42"
+        />
+      </van-cell>
+      <van-cell title="温度维持">
+        <van-slider 
+          min="38" 
+          max="42" 
+          value="{{maintainTemp}}" 
+          show-value 
+          bind:change="onMaintainTempChange"
+          active-color="#f59e42"
+        />
+      </van-cell>
+      <van-cell title="循环状态" value="{{circulationStatus}}" />
+    </van-cell-group>
+  </view>
+
+  <!-- 水质监测 -->
+  <view class="config-card">
+    <view class="section-title">水质监测</view>
+    <van-cell-group>
+      <van-cell title="pH值" value="{{waterQuality.ph}}" />
+      <van-cell title="药液浓度" value="{{waterQuality.concentration}}%" />
+      <van-cell title="温度" value="{{waterQuality.temp}}°C" />
+      <van-cell title="水质状态" value="{{waterQuality.status}}" />
+    </van-cell-group>
+  </view>
+
+  <!-- 控制按钮 -->
+  <view class="control-buttons">
+    <van-button 
+      type="{{isRunning ? 'danger' : 'primary'}}" 
+      size="large" 
+      block 
+      bind:tap="toggleHerbalBath"
+      loading="{{loading}}"
+    >
+      {{isRunning ? '停止药浴' : '启动药浴'}}
+    </van-button>
+  </view>
+</view> 

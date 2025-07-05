@@ -4,7 +4,12 @@
     "pages/monitor/monitor",
     "pages/hydrotherapy/hydrotherapy",
     "pages/moxibustion/moxibustion",
-    "pages/appconnect/appconnect"
+    "pages/appconnect/appconnect",
+    "pages/infrared/infrared",
+    "pages/moxibustion-enhanced/moxibustion-enhanced",
+    "pages/aromatherapy/aromatherapy",
+    "pages/herbal-bath/herbal-bath",
+    "pages/music-therapy/music-therapy"
   ],
   "window": {
     "navigationBarTextStyle": "black",
@@ -33,6 +38,9 @@
     "van-cell": "@vant/weapp/cell/index",
     "van-cell-group": "@vant/weapp/cell-group/index",
     "van-tag": "@vant/weapp/tag/index",
-    "van-dialog": "@vant/weapp/dialog/index"
+    "van-dialog": "@vant/weapp/dialog/index",
+    "van-switch": "@vant/weapp/switch/index",
+    "van-loading": "@vant/weapp/loading/index",
+    "van-icon": "@vant/weapp/icon/index"
   }
 }
