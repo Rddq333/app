@@ -119,7 +119,7 @@
 
     </view>
   </view>
-  <view class="config-card" wx:if="{{therapyStatus === 'running'}}">
+  <view class="config-card" wx:if="{{isRunning}}">
     <view class="section-title">运行信息</view>
     <van-cell-group>
       <van-cell title="运行时间" value="{{runningTime}}" />
@@ -132,17 +132,17 @@
   </view>
   <view class="control-buttons">
     <van-button 
-      type="{{therapyStatus === 'running' ? (therapyStatus === 'paused' ? 'primary' : 'warning') : 'primary'}}" 
+      type="{{isRunning ? (isPaused ? 'primary' : 'warning') : 'primary'}}" 
       size="large" 
       block 
       custom-class="round-btn"
       bind:tap="onToggle"
       loading="{{loading}}"
     >
-      {{therapyStatus === 'running' ? (therapyStatus === 'paused' ? '继续' : '暂停') : '启动'}}
+      {{isRunning ? (isPaused ? '继续' : '暂停') : '启动'}}
     </van-button>
     <van-button 
-      wx:if="{{therapyStatus === 'running'}}" 
+      wx:if="{{isRunning}}" 
       type="danger" 
       size="large" 
       block 

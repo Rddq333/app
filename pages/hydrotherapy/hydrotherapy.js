@@ -44,7 +44,8 @@ Page({
     runningTime: '00:00',
     remainingTime: '30:00',
     startTime: null,
-    elapsed: 0
+    elapsed: 0,
+    isPaused: false, // 新增，标记是否暂停
   },
 
   onLoad(options) {
@@ -237,9 +238,9 @@ Page({
 
     if (!this.data.isRunning) {
       this.onStart();
-    } else if (this.data.isRunning && this.data.therapyStatus !== 'paused') {
+    } else if (this.data.isRunning && !this.data.isPaused) {
       this.onPause();
-    } else if (this.data.therapyStatus === 'paused') {
+    } else if (this.data.isPaused) {
       this.onResume();
     }
   },
@@ -264,6 +265,7 @@ Page({
     const duration = this.data.params.duration || 30;
     this.setData({
       isRunning: true,
+      isPaused: false,
       therapyStatus: 'running',
       startTime: Date.now(),
       runningTime: '00:00',
@@ -289,13 +291,17 @@ Page({
       clearInterval(this.data.timer);
       this.setData({ timer: null });
     }
-    this.setData({ therapyStatus: 'paused' });
+    this.setData({
+      therapyStatus: 'paused',
+      isPaused: true
+    });
     wx.showToast({ title: '已暂停', icon: 'none' });
   },
   onResume() {
     const duration = this.data.params.duration || 30;
     this.setData({
       therapyStatus: 'running',
+      isPaused: false,
       startTime: Date.now() - this.data.elapsed * 1000
     });
     this.startTimer(duration * 60 - this.data.elapsed);
@@ -310,6 +316,7 @@ Page({
     
     this.setData({
       isRunning: false,
+      isPaused: false,
       therapyStatus: 'idle',
       runningTime: '00:00',
       remainingTime: this.formatTime(this.data.params.duration * 60 || 1800),

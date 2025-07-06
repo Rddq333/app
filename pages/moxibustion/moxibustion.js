@@ -26,7 +26,8 @@ Page({
     startTime: null,
     elapsed: 0,
     deviceStatus: '未知',
-    deviceConnected: false
+    deviceConnected: false,
+    isPaused: false
   },
 
   onLoad() {
@@ -123,6 +124,7 @@ Page({
     const duration = this.data.params.time || 30;
     this.setData({
       isRunning: true,
+      isPaused: false,
       status: 'running',
       startTime: Date.now(),
       runningTime: '00:00',
@@ -147,7 +149,10 @@ Page({
       clearInterval(this.data.timer);
       this.setData({ timer: null });
     }
-    this.setData({ status: 'paused' });
+    this.setData({
+      status: 'paused',
+      isPaused: true
+    });
     wx.showToast({ title: '已暂停', icon: 'none' });
   },
   // 继续
@@ -155,6 +160,7 @@ Page({
     const duration = this.data.params.time || 30;
     this.setData({
       status: 'running',
+      isPaused: false,
       startTime: Date.now() - this.data.elapsed * 1000
     });
     this.startTimer(duration * 60 - this.data.elapsed);
@@ -165,6 +171,7 @@ Page({
     if (this.data.timer) clearInterval(this.data.timer);
     this.setData({
       isRunning: false,
+      isPaused: false,
       status: 'idle',
       runningTime: '00:00',
       remainingTime: this.formatTime(this.data.params.time * 60 || 1800),
@@ -230,9 +237,9 @@ Page({
     if (this.data.loading) return;
     if (!this.data.isRunning) {
       this.onStart();
-    } else if (this.data.isRunning && this.data.status !== 'paused') {
+    } else if (this.data.isRunning && !this.data.isPaused) {
       this.onPause();
-    } else if (this.data.status === 'paused') {
+    } else if (this.data.isPaused) {
       this.onResume();
     }
   },
