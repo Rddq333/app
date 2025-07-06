@@ -20,12 +20,19 @@
           <text class="stat-label">剩余时间</text>
           <text class="stat-value">{{remainingTime}}</text>
         </view>
+        <view class="stat-item">
+          <text class="stat-label">当前状态</text>
+          <text class="stat-value">{{isPaused ? '已暂停' : '运行中'}}</text>
+        </view>
       </view>
       <view class="mode-features">
         <text class="features-title">包含功能：</text>
         <view class="feature-tags">
           <van-tag wx:for="{{currentTherapyMode.features}}" wx:key="*this" type="primary" size="small">{{item}}</van-tag>
         </view>
+      </view>
+      <view style="margin-top: 32rpx; text-align: center;">
+        <button class="monitor-btn export" type="primary" bindtap="togglePauseTherapy">{{isPaused ? '继续' : '暂停'}}</button>
       </view>
     </view>
   </view>

@@ -31,7 +31,9 @@ Page({
     currentTherapyMode: null,
     runningTime: '00:00',
     remainingTime: '00:00',
-    modeStartTime: null
+    modeStartTime: null,
+    isPaused: false,
+    pausedElapsed: 0
   },
   onLoad() {
     this.loadTherapyMode();
@@ -61,11 +63,10 @@ Page({
   
   // 更新时间显示
   updateTime() {
-    if (!this.data.modeStartTime) return;
-    
+    if (!this.data.modeStartTime || this.data.isPaused) return;
     const startTime = new Date(this.data.modeStartTime);
     const now = new Date();
-    const elapsed = Math.floor((now - startTime) / 1000); // 秒
+    const elapsed = this.data.pausedElapsed + Math.floor((now - startTime) / 1000);
     
     // 计算运行时长
     const hours = Math.floor(elapsed / 3600);
@@ -107,18 +108,41 @@ Page({
     return durations[modeKey] || 60 * 60;
   },
   
+  // 暂停/继续理疗模式
+  togglePauseTherapy() {
+    if (!this.data.isPaused) {
+      // 暂停
+      const startTime = new Date(this.data.modeStartTime);
+      const now = new Date();
+      const elapsed = this.data.pausedElapsed + Math.floor((now - startTime) / 1000);
+      this.setData({
+        isPaused: true,
+        pausedElapsed: elapsed
+      });
+      wx.showToast({ title: '已暂停', icon: 'none' });
+    } else {
+      // 继续
+      const now = new Date();
+      this.setData({
+        isPaused: false,
+        modeStartTime: now,
+      });
+      wx.showToast({ title: '已继续', icon: 'none' });
+    }
+  },
+  
   // 停止理疗模式
   stopTherapyMode() {
     wx.setStorageSync('currentTherapyMode', null);
     wx.setStorageSync('deviceRunning', false);
-    
     this.setData({
       currentTherapyMode: null,
       runningTime: '00:00:00',
       remainingTime: '00:00:00',
-      modeStartTime: null
+      modeStartTime: null,
+      isPaused: false,
+      pausedElapsed: 0
     });
-    
     wx.showToast({
       title: '理疗模式已完成',
       icon: 'success'

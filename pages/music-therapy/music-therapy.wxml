@@ -14,6 +14,14 @@
     </view>
   </view>
 
+  <!-- 设备状态提示 -->
+  <view class="device-status" wx:if="{{!isRunning}}">
+    <van-cell-group>
+      <van-cell title="设备状态" value="{{deviceStatus}}" />
+      <van-cell title="连接状态" value="{{deviceConnected ? '已连接' : '未连接'}}" />
+    </van-cell-group>
+  </view>
+
   <!-- 核心治疗参数 -->
   <view class="config-card">
     <view class="section-title">核心治疗参数</view>
@@ -108,26 +116,32 @@
     <view class="section-title">高级设置</view>
     <van-cell-group>
       <!-- 脑波同步 -->
-      <van-cell title="脑波同步" value="{{brainwaveSync ? '开启' : '关闭'}}">
-        <van-switch checked="{{brainwaveSync}}" bind:change="onBrainwaveSyncChange" />
+      <van-cell title="脑波同步">
+        <picker mode="selector" range="{{['关闭','开启']}}" value="{{brainwaveSync ? 1 : 0}}" bindchange="onBrainwaveSyncChange">
+          <view class="picker-value">{{brainwaveSync ? '开启' : '关闭'}}</view>
+        </picker>
       </van-cell>
-      
       <!-- 3D环绕声 -->
-      <van-cell title="3D环绕声" value="{{surround3d ? '开启' : '关闭'}}">
-        <van-switch checked="{{surround3d}}" bind:change="onSurround3dChange" />
+      <van-cell title="3D环绕声">
+        <picker mode="selector" range="{{['关闭','开启']}}" value="{{surround3d ? 1 : 0}}" bindchange="onSurround3dChange">
+          <view class="picker-value">{{surround3d ? '开启' : '关闭'}}</view>
+        </picker>
       </van-cell>
-      
       <!-- 动态灯光 -->
-      <van-cell title="动态灯光" value="{{dynamicLighting ? '开启' : '关闭'}}">
-        <van-switch checked="{{dynamicLighting}}" bind:change="onDynamicLightingChange" />
+      <van-cell title="动态灯光">
+        <picker mode="selector" range="{{['关闭','开启']}}" value="{{dynamicLighting ? 1 : 0}}" bindchange="onDynamicLightingChange">
+          <view class="picker-value">{{dynamicLighting ? '开启' : '关闭'}}</view>
+        </picker>
       </van-cell>
-      
       <!-- 座椅振动 -->
-      <van-cell title="座椅振动" value="{{seatVibration ? '开启' : '关闭'}}">
-        <van-switch checked="{{seatVibration}}" bind:change="onSeatVibrationChange" />
+      <van-cell title="座椅振动">
+        <picker mode="selector" range="{{['关闭','开启']}}" value="{{seatVibration ? 1 : 0}}" bindchange="onSeatVibrationChange">
+          <view class="picker-value">{{seatVibration ? '开启' : '关闭'}}</view>
+        </picker>
       </van-cell>
     </van-cell-group>
   </view>
+
 
   <!-- 运行信息 -->
   <view class="config-card" wx:if="{{isRunning}}">

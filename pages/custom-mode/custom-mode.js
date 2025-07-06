@@ -195,6 +195,16 @@ Page({
     }
   },
 
+  // 新增：高级设置picker事件
+  onAdvancedParamChange(e) {
+    const { mode, param } = e.currentTarget.dataset;
+    const value = e.detail.value;
+    const modeParams = { ...this.data.modeParams };
+    // picker返回0为false，1为true
+    modeParams[mode][param] = value == 1;
+    this.setData({ modeParams });
+  },
+
   // 启动自定义模式
   startCustomMode() {
     // 检查是否有选中的模式

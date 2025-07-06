@@ -75,7 +75,9 @@ Page({
     // 定时器
     timer: null,
     startTime: null,
-    elapsedTime: 0
+    elapsedTime: 0,
+    deviceStatus: '未知',
+    deviceConnected: false
   },
 
   /**
@@ -83,6 +85,7 @@ Page({
    */
   onLoad(options) {
     this.initData();
+    this.checkRunningStatus();
   },
 
   /**
@@ -204,17 +207,20 @@ Page({
     }
   },
 
-  // 高级设置开关
+  // 高级设置开关（适配picker）
   onAutoAdjustChange(event) {
-    this.setData({ autoAdjust: event.detail });
+    const value = event.detail.value !== undefined ? event.detail.value : event.detail;
+    this.setData({ autoAdjust: value == 1 });
   },
 
   onSmartIntervalChange(event) {
-    this.setData({ smartInterval: event.detail });
+    const value = event.detail.value !== undefined ? event.detail.value : event.detail;
+    this.setData({ smartInterval: value == 1 });
   },
 
   onEnvironmentMonitorChange(event) {
-    this.setData({ environmentMonitor: event.detail });
+    const value = event.detail.value !== undefined ? event.detail.value : event.detail;
+    this.setData({ environmentMonitor: value == 1 });
   },
 
   // 启动/暂停理疗
@@ -345,19 +351,12 @@ Page({
 
   // 检查运行状态
   checkRunningStatus() {
-    const currentTherapyMode = wx.getStorageSync('currentTherapyMode');
-    if (currentTherapyMode && currentTherapyMode.key === 'aromatherapy') {
-      // 如果当前运行的是香氛理疗，恢复运行状态
-      this.setData({
-        isRunning: true,
-        diffusionStatus: '运行中'
-      });
-    } else if (currentTherapyMode && currentTherapyMode.key !== 'aromatherapy') {
-      // 如果运行的是其他模式，禁用启动按钮
-      this.setData({
-        isRunning: false,
-        diffusionStatus: '已停止'
-      });
-    }
+    const historyDevices = wx.getStorageSync('historyDevices') || [];
+    const deviceRunning = wx.getStorageSync('deviceRunning') || false;
+    const hasConnectedDevice = historyDevices.some(device => device.connected);
+    this.setData({
+      deviceConnected: hasConnectedDevice,
+      deviceStatus: hasConnectedDevice ? (deviceRunning ? '运行中' : '已连接') : '未连接'
+    });
   }
 });

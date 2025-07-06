@@ -1,7 +1,7 @@
 <navigation-bar title="香氛理疗" back="true"></navigation-bar>
 <view class="page-content">
-  <!-- 当前状态 -->
-  <view class="status-card">
+<!-- 当前状态 -->
+<view class="status-card">
     <view class="status-header">
       <van-icon name="flower-o" size="40px" color="#8b5cf6" />
       <view class="status-info">
@@ -12,6 +12,14 @@
         {{isRunning ? '运行中' : '已停止'}}
       </van-tag>
     </view>
+  </view>
+
+  <!-- 设备状态提示 -->
+  <view class="device-status" wx:if="{{!isRunning}}">
+    <van-cell-group>
+      <van-cell title="设备状态" value="{{deviceStatus}}" />
+      <van-cell title="连接状态" value="{{deviceConnected ? '已连接' : '未连接'}}" />
+    </van-cell-group>
   </view>
 
   <!-- 基础香氛参数 -->
@@ -84,26 +92,29 @@
   </view>
 
   <!-- 高级设置 -->
-  <view class="config-card">
-    <view class="section-title">高级设置</view>
-    <van-cell-group>
-      <!-- 自动调节 -->
-      <van-cell title="自动浓度调节" value="{{autoAdjust ? '开启' : '关闭'}}">
-        <van-switch checked="{{autoAdjust}}" bind:change="onAutoAdjustChange" />
-      </van-cell>
-      
-      <!-- 智能间歇 -->
-      <van-cell title="智能间歇模式" value="{{smartInterval ? '开启' : '关闭'}}">
-        <van-switch checked="{{smartInterval}}" bind:change="onSmartIntervalChange" />
-      </van-cell>
-      
-      <!-- 环境监测 -->
-      <van-cell title="环境监测" value="{{environmentMonitor ? '开启' : '关闭'}}">
-        <van-switch checked="{{environmentMonitor}}" bind:change="onEnvironmentMonitorChange" />
-      </van-cell>
-    </van-cell-group>
-  </view>
-
+<view class="config-card">
+  <view class="section-title">高级设置</view>
+  <van-cell-group>
+    <!-- 自动调节 -->
+    <van-cell title="自动浓度调节">
+      <picker mode="selector" range="{{['关闭','开启']}}" value="{{autoAdjust ? 1 : 0}}" bindchange="onAutoAdjustChange">
+        <view class="picker-value">{{autoAdjust ? '开启' : '关闭'}}</view>
+      </picker>
+    </van-cell>
+    <!-- 智能间歇 -->
+    <van-cell title="智能间歇模式">
+      <picker mode="selector" range="{{['关闭','开启']}}" value="{{smartInterval ? 1 : 0}}" bindchange="onSmartIntervalChange">
+        <view class="picker-value">{{smartInterval ? '开启' : '关闭'}}</view>
+      </picker>
+    </van-cell>
+    <!-- 环境监测 -->
+    <van-cell title="环境监测">
+      <picker mode="selector" range="{{['关闭','开启']}}" value="{{environmentMonitor ? 1 : 0}}" bindchange="onEnvironmentMonitorChange">
+        <view class="picker-value">{{environmentMonitor ? '开启' : '关闭'}}</view>
+      </picker>
+    </van-cell>
+  </van-cell-group>
+</view>
   <!-- 运行信息 -->
   <view class="config-card" wx:if="{{isRunning}}">
     <view class="section-title">运行信息</view>

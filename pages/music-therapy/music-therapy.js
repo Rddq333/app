@@ -66,7 +66,9 @@ Page({
     // 定时器
     timer: null,
     startTime: null,
-    elapsedTime: 0
+    elapsedTime: 0,
+    deviceStatus: '未知',
+    deviceConnected: false
   },
 
   /**
@@ -74,6 +76,7 @@ Page({
    */
   onLoad(options) {
     this.initData();
+    this.checkRunningStatus();
   },
 
   /**
@@ -192,21 +195,25 @@ Page({
     }
   },
 
-  // 高级设置开关
+  // 高级设置开关（适配picker）
   onBrainwaveSyncChange(event) {
-    this.setData({ brainwaveSync: event.detail });
+    const value = event.detail.value !== undefined ? event.detail.value : event.detail;
+    this.setData({ brainwaveSync: value == 1 });
   },
 
   onSurround3dChange(event) {
-    this.setData({ surround3d: event.detail });
+    const value = event.detail.value !== undefined ? event.detail.value : event.detail;
+    this.setData({ surround3d: value == 1 });
   },
 
   onDynamicLightingChange(event) {
-    this.setData({ dynamicLighting: event.detail });
+    const value = event.detail.value !== undefined ? event.detail.value : event.detail;
+    this.setData({ dynamicLighting: value == 1 });
   },
 
   onSeatVibrationChange(event) {
-    this.setData({ seatVibration: event.detail });
+    const value = event.detail.value !== undefined ? event.detail.value : event.detail;
+    this.setData({ seatVibration: value == 1 });
   },
 
   // 启动/暂停理疗
@@ -363,19 +370,12 @@ Page({
 
   // 检查运行状态
   checkRunningStatus() {
-    const currentTherapyMode = wx.getStorageSync('currentTherapyMode');
-    if (currentTherapyMode && currentTherapyMode.key === 'musicTherapy') {
-      // 如果当前运行的是音乐理疗，恢复运行状态
-      this.setData({
-        isRunning: true,
-        playStatus: '播放中'
-      });
-    } else if (currentTherapyMode && currentTherapyMode.key !== 'musicTherapy') {
-      // 如果运行的是其他模式，禁用启动按钮
-      this.setData({
-        isRunning: false,
-        playStatus: '已停止'
-      });
-    }
+    const historyDevices = wx.getStorageSync('historyDevices') || [];
+    const deviceRunning = wx.getStorageSync('deviceRunning') || false;
+    const hasConnectedDevice = historyDevices.some(device => device.connected);
+    this.setData({
+      deviceConnected: hasConnectedDevice,
+      deviceStatus: hasConnectedDevice ? (deviceRunning ? '运行中' : '已连接') : '未连接'
+    });
   }
 });

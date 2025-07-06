@@ -59,8 +59,9 @@ button {
   width: 120rpx;
 }
 .page-content {
-  height: 100vh;
   padding-top: 120rpx;
+  padding-bottom: 40rpx;
+  height: 100vh;
   box-sizing: border-box;
   overflow: auto;
   margin-top: 0;
@@ -115,20 +116,19 @@ button {
 }
 .status-card {
   background: linear-gradient(135deg, #a3c23c 0%, #7bb661 100%);
-  border-radius: 20rpx;
-  padding: 30rpx;
-  margin-bottom: 20rpx;
+  border-radius: 24rpx;
+  padding: 32rpx;
+  margin-bottom: 32rpx;
   color: white;
   box-shadow: 0 8rpx 32rpx rgba(163, 194, 60, 0.18);
 }
 .status-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 20rpx;
 }
 .status-info {
   flex: 1;
-  margin-left: 20rpx;
 }
 .status-title {
   font-size: 36rpx;
@@ -139,6 +139,24 @@ button {
   font-size: 28rpx;
   opacity: 0.9;
 }
+.control-buttons {
+  padding: 0 32rpx;
+  margin-top: 40rpx;
+}
 .control-buttons .van-button, .round-btn {
   border-radius: 16rpx !important;
+}
+.van-slider__bar {
+  background-color: #a3c23c !important;
+}
+.van-slider__button {
+  background-color: #a3c23c !important;
+  border-color: #a3c23c !important;
+}
+.config-card {
+  background: #fff;
+  border-radius: 24rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0,0,0,0.08);
+  padding: 32rpx;
+  margin-bottom: 32rpx;
 } 

@@ -30,304 +30,162 @@
   wx:if="{{currentModeIndex === index}}"
   style="background:{{modeBgColorMap[item.key]}}">
   <view class="param-title">{{item.name}}参数</view>
-  <!-- 时间参数优先突出显示 -->
   <block wx:if="{{item.key === 'infrared'}}">
-    <van-cell title="治疗时长" value="{{modeParams.infrared.duration}}分钟">
-      <view class="quick-time-btns">
-        <button wx:for="{{[10,20,30,40,50,60]}}" wx:key="item"
-                size="mini"
-                class="quick-btn"
-                data-value="{{item}}"
-                bindtap="onQuickTimeSelect"
-                data-mode="infrared"
-                data-param="duration"
-                type="{{modeParams.infrared.duration == item ? 'primary' : 'default'}}">
-          {{item}}分
-        </button>
-      </view>
-      <van-slider value="{{modeParams.infrared.duration}}"
-                 min="10" max="60" step="5"
-                 bind:change="onParamChange"
-                 data-mode="infrared" data-param="duration" />
+    <van-cell title="治疗时长">
+      <picker mode="selector" range="{{[10,20,30,40,50,60]}}" value="{{[10,20,30,40,50,60].indexOf(modeParams.infrared.duration)}}" bindchange="onParamChange" data-mode="infrared" data-param="duration">
+        <view class="picker-value">{{modeParams.infrared.duration}}分钟</view>
+      </picker>
     </van-cell>
-    <!-- 红外理疗参数配置 -->
-    <view class="config-section">
-      <view class="section-title">红外理疗参数</view>
-      <van-cell-group>
-        <van-cell title="温度设置" value="{{modeParams.infrared.temperature}}°C">
-          <van-slider value="{{modeParams.infrared.temperature}}" 
-                     min="35" max="60" 
-                     bind:change="onParamChange"
-                     data-mode="infrared" data-param="temperature" />
-        </van-cell>
-        <van-cell title="强度等级" value="{{modeParams.infrared.intensity}}级">
-          <van-slider value="{{modeParams.infrared.intensity}}" 
-                     min="1" max="5" 
-                     bind:change="onParamChange"
-                     data-mode="infrared" data-param="intensity" />
-        </van-cell>
-        <van-cell title="治疗部位" value="{{modeParams.infrared.area}}" />
-      </van-cell-group>
-    </view>
+    <van-cell title="温度设置">
+      <picker mode="selector" range="{{[35,40,45,50,55,60]}}" value="{{[35,40,45,50,55,60].indexOf(modeParams.infrared.temperature)}}" bindchange="onParamChange" data-mode="infrared" data-param="temperature">
+        <view class="picker-value">{{modeParams.infrared.temperature}}°C</view>
+      </picker>
+    </van-cell>
+    <van-cell title="强度等级">
+      <picker mode="selector" range="{{[1,2,3,4,5]}}" value="{{modeParams.infrared.intensity-1}}" bindchange="onParamChange" data-mode="infrared" data-param="intensity">
+        <view class="picker-value">{{modeParams.infrared.intensity}}级</view>
+      </picker>
+    </van-cell>
+    <van-cell title="治疗部位">
+      <picker mode="selector" range="{{['全身','背部','腰部','腿部']}}" value="{{['全身','背部','腰部','腿部'].indexOf(modeParams.infrared.area)}}" bindchange="onParamChange" data-mode="infrared" data-param="area">
+        <view class="picker-value">{{modeParams.infrared.area}}</view>
+      </picker>
+    </van-cell>
   </block>
   <block wx:if="{{item.key === 'hydrotherapy'}}">
-    <van-cell title="水疗时长" value="{{modeParams.hydrotherapy.duration}}分钟">
-      <view class="quick-time-btns">
-        <button wx:for="{{[10,20,30,40,50,60]}}" wx:key="item"
-                size="mini"
-                class="quick-btn"
-                data-value="{{item}}"
-                bindtap="onQuickTimeSelect"
-                data-mode="hydrotherapy"
-                data-param="duration"
-                type="{{modeParams.hydrotherapy.duration == item ? 'primary' : 'default'}}">
-          {{item}}分
-        </button>
-      </view>
-      <van-slider value="{{modeParams.hydrotherapy.duration}}"
-                 min="10" max="60" step="5"
-                 bind:change="onParamChange"
-                 data-mode="hydrotherapy" data-param="duration" />
+    <van-cell title="水疗时长">
+      <picker mode="selector" range="{{[10,20,30,40,50,60]}}" value="{{[10,20,30,40,50,60].indexOf(modeParams.hydrotherapy.duration)}}" bindchange="onParamChange" data-mode="hydrotherapy" data-param="duration">
+        <view class="picker-value">{{modeParams.hydrotherapy.duration}}分钟</view>
+      </picker>
     </van-cell>
-    <!-- 水疗参数配置 -->
-    <view class="config-section">
-      <view class="section-title">超音波水疗参数</view>
-      <van-cell-group>
-        <van-cell title="水温设置" value="{{modeParams.hydrotherapy.waterTemp}}°C">
-          <van-slider value="{{modeParams.hydrotherapy.waterTemp}}" 
-                     min="30" max="45" 
-                     bind:change="onParamChange"
-                     data-mode="hydrotherapy" data-param="waterTemp" />
-        </van-cell>
-        <van-cell title="水压强度" value="{{modeParams.hydrotherapy.pressure}}级">
-          <van-slider value="{{modeParams.hydrotherapy.pressure}}" 
-                     min="1" max="5" 
-                     bind:change="onParamChange"
-                     data-mode="hydrotherapy" data-param="pressure" />
-        </van-cell>
-        <van-cell title="按摩模式">
-          <van-checkbox-group value="{{modeParams.hydrotherapy.massageMode}}" 
-                             bind:change="onMultiParamChange"
-                             data-mode="hydrotherapy" data-param="massageMode">
-            <van-checkbox name="脉冲">脉冲</van-checkbox>
-            <van-checkbox name="旋转">旋转</van-checkbox>
-            <van-checkbox name="振动">振动</van-checkbox>
-          </van-checkbox-group>
-        </van-cell>
-        <van-cell title="重点部位">
-          <van-checkbox-group value="{{modeParams.hydrotherapy.focusArea}}" 
-                             bind:change="onMultiParamChange"
-                             data-mode="hydrotherapy" data-param="focusArea">
-            <van-checkbox name="背部">背部</van-checkbox>
-            <van-checkbox name="腰部">腰部</van-checkbox>
-            <van-checkbox name="颈部">颈部</van-checkbox>
-          </van-checkbox-group>
-        </van-cell>
-      </van-cell-group>
-    </view>
+    <van-cell title="水温设置">
+      <picker mode="selector" range="{{[30,32,34,36,38,40,42,44,45]}}" value="{{[30,32,34,36,38,40,42,44,45].indexOf(modeParams.hydrotherapy.waterTemp)}}" bindchange="onParamChange" data-mode="hydrotherapy" data-param="waterTemp">
+        <view class="picker-value">{{modeParams.hydrotherapy.waterTemp}}°C</view>
+      </picker>
+    </van-cell>
+    <van-cell title="水压强度">
+      <picker mode="selector" range="{{[1,2,3,4,5]}}" value="{{modeParams.hydrotherapy.pressure-1}}" bindchange="onParamChange" data-mode="hydrotherapy" data-param="pressure">
+        <view class="picker-value">{{modeParams.hydrotherapy.pressure}}级</view>
+      </picker>
+    </van-cell>
+    <van-cell title="按摩模式">
+      <picker mode="selector" range="{{['脉冲','旋转','振动']}}" value="{{['脉冲','旋转','振动'].indexOf(modeParams.hydrotherapy.massageMode[0])}}" bindchange="onParamChange" data-mode="hydrotherapy" data-param="massageMode">
+        <view class="picker-value">{{modeParams.hydrotherapy.massageMode[0]}}</view>
+      </picker>
+    </van-cell>
+    <van-cell title="重点部位">
+      <picker mode="selector" range="{{['背部','腰部','颈部']}}" value="{{['背部','腰部','颈部'].indexOf(modeParams.hydrotherapy.focusArea[0])}}" bindchange="onParamChange" data-mode="hydrotherapy" data-param="focusArea">
+        <view class="picker-value">{{modeParams.hydrotherapy.focusArea[0]}}</view>
+      </picker>
+    </van-cell>
   </block>
   <block wx:if="{{item.key === 'moxibustion'}}">
-    <van-cell title="艾灸时长" value="{{modeParams.moxibustion.duration}}分钟">
-      <view class="quick-time-btns">
-        <button wx:for="{{[20,30,40,50,60,70,80,90]}}" wx:key="item"
-                size="mini"
-                class="quick-btn"
-                data-value="{{item}}"
-                bindtap="onQuickTimeSelect"
-                data-mode="moxibustion"
-                data-param="duration"
-                type="{{modeParams.moxibustion.duration == item ? 'primary' : 'default'}}">
-          {{item}}分
-        </button>
-      </view>
-      <van-slider value="{{modeParams.moxibustion.duration}}"
-                 min="20" max="90" step="5"
-                 bind:change="onParamChange"
-                 data-mode="moxibustion" data-param="duration" />
+    <van-cell title="艾灸时长">
+      <picker mode="selector" range="{{[20,30,40,50,60,70,80,90]}}" value="{{[20,30,40,50,60,70,80,90].indexOf(modeParams.moxibustion.duration)}}" bindchange="onParamChange" data-mode="moxibustion" data-param="duration">
+        <view class="picker-value">{{modeParams.moxibustion.duration}}分钟</view>
+      </picker>
     </van-cell>
-    <!-- 艾灸参数配置 -->
-    <view class="config-section">
-      <view class="section-title">艾灸理疗参数</view>
-      <van-cell-group>
-        <van-cell title="艾灸温度" value="{{modeParams.moxibustion.temperature}}°C">
-          <van-slider value="{{modeParams.moxibustion.temperature}}" 
-                     min="40" max="80" 
-                     bind:change="onParamChange"
-                     data-mode="moxibustion" data-param="temperature" />
-        </van-cell>
-        <van-cell title="强度等级" value="{{modeParams.moxibustion.intensity}}级">
-          <van-slider value="{{modeParams.moxibustion.intensity}}" 
-                     min="1" max="5" 
-                     bind:change="onParamChange"
-                     data-mode="moxibustion" data-param="intensity" />
-        </van-cell>
-        <van-cell title="治疗部位" value="{{modeParams.moxibustion.area}}" />
-        <van-cell title="艾灸模式" value="{{modeParams.moxibustion.mode}}" />
-      </van-cell-group>
-    </view>
+    <van-cell title="艾灸温度">
+      <picker mode="selector" range="{{[40,45,50,55,60,65,70,75,80]}}" value="{{[40,45,50,55,60,65,70,75,80].indexOf(modeParams.moxibustion.temperature)}}" bindchange="onParamChange" data-mode="moxibustion" data-param="temperature">
+        <view class="picker-value">{{modeParams.moxibustion.temperature}}°C</view>
+      </picker>
+    </van-cell>
+    <van-cell title="强度等级">
+      <picker mode="selector" range="{{[1,2,3,4,5]}}" value="{{modeParams.moxibustion.intensity-1}}" bindchange="onParamChange" data-mode="moxibustion" data-param="intensity">
+        <view class="picker-value">{{modeParams.moxibustion.intensity}}级</view>
+      </picker>
+    </van-cell>
+    <van-cell title="治疗部位">
+      <picker mode="selector" range="{{['背部','腰部','腿部','全身']}}" value="{{['背部','腰部','腿部','全身'].indexOf(modeParams.moxibustion.area)}}" bindchange="onParamChange" data-mode="moxibustion" data-param="area">
+        <view class="picker-value">{{modeParams.moxibustion.area}}</view>
+      </picker>
+    </van-cell>
+    <van-cell title="艾灸模式">
+      <picker mode="selector" range="{{['温和','雀啄','回旋']}}" value="{{['温和','雀啄','回旋'].indexOf(modeParams.moxibustion.mode)}}" bindchange="onParamChange" data-mode="moxibustion" data-param="mode">
+        <view class="picker-value">{{modeParams.moxibustion.mode}}</view>
+      </picker>
+    </van-cell>
   </block>
   <block wx:if="{{item.key === 'herbalBath'}}">
-    <view class="param-title">{{item.name}}参数</view>
-    <van-cell title="浸泡时长" value="{{modeParams.herbalBath.duration}}分钟">
-      <view class="quick-time-btns">
-        <button wx:for="{{[20,30,40,50,60]}}" wx:key="item"
-                size="mini"
-                class="quick-btn"
-                data-value="{{item}}"
-                bindtap="onQuickTimeSelect"
-                data-mode="herbalBath"
-                data-param="duration"
-                type="{{modeParams.herbalBath.duration == item ? 'primary' : 'default'}}">
-          {{item}}分
-        </button>
-      </view>
-      <van-slider value="{{modeParams.herbalBath.duration}}"
-                 min="20" max="60" step="5"
-                 bind:change="onParamChange"
-                 data-mode="herbalBath" data-param="duration" />
-    </van-cell>
-    <van-cell-group>
-      <van-cell title="水温设置" value="{{modeParams.herbalBath.waterTemp}}°C">
-        <van-slider value="{{modeParams.herbalBath.waterTemp}}"
-                   min="35" max="45"
-                   bind:change="onParamChange"
-                   data-mode="herbalBath" data-param="waterTemp" />
-      </van-cell>
-      <van-cell title="中药类型" value="{{modeParams.herbalBath.herbType}}">
-        <picker mode="selector" range="{{['艾草','当归','川芎','黄芪']}}" value="{{['艾草','当归','川芎','黄芪'].indexOf(modeParams.herbalBath.herbType)}}" bindchange="onParamChange" data-mode="herbalBath" data-param="herbType">
-          <view class="picker-value">{{modeParams.herbalBath.herbType}}</view>
-        </picker>
-      </van-cell>
-      <van-cell title="浓度等级" value="{{modeParams.herbalBath.concentration}}级">
-        <van-slider value="{{modeParams.herbalBath.concentration}}"
-                   min="1" max="5"
-                   bind:change="onParamChange"
-                   data-mode="herbalBath" data-param="concentration" />
-      </van-cell>
-      <van-cell title="浸泡模式" value="{{modeParams.herbalBath.mode}}">
-        <picker mode="selector" range="{{['浸泡','冲淋']}}" value="{{['浸泡','冲淋'].indexOf(modeParams.herbalBath.mode)}}" bindchange="onParamChange" data-mode="herbalBath" data-param="mode">
-          <view class="picker-value">{{modeParams.herbalBath.mode}}</view>
-        </picker>
-      </van-cell>
-    </van-cell-group>
-  </block>
-  <block wx:if="{{item.key === 'aromatherapy'}}">
-    <van-cell title="香氛时长" value="{{modeParams.aromatherapy.duration}}分钟">
-      <view class="quick-time-btns">
-        <button wx:for="{{[15,20,30,35,40,50,60]}}" wx:key="item"
-                size="mini"
-                class="quick-btn"
-                data-value="{{item}}"
-                bindtap="onQuickTimeSelect"
-                data-mode="aromatherapy"
-                data-param="duration"
-                type="{{modeParams.aromatherapy.duration == item ? 'primary' : 'default'}}">
-          {{item}}分
-        </button>
-      </view>
-      <van-slider value="{{modeParams.aromatherapy.duration}}"
-                 min="15" max="60" step="5"
-                 bind:change="onParamChange"
-                 data-mode="aromatherapy" data-param="duration" />
-    </van-cell>
-    <van-cell title="精油类型" value="{{modeParams.aromatherapy.oilType}}">
-      <picker mode="selector" range="{{['薰衣草','柠檬','薄荷','玫瑰','橙花','尤加利']}}" value="{{['薰衣草','柠檬','薄荷','玫瑰','橙花','尤加利'].indexOf(modeParams.aromatherapy.oilType)}}" bindchange="onParamChange" data-mode="aromatherapy" data-param="oilType">
-        <view class="picker-value">{{modeParams.aromatherapy.oilType}}</view>
+    <van-cell title="浸泡时长">
+      <picker mode="selector" range="{{[20,30,40,50,60]}}" value="{{[20,30,40,50,60].indexOf(modeParams.herbalBath.duration)}}" bindchange="onParamChange" data-mode="herbalBath" data-param="duration">
+        <view class="picker-value">{{modeParams.herbalBath.duration}}分钟</view>
       </picker>
     </van-cell>
-    <van-cell title="浓度等级" value="{{modeParams.aromatherapy.concentration}}级">
-      <van-slider value="{{modeParams.aromatherapy.concentration}}"
-                 min="1" max="5"
-                 bind:change="onParamChange"
-                 data-mode="aromatherapy" data-param="concentration" />
-    </van-cell>
-    <van-cell title="喷雾模式" value="{{modeParams.aromatherapy.mode}}">
-      <picker mode="selector" range="{{['喷雾','扩香','间歇']}}" value="{{['喷雾','扩香','间歇'].indexOf(modeParams.aromatherapy.mode)}}" bindchange="onParamChange" data-mode="aromatherapy" data-param="mode">
-        <view class="picker-value">{{modeParams.aromatherapy.mode}}</view>
+    <van-cell title="水温设置">
+      <picker mode="selector" range="{{[35,37,39,41,43,45]}}" value="{{[35,37,39,41,43,45].indexOf(modeParams.herbalBath.waterTemp)}}" bindchange="onParamChange" data-mode="herbalBath" data-param="waterTemp">
+        <view class="picker-value">{{modeParams.herbalBath.waterTemp}}°C</view>
       </picker>
     </van-cell>
-    <van-cell title="强度等级" value="{{modeParams.aromatherapy.intensity}}级">
-      <van-slider value="{{modeParams.aromatherapy.intensity}}"
-                 min="1" max="5"
-                 bind:change="onParamChange"
-                 data-mode="aromatherapy" data-param="intensity" />
+    <van-cell title="中药类型">
+      <picker mode="selector" range="{{['艾草','当归','川芎','黄芪']}}" value="{{['艾草','当归','川芎','黄芪'].indexOf(modeParams.herbalBath.herbType)}}" bindchange="onParamChange" data-mode="herbalBath" data-param="herbType">
+        <view class="picker-value">{{modeParams.herbalBath.herbType}}</view>
+      </picker>
     </van-cell>
-    <van-cell title="风速" value="{{modeParams.aromatherapy.fanSpeed || 1}}档">
-      <van-slider value="{{modeParams.aromatherapy.fanSpeed || 1}}"
-                 min="1" max="3"
-                 bind:change="onParamChange"
-                 data-mode="aromatherapy" data-param="fanSpeed" />
+    <van-cell title="浓度等级">
+      <picker mode="selector" range="{{[1,2,3,4,5]}}" value="{{modeParams.herbalBath.concentration-1}}" bindchange="onParamChange" data-mode="herbalBath" data-param="concentration">
+        <view class="picker-value">{{modeParams.herbalBath.concentration}}级</view>
+      </picker>
     </van-cell>
-    <van-cell title="灯光氛围" value="{{modeParams.aromatherapy.light || '柔和'}}">
-      <picker mode="selector" range="{{['柔和','明亮','关闭']}}" value="{{['柔和','明亮','关闭'].indexOf(modeParams.aromatherapy.light || '柔和')}}" bindchange="onParamChange" data-mode="aromatherapy" data-param="light">
-        <view class="picker-value">{{modeParams.aromatherapy.light || '柔和'}}</view>
+    <van-cell title="浸泡模式">
+      <picker mode="selector" range="{{['浸泡','冲淋']}}" value="{{['浸泡','冲淋'].indexOf(modeParams.herbalBath.mode)}}" bindchange="onParamChange" data-mode="herbalBath" data-param="mode">
+        <view class="picker-value">{{modeParams.herbalBath.mode}}</view>
       </picker>
     </van-cell>
   </block>
   <block wx:if="{{item.key === 'musicTherapy'}}">
-    <van-cell title="音乐时长" value="{{modeParams.musicTherapy.duration}}分钟">
-      <view class="quick-time-btns">
-        <button wx:for="{{[10,15,20,25,30,40,50,60]}}" wx:key="item"
-                size="mini"
-                class="quick-btn"
-                data-value="{{item}}"
-                bindtap="onQuickTimeSelect"
-                data-mode="musicTherapy"
-                data-param="duration"
-                type="{{modeParams.musicTherapy.duration == item ? 'primary' : 'default'}}">
-          {{item}}分
-        </button>
-      </view>
-      <van-slider value="{{modeParams.musicTherapy.duration}}"
-                 min="10" max="60" step="5"
-                 bind:change="onParamChange"
-                 data-mode="musicTherapy" data-param="duration" />
+    <van-cell title="音乐时长">
+      <picker mode="selector" range="{{[10,15,20,25,30,40,50,60]}}" value="{{[10,15,20,25,30,40,50,60].indexOf(modeParams.musicTherapy.duration)}}" bindchange="onParamChange" data-mode="musicTherapy" data-param="duration">
+        <view class="picker-value">{{modeParams.musicTherapy.duration}}分钟</view>
+      </picker>
     </van-cell>
-    <!-- 音乐参数配置 -->
-    <view class="config-section">
-      <view class="section-title">音乐理疗参数</view>
-      <van-cell-group>
-        <van-cell title="音乐类型" value="{{modeParams.musicTherapy.genre}}" />
-        <van-cell title="音量大小" value="{{modeParams.musicTherapy.volume}}%">
-          <van-slider value="{{modeParams.musicTherapy.volume}}" 
-                     min="0" max="100" 
-                     bind:change="onParamChange"
-                     data-mode="musicTherapy" data-param="volume" />
-        </van-cell>
-        <van-cell title="频率设置" value="{{modeParams.musicTherapy.frequency}}Hz">
-          <van-slider value="{{modeParams.musicTherapy.frequency}}" 
-                     min="200" max="800" 
-                     bind:change="onParamChange"
-                     data-mode="musicTherapy" data-param="frequency" />
-        </van-cell>
-        <van-cell title="节奏BPM" value="{{modeParams.musicTherapy.rhythm}}">
-          <van-slider value="{{modeParams.musicTherapy.rhythm}}" 
-                     min="40" max="120" 
-                     bind:change="onParamChange"
-                     data-mode="musicTherapy" data-param="rhythm" />
-        </van-cell>
-        <van-cell title="脑波同步" value="{{modeParams.musicTherapy.brainwaveSync ? '开启' : '关闭'}}">
-          <van-switch checked="{{modeParams.musicTherapy.brainwaveSync}}" 
-                     bind:change="onParamChange"
-                     data-mode="musicTherapy" data-param="brainwaveSync" />
-        </van-cell>
-        <van-cell title="3D环绕声" value="{{modeParams.musicTherapy.surround3d ? '开启' : '关闭'}}">
-          <van-switch checked="{{modeParams.musicTherapy.surround3d}}" 
-                     bind:change="onParamChange"
-                     data-mode="musicTherapy" data-param="surround3d" />
-        </van-cell>
-        <van-cell title="动态灯光" value="{{modeParams.musicTherapy.dynamicLighting ? '开启' : '关闭'}}">
-          <van-switch checked="{{modeParams.musicTherapy.dynamicLighting}}" 
-                     bind:change="onParamChange"
-                     data-mode="musicTherapy" data-param="dynamicLighting" />
-        </van-cell>
-        <van-cell title="座椅振动" value="{{modeParams.musicTherapy.seatVibration ? '开启' : '关闭'}}">
-          <van-switch checked="{{modeParams.musicTherapy.seatVibration}}" 
-                     bind:change="onParamChange"
-                     data-mode="musicTherapy" data-param="seatVibration" />
-        </van-cell>
-      </van-cell-group>
-    </view>
+    <van-cell title="音乐类型">
+      <picker mode="selector" range="{{['α波','θ波','自然音','器乐']}}" value="{{['α波','θ波','自然音','器乐'].indexOf(modeParams.musicTherapy.genre)}}" bindchange="onParamChange" data-mode="musicTherapy" data-param="genre">
+        <view class="picker-value">{{modeParams.musicTherapy.genre}}</view>
+      </picker>
+    </van-cell>
+    <van-cell title="音量大小">
+      <picker mode="selector" range="{{[0,10,20,30,40,50,60,70,80,90,100]}}" value="{{[0,10,20,30,40,50,60,70,80,90,100].indexOf(modeParams.musicTherapy.volume)}}" bindchange="onParamChange" data-mode="musicTherapy" data-param="volume">
+        <view class="picker-value">{{modeParams.musicTherapy.volume}}%</view>
+      </picker>
+    </van-cell>
+    <van-cell title="频率设置">
+      <picker mode="selector" range="{{[200,300,400,500,600,700,800]}}" value="{{[200,300,400,500,600,700,800].indexOf(modeParams.musicTherapy.frequency)}}" bindchange="onParamChange" data-mode="musicTherapy" data-param="frequency">
+        <view class="picker-value">{{modeParams.musicTherapy.frequency}}Hz</view>
+      </picker>
+    </van-cell>
+    <van-cell title="节奏BPM">
+      <picker mode="selector" range="{{[40,60,80,100,120]}}" value="{{[40,60,80,100,120].indexOf(modeParams.musicTherapy.rhythm)}}" bindchange="onParamChange" data-mode="musicTherapy" data-param="rhythm">
+        <view class="picker-value">{{modeParams.musicTherapy.rhythm}}BPM</view>
+      </picker>
+    </van-cell>
+  </block>
+  <block wx:if="{{item.key === 'aromatherapy'}}">
+    <van-cell title="香氛时长">
+      <picker mode="selector" range="{{[15,20,30,35,40,50,60]}}" value="{{[15,20,30,35,40,50,60].indexOf(modeParams.aromatherapy.duration)}}" bindchange="onParamChange" data-mode="aromatherapy" data-param="duration">
+        <view class="picker-value">{{modeParams.aromatherapy.duration}}分钟</view>
+      </picker>
+    </van-cell>
+    <van-cell title="精油类型">
+      <picker mode="selector" range="{{['薰衣草','柠檬','薄荷','玫瑰','橙花','尤加利']}}" value="{{['薰衣草','柠檬','薄荷','玫瑰','橙花','尤加利'].indexOf(modeParams.aromatherapy.oilType)}}" bindchange="onParamChange" data-mode="aromatherapy" data-param="oilType">
+        <view class="picker-value">{{modeParams.aromatherapy.oilType}}</view>
+      </picker>
+    </van-cell>
+    <van-cell title="浓度等级">
+      <picker mode="selector" range="{{[1,2,3,4,5]}}" value="{{modeParams.aromatherapy.concentration-1}}" bindchange="onParamChange" data-mode="aromatherapy" data-param="concentration">
+        <view class="picker-value">{{modeParams.aromatherapy.concentration}}级</view>
+      </picker>
+    </van-cell>
+    <van-cell title="喷雾模式">
+      <picker mode="selector" range="{{['喷雾','扩香','间歇']}}" value="{{['喷雾','扩香','间歇'].indexOf(modeParams.aromatherapy.mode)}}" bindchange="onParamChange" data-mode="aromatherapy" data-param="mode">
+        <view class="picker-value">{{modeParams.aromatherapy.mode}}</view>
+      </picker>
+    </van-cell>
+    <van-cell title="强度等级">
+      <picker mode="selector" range="{{[1,2,3,4,5]}}" value="{{modeParams.aromatherapy.intensity-1}}" bindchange="onParamChange" data-mode="aromatherapy" data-param="intensity">
+        <view class="picker-value">{{modeParams.aromatherapy.intensity}}级</view>
+      </picker>
+    </van-cell>
   </block>
 </view>
 
@@ -375,4 +233,4 @@
   >
     结束
   </van-button>
-</view> 
+</view>

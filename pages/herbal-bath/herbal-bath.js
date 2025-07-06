@@ -38,7 +38,9 @@ Page({
     totalTime: 30 * 60, // 30分钟
     timer: null,
     startTime: null,
-    elapsed: 0
+    elapsed: 0,
+    deviceStatus: '未知',
+    deviceConnected: false
   },
 
   /**
@@ -46,6 +48,7 @@ Page({
    */
   onLoad(options) {
     this.loadSettings();
+    this.checkRunningStatus();
   },
 
   onUnload() {
@@ -289,19 +292,12 @@ Page({
 
   // 检查运行状态
   checkRunningStatus() {
-    const currentTherapyMode = wx.getStorageSync('currentTherapyMode');
-    if (currentTherapyMode && currentTherapyMode.key === 'herbalBath') {
-      // 如果当前运行的是中药浴，恢复运行状态
-      this.setData({
-        isRunning: true,
-        status: 'running'
-      });
-    } else if (currentTherapyMode && currentTherapyMode.key !== 'herbalBath') {
-      // 如果运行的是其他模式，禁用启动按钮
-      this.setData({
-        isRunning: false,
-        status: 'idle'
-      });
-    }
+    const historyDevices = wx.getStorageSync('historyDevices') || [];
+    const deviceRunning = wx.getStorageSync('deviceRunning') || false;
+    const hasConnectedDevice = historyDevices.some(device => device.connected);
+    this.setData({
+      deviceConnected: hasConnectedDevice,
+      deviceStatus: hasConnectedDevice ? (deviceRunning ? '运行中' : '已连接') : '未连接'
+    });
   }
 })

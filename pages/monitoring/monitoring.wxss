@@ -158,6 +158,10 @@
   padding: 0 16px;
 }
 
+.control-buttons .van-button {
+  border-radius: 16px !important;
+}
+
 /* 响应式设计 */
 @media (min-width: 768px) {
   .parameter-grid {

@@ -11,6 +11,13 @@
     </van-tag>
   </view>
 </view>
+<!-- 设备状态提示 -->
+<view class="device-status" wx:if="{{!isRunning}}">
+  <van-cell-group>
+    <van-cell title="设备状态" value="{{deviceStatus}}" />
+    <van-cell title="连接状态" value="{{deviceConnected ? '已连接' : '未连接'}}" />
+  </van-cell-group>
+</view>
 <view class="herbal-bath-container">
   <view class="section-title">基础治疗参数</view>
   <!-- 药液浓度 -->
