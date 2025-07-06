@@ -3,7 +3,8 @@
   "projectname": "%E6%B4%97%E6%B5%B4%E6%9C%BA%E5%99%A8%E4%BA%BA",
   "setting": {
     "compileHotReLoad": true,
-    "skylineRenderEnable": true
+    "skylineRenderEnable": true,
+    "bigPackageSizeSupport": true
   },
   "condition": {
     "miniprogram": {

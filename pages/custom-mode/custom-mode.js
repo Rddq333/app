@@ -430,5 +430,9 @@ Page({
       modeParams[mode][param] = Number(value);
       this.setData({ modeParams });
     }
+  },
+
+  onBack() {
+    wx.navigateBack();
   }
 }); 

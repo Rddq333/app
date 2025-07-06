@@ -161,14 +161,8 @@ Page({
       return;
     }
 
-    // 根据模式类型决定行为
-    if (modeKey === 'infrared' || modeKey === 'aromatherapy' || modeKey === 'musicTherapy') {
-      // 红外、香氛、音乐模式跳转到配置页面
-      this.showModeDetails(modeKey, mode);
-    } else {
-      // 水疗、艾灸、中药浴模式直接启动
-      this.startTherapyMode(modeKey, mode);
-    }
+    // 所有模式都弹窗详情，用户确认后再进入
+    this.showModeDetails(modeKey, mode);
   },
 
   // 检查设备连接状态

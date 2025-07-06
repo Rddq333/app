@@ -1,5 +1,7 @@
-<!--custom-mode.wxml-->
-<navigation-bar title="自定义模式配置" back="true" />
+<view class="custom-back-btn" bindtap="onBack">
+  <van-icon name="arrow-left" size="32rpx" />
+</view>
+
 <view class="custom-header">
   <view class="custom-title">自定义模式配置</view>
   <view class="custom-subtitle">组合功能：{{modeConfigs.length}}个模式</view>
@@ -165,6 +167,7 @@
     </view>
   </block>
   <block wx:if="{{item.key === 'herbalBath'}}">
+    <view class="param-title">{{item.name}}参数</view>
     <van-cell title="浸泡时长" value="{{modeParams.herbalBath.duration}}分钟">
       <view class="quick-time-btns">
         <button wx:for="{{[20,30,40,50,60]}}" wx:key="item"
@@ -183,39 +186,35 @@
                  bind:change="onParamChange"
                  data-mode="herbalBath" data-param="duration" />
     </van-cell>
-    <!-- 中药浴参数配置 -->
-    <view class="config-section">
-      <view class="section-title">中药浴理疗参数</view>
-      <van-cell-group>
-        <van-cell title="水温设置" value="{{modeParams.herbalBath.waterTemp}}°C">
-          <van-slider value="{{modeParams.herbalBath.waterTemp}}"
-                     min="35" max="45"
-                     bind:change="onParamChange"
-                     data-mode="herbalBath" data-param="waterTemp" />
-        </van-cell>
-        <van-cell title="中药类型" value="{{modeParams.herbalBath.herbType}}">
-          <picker mode="selector" range="{{['艾草','当归','川芎','黄芪']}}" value="{{['艾草','当归','川芎','黄芪'].indexOf(modeParams.herbalBath.herbType)}}" bindchange="onParamChange" data-mode="herbalBath" data-param="herbType">
-            <view class="picker-value">{{modeParams.herbalBath.herbType}}</view>
-          </picker>
-        </van-cell>
-        <van-cell title="浓度等级" value="{{modeParams.herbalBath.concentration}}级">
-          <van-slider value="{{modeParams.herbalBath.concentration}}"
-                     min="1" max="5"
-                     bind:change="onParamChange"
-                     data-mode="herbalBath" data-param="concentration" />
-        </van-cell>
-        <van-cell title="浸泡模式" value="{{modeParams.herbalBath.mode}}">
-          <picker mode="selector" range="{{['浸泡','冲淋']}}" value="{{['浸泡','冲淋'].indexOf(modeParams.herbalBath.mode)}}" bindchange="onParamChange" data-mode="herbalBath" data-param="mode">
-            <view class="picker-value">{{modeParams.herbalBath.mode}}</view>
-          </picker>
-        </van-cell>
-      </van-cell-group>
-    </view>
+    <van-cell-group>
+      <van-cell title="水温设置" value="{{modeParams.herbalBath.waterTemp}}°C">
+        <van-slider value="{{modeParams.herbalBath.waterTemp}}"
+                   min="35" max="45"
+                   bind:change="onParamChange"
+                   data-mode="herbalBath" data-param="waterTemp" />
+      </van-cell>
+      <van-cell title="中药类型" value="{{modeParams.herbalBath.herbType}}">
+        <picker mode="selector" range="{{['艾草','当归','川芎','黄芪']}}" value="{{['艾草','当归','川芎','黄芪'].indexOf(modeParams.herbalBath.herbType)}}" bindchange="onParamChange" data-mode="herbalBath" data-param="herbType">
+          <view class="picker-value">{{modeParams.herbalBath.herbType}}</view>
+        </picker>
+      </van-cell>
+      <van-cell title="浓度等级" value="{{modeParams.herbalBath.concentration}}级">
+        <van-slider value="{{modeParams.herbalBath.concentration}}"
+                   min="1" max="5"
+                   bind:change="onParamChange"
+                   data-mode="herbalBath" data-param="concentration" />
+      </van-cell>
+      <van-cell title="浸泡模式" value="{{modeParams.herbalBath.mode}}">
+        <picker mode="selector" range="{{['浸泡','冲淋']}}" value="{{['浸泡','冲淋'].indexOf(modeParams.herbalBath.mode)}}" bindchange="onParamChange" data-mode="herbalBath" data-param="mode">
+          <view class="picker-value">{{modeParams.herbalBath.mode}}</view>
+        </picker>
+      </van-cell>
+    </van-cell-group>
   </block>
   <block wx:if="{{item.key === 'aromatherapy'}}">
     <van-cell title="香氛时长" value="{{modeParams.aromatherapy.duration}}分钟">
       <view class="quick-time-btns">
-        <button wx:for="{{[15,20,30,40,50,60]}}" wx:key="item"
+        <button wx:for="{{[15,20,30,35,40,50,60]}}" wx:key="item"
                 size="mini"
                 class="quick-btn"
                 data-value="{{item}}"
@@ -231,26 +230,39 @@
                  bind:change="onParamChange"
                  data-mode="aromatherapy" data-param="duration" />
     </van-cell>
-    <!-- 香氛参数配置 -->
-    <view class="config-section">
-      <view class="section-title">香氛理疗参数</view>
-      <van-cell-group>
-        <van-cell title="精油类型" value="{{modeParams.aromatherapy.oilType}}" />
-        <van-cell title="浓度等级" value="{{modeParams.aromatherapy.concentration}}级">
-          <van-slider value="{{modeParams.aromatherapy.concentration}}" 
-                     min="1" max="5" 
-                     bind:change="onParamChange"
-                     data-mode="aromatherapy" data-param="concentration" />
-        </van-cell>
-        <van-cell title="喷雾模式" value="{{modeParams.aromatherapy.mode}}" />
-        <van-cell title="强度等级" value="{{modeParams.aromatherapy.intensity}}级">
-          <van-slider value="{{modeParams.aromatherapy.intensity}}" 
-                     min="1" max="5" 
-                     bind:change="onParamChange"
-                     data-mode="aromatherapy" data-param="intensity" />
-        </van-cell>
-      </van-cell-group>
-    </view>
+    <van-cell title="精油类型" value="{{modeParams.aromatherapy.oilType}}">
+      <picker mode="selector" range="{{['薰衣草','柠檬','薄荷','玫瑰','橙花','尤加利']}}" value="{{['薰衣草','柠檬','薄荷','玫瑰','橙花','尤加利'].indexOf(modeParams.aromatherapy.oilType)}}" bindchange="onParamChange" data-mode="aromatherapy" data-param="oilType">
+        <view class="picker-value">{{modeParams.aromatherapy.oilType}}</view>
+      </picker>
+    </van-cell>
+    <van-cell title="浓度等级" value="{{modeParams.aromatherapy.concentration}}级">
+      <van-slider value="{{modeParams.aromatherapy.concentration}}"
+                 min="1" max="5"
+                 bind:change="onParamChange"
+                 data-mode="aromatherapy" data-param="concentration" />
+    </van-cell>
+    <van-cell title="喷雾模式" value="{{modeParams.aromatherapy.mode}}">
+      <picker mode="selector" range="{{['喷雾','扩香','间歇']}}" value="{{['喷雾','扩香','间歇'].indexOf(modeParams.aromatherapy.mode)}}" bindchange="onParamChange" data-mode="aromatherapy" data-param="mode">
+        <view class="picker-value">{{modeParams.aromatherapy.mode}}</view>
+      </picker>
+    </van-cell>
+    <van-cell title="强度等级" value="{{modeParams.aromatherapy.intensity}}级">
+      <van-slider value="{{modeParams.aromatherapy.intensity}}"
+                 min="1" max="5"
+                 bind:change="onParamChange"
+                 data-mode="aromatherapy" data-param="intensity" />
+    </van-cell>
+    <van-cell title="风速" value="{{modeParams.aromatherapy.fanSpeed || 1}}档">
+      <van-slider value="{{modeParams.aromatherapy.fanSpeed || 1}}"
+                 min="1" max="3"
+                 bind:change="onParamChange"
+                 data-mode="aromatherapy" data-param="fanSpeed" />
+    </van-cell>
+    <van-cell title="灯光氛围" value="{{modeParams.aromatherapy.light || '柔和'}}">
+      <picker mode="selector" range="{{['柔和','明亮','关闭']}}" value="{{['柔和','明亮','关闭'].indexOf(modeParams.aromatherapy.light || '柔和')}}" bindchange="onParamChange" data-mode="aromatherapy" data-param="light">
+        <view class="picker-value">{{modeParams.aromatherapy.light || '柔和'}}</view>
+      </picker>
+    </van-cell>
   </block>
   <block wx:if="{{item.key === 'musicTherapy'}}">
     <van-cell title="音乐时长" value="{{modeParams.musicTherapy.duration}}分钟">

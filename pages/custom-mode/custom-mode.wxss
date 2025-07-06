@@ -338,4 +338,15 @@
   border-radius: 20rpx;
   font-size: 24rpx;
   padding: 0 16rpx;
+}
+
+.custom-back-btn {
+  position: fixed;
+  top: 20rpx;
+  left: 20rpx;
+  z-index: 999;
+  background: rgba(255,255,255,0.8);
+  border-radius: 50%;
+  padding: 8rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.08);
 } 
