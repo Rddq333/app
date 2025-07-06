@@ -9,7 +9,9 @@ Page({
     irradiationMode: '全身均匀照射',
     focusArea: '肩颈部位',
     showFocusArea: false,
-    remainingTime: '60分钟',
+    runningTime: '00:00',
+    remainingTime: '60:00',
+    totalTime: 60 * 60, // 60分钟
     safetySettings: {
       tempProtection: true,
       distanceDetection: true
@@ -46,10 +48,26 @@ Page({
       '腹部区域'
     ],
     startTime: null,
-    timer: null
+    timer: null,
+    elapsed: 0,
+    params: {
+      temp: 45,
+      tempQuick: [42, 45, 50],
+      wavelength: '中波',
+      wavelengthOptions: ['短波', '中波', '长波'],
+      time: 20,
+      timeOptions: [10, 15, 20, 25, 30],
+      distance: 30,
+      areaMode: '全身均匀照射',
+      areaModeOptions: ['全身均匀照射', '局部重点照射'],
+      skinTempMonitor: true,
+      autoPowerOff: true,
+      intervalRemind: true
+    },
+    timeIndex: 2,
+    areaModeIndex: 0,
+    status: 'idle' // 'idle' | 'running' | 'paused'
   },
-
-
 
   onLoad() {
     this.loadSettings();
@@ -63,6 +81,7 @@ Page({
 
   onShow() {
     this.loadSettings();
+    this.checkRunningStatus();
   },
 
   // 加载设置
@@ -73,6 +92,24 @@ Page({
         ...settings,
         isRunning: wx.getStorageSync('infraredRunning') || false,
         showFocusArea: settings.irradiationMode === '局部重点加热'
+      });
+    }
+  },
+
+  // 检查运行状态
+  checkRunningStatus() {
+    const currentTherapyMode = wx.getStorageSync('currentTherapyMode');
+    if (currentTherapyMode && currentTherapyMode.key === 'infrared') {
+      // 如果当前运行的是红外理疗，恢复运行状态
+      this.setData({
+        isRunning: true,
+        status: 'running'
+      });
+    } else if (currentTherapyMode && currentTherapyMode.key !== 'infrared') {
+      // 如果运行的是其他模式，禁用启动按钮
+      this.setData({
+        isRunning: false,
+        status: 'idle'
       });
     }
   },
@@ -92,8 +129,7 @@ Page({
 
   // 温度变化
   onTempChange(e) {
-    this.setData({ targetTemp: e.detail });
-    this.saveSettings();
+    this.setData({ 'params.temp': Number(e.detail.value) });
   },
 
   // 专业模式切换
@@ -155,91 +191,160 @@ Page({
   },
 
   // 切换红外理疗
-  toggleInfrared() {
-    if (this.data.isRunning) {
-      this.stopInfrared();
-    } else {
+  onToggle() {
+    if (this.data.loading) return;
+    if (!this.data.isRunning) {
       this.startInfrared();
+    } else if (this.data.isRunning && this.data.status !== 'paused') {
+      this.pauseInfrared();
+    } else if (this.data.status === 'paused') {
+      this.resumeInfrared();
     }
   },
 
   // 启动红外理疗
   startInfrared() {
-    this.setData({ loading: true });
-
-    // 模拟启动过程
-    setTimeout(() => {
-      this.setData({
-        isRunning: true,
-        loading: false,
-        startTime: new Date().toISOString()
+    // 检查模式互斥
+    const currentTherapyMode = wx.getStorageSync('currentTherapyMode');
+    if (currentTherapyMode && currentTherapyMode.key && currentTherapyMode.key !== 'infrared') {
+      wx.showModal({
+        title: '模式冲突',
+        content: `当前正在运行${currentTherapyMode.name}，请先停止当前模式后再启动红外理疗`,
+        confirmText: '确定',
+        showCancel: false
       });
+      return;
+    }
 
-      wx.setStorageSync('infraredRunning', true);
-      this.startTimer();
+    const duration = this.data.params.time || 60;
+    this.setData({
+      isRunning: true,
+      status: 'running',
+      startTime: Date.now(),
+      runningTime: '00:00',
+      remainingTime: this.formatTime(duration * 60),
+      elapsed: 0
+    });
+    this.startTimer(duration * 60);
+    wx.setStorageSync('infraredRunning', true);
+    
+    // 保存当前运行模式
+    wx.setStorageSync('currentTherapyMode', {
+      key: 'infrared',
+      name: '红外理疗',
+      startTime: new Date().toISOString()
+    });
+    
+    wx.showToast({ title: '红外理疗已启动', icon: 'success' });
+  },
 
-      wx.showToast({
-        title: '红外理疗已启动',
-        icon: 'success'
-      });
-    }, 1500);
+  // 暂停红外理疗
+  pauseInfrared() {
+    if (this.data.timer) {
+      clearInterval(this.data.timer);
+      this.setData({ timer: null });
+    }
+    this.setData({ status: 'paused' });
+    wx.showToast({ title: '已暂停', icon: 'none' });
+  },
+
+  // 继续红外理疗
+  resumeInfrared() {
+    const duration = this.data.params.time || 60;
+    this.setData({
+      status: 'running',
+      startTime: Date.now() - this.data.elapsed * 1000
+    });
+    this.startTimer(duration * 60 - this.data.elapsed);
+    wx.showToast({ title: '继续理疗', icon: 'success' });
   },
 
   // 停止红外理疗
   stopInfrared() {
-    this.setData({ loading: true });
-
-    setTimeout(() => {
-      this.setData({
-        isRunning: false,
-        loading: false,
-        remainingTime: '60分钟'
-      });
-
-      wx.setStorageSync('infraredRunning', false);
-      if (this.data.timer) {
-        clearInterval(this.data.timer);
-        this.setData({ timer: null });
-      }
-
-      wx.showToast({
-        title: '红外理疗已停止',
-        icon: 'none'
-      });
-    }, 1000);
+    if (this.data.timer) clearInterval(this.data.timer);
+    this.setData({
+      isRunning: false,
+      status: 'idle',
+      runningTime: '00:00',
+      remainingTime: this.formatTime(this.data.params.time * 60 || 3600),
+      elapsed: 0
+    });
+    wx.setStorageSync('infraredRunning', false);
+    
+    // 清除当前运行模式
+    wx.removeStorageSync('currentTherapyMode');
+    
+    wx.showToast({ title: '红外理疗已结束', icon: 'none' });
   },
 
   // 启动计时器
-  startTimer() {
-    const timer = setInterval(() => {
-      const startTime = new Date(this.data.startTime);
-      const now = new Date();
-      const elapsed = Math.floor((now - startTime) / 1000);
-      const remaining = Math.max(0, 60 * 60 - elapsed); // 60分钟
-
-      const minutes = Math.floor(remaining / 60);
-      const seconds = remaining % 60;
-      const remainingTime = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-
-      this.setData({ remainingTime });
-
-      // 时间到自动停止
+  startTimer(totalSeconds) {
+    if (this.data.timer) clearInterval(this.data.timer);
+    this.data.timer = setInterval(() => {
+      const elapsed = Math.floor((Date.now() - this.data.startTime) / 1000);
+      const remaining = Math.max(0, totalSeconds - elapsed);
+      this.setData({
+        runningTime: this.formatTime(elapsed),
+        remainingTime: this.formatTime(remaining),
+        elapsed
+      });
       if (remaining <= 0) {
         this.stopInfrared();
-        wx.showToast({
-          title: '红外理疗时间已到',
-          icon: 'success'
-        });
-      }
-
-      // 模拟温度变化
-      if (this.data.isRunning && this.data.currentTemp < this.data.targetTemp) {
-        this.setData({
-          currentTemp: Math.min(this.data.currentTemp + 0.5, this.data.targetTemp)
-        });
       }
     }, 1000);
+  },
 
-    this.setData({ timer });
+  // 温度快捷按钮
+  onQuickTemp(e) {
+    this.setData({ 'params.temp': Number(e.currentTarget.dataset.value) });
+  },
+
+  // 波长选择
+  onWavelengthChange(e) {
+    this.setData({ 'params.wavelength': e.detail.value });
+  },
+
+  // 治疗时间选择
+  onTimeChange(e) {
+    const idx = Number(e.detail.value);
+    this.setData({
+      'params.time': this.data.params.timeOptions[idx],
+      timeIndex: idx
+    });
+  },
+
+  // 照射距离滑块
+  onDistanceChange(e) {
+    this.setData({ 'params.distance': Number(e.detail.value) });
+  },
+
+  // 照射模式选择
+  onAreaModeChange(e) {
+    const idx = Number(e.detail.value);
+    this.setData({
+      'params.areaMode': this.data.params.areaModeOptions[idx],
+      areaModeIndex: idx
+    });
+  },
+
+  // 皮肤温度监测
+  onSkinTempMonitorChange(e) {
+    this.setData({ 'params.skinTempMonitor': e.detail.value });
+  },
+
+  // 自动断电保护
+  onAutoPowerOffChange(e) {
+    this.setData({ 'params.autoPowerOff': e.detail.value });
+  },
+
+  // 使用间隔提醒
+  onIntervalRemindChange(e) {
+    this.setData({ 'params.intervalRemind': e.detail.value });
+  },
+
+  formatTime(seconds) {
+    const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+    const s = (seconds % 60).toString().padStart(2, '0');
+    return `${m}:${s}`;
   }
 }); 

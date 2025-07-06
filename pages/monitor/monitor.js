@@ -163,5 +163,23 @@ Page({
     } else {
       wx.reLaunch({ url: '/pages/index/index' });
     }
+  },
+
+  // 刷新监测数据按钮事件
+  refreshMonitorData() {
+    this.updateAllData();
+    wx.showToast({
+      title: '数据已刷新',
+      icon: 'success'
+    });
+  },
+
+  // 导出监测报告按钮事件
+  exportMonitorReport() {
+    // 这里可根据实际需求导出数据，暂用toast占位
+    wx.showToast({
+      title: '报告已导出',
+      icon: 'success'
+    });
   }
 }); 

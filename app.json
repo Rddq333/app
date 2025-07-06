@@ -10,7 +10,9 @@
     "pages/moxibustion-enhanced/moxibustion-enhanced",
     "pages/aromatherapy/aromatherapy",
     "pages/herbal-bath/herbal-bath",
-    "pages/music-therapy/music-therapy"
+    "pages/music-therapy/music-therapy",
+    "pages/custom-mode/custom-mode",
+    "pages/custom-config/custom-config"
   ],
   "window": {
     "navigationBarTextStyle": "black",
@@ -42,6 +44,8 @@
     "van-dialog": "@vant/weapp/dialog/index",
     "van-switch": "@vant/weapp/switch/index",
     "van-loading": "@vant/weapp/loading/index",
-    "van-icon": "@vant/weapp/icon/index"
+    "van-icon": "@vant/weapp/icon/index",
+    "van-checkbox": "@vant/weapp/checkbox/index",
+    "van-checkbox-group": "@vant/weapp/checkbox-group/index"
   }
 }

@@ -1,12 +1,12 @@
-<navigation-bar title="香氛疗愈" back="true"></navigation-bar>
+<navigation-bar title="香氛理疗" back="true"></navigation-bar>
 <view class="page-content">
   <!-- 当前状态 -->
   <view class="status-card">
     <view class="status-header">
       <van-icon name="flower-o" size="40px" color="#8b5cf6" />
       <view class="status-info">
-        <view class="status-title">香氛疗愈系统</view>
-        <view class="status-desc">超声波雾化，智能扩散</view>
+        <view class="status-title">香氛理疗系统</view>
+        <view class="status-desc">智能扩散，情境疗愈</view>
       </view>
       <van-tag type="{{isRunning ? 'success' : 'default'}}" size="large">
         {{isRunning ? '运行中' : '已停止'}}
@@ -14,89 +14,128 @@
     </view>
   </view>
 
-  <!-- 香氛盒管理 -->
+  <!-- 基础香氛参数 -->
   <view class="config-card">
-    <view class="section-title">香氛盒管理</view>
+    <view class="section-title">基础香氛参数</view>
     <van-cell-group>
-      <van-cell wx:for="{{aromaBoxes}}" wx:key="id" 
-                title="香氛仓{{item.id}}" 
-                label="{{item.name}} - 剩余{{item.remaining}}次"
-                is-link 
-                bind:tap="selectAromaBox" 
-                data-box="{{item}}">
-        <van-icon wx:if="{{selectedBoxId === item.id}}" name="success" color="#07c160" />
-        <van-tag wx:if="{{item.remaining < 5}}" type="warning" size="small">低库存</van-tag>
+      <!-- 香氛类型选择 -->
+      <van-cell title="香氛类型">
+        <picker mode="selector" range="{{aromaTypes}}" value="{{aromaTypeIndex}}" bindchange="onAromaTypeChange">
+          <view class="picker-value">{{selectedAromaType}}</view>
+        </picker>
       </van-cell>
-      <van-cell title="RFID识别" value="{{rfidEnabled ? '开启' : '关闭'}}">
-        <van-switch checked="{{rfidEnabled}}" bind:change="onRfidChange" />
+      
+      <!-- 浓度调节 -->
+      <van-cell title="浓度等级">
+        <view class="concentration-control">
+          <van-slider 
+            min="1" 
+            max="5" 
+            value="{{concentration}}" 
+            show-value 
+            bind:change="onConcentrationChange"
+            active-color="#8b5cf6"
+          />
+          <view class="concentration-info">
+            <text>{{concentration}}级 ({{concentration * 0.5}}%挥发油浓度)</text>
+          </view>
+        </view>
+      </van-cell>
+      
+      <!-- 扩散方式 -->
+      <van-cell title="扩散方式">
+        <picker mode="selector" range="{{diffusionModes}}" value="{{diffusionModeIndex}}" bindchange="onDiffusionModeChange">
+          <view class="picker-value">{{diffusionMode}}</view>
+        </picker>
+      </van-cell>
+      
+      <!-- 持续时间 -->
+      <van-cell title="持续时间">
+        <picker mode="selector" range="{{durationOptions}}" value="{{durationIndex}}" bindchange="onDurationChange">
+          <view class="picker-value">{{duration}}分钟</view>
+        </picker>
       </van-cell>
     </van-cell-group>
   </view>
 
-  <!-- 扩散控制 -->
+  <!-- 情境模式参数 -->
   <view class="config-card">
-    <view class="section-title">扩散控制</view>
+    <view class="section-title">情境模式参数</view>
     <van-cell-group>
-      <van-cell title="雾化技术" value="超声波雾化" />
-      <van-cell title="扩散模式" is-link bind:tap="selectDiffusionMode">
-        <text>{{diffusionMode}}</text>
+      <!-- 情境模式选择 -->
+      <van-cell title="情境模式">
+        <picker mode="selector" range="{{scenarioOptions}}" value="{{scenarioIndex}}" bindchange="onScenarioChange">
+          <view class="picker-value">{{selectedScenario}}</view>
+        </picker>
       </van-cell>
-      <van-cell title="浓度调节">
-        <van-slider 
-          min="1" 
-          max="5" 
-          value="{{concentration}}" 
-          show-value 
-          bind:change="onConcentrationChange"
-          active-color="#8b5cf6"
-        />
+      
+      <!-- 推荐香型 -->
+      <van-cell wx:if="{{selectedScenario !== '自定义'}}" title="推荐香型" label="{{scenarioConfig.recommendedAroma}}" />
+      
+      <!-- 推荐浓度 -->
+      <van-cell wx:if="{{selectedScenario !== '自定义'}}" title="推荐浓度" label="{{scenarioConfig.recommendedConcentration}}级" />
+      
+      <!-- 扩散节奏 -->
+      <van-cell wx:if="{{selectedScenario !== '自定义'}}" title="扩散节奏" label="{{scenarioConfig.diffusionRhythm}}" />
+      
+      <!-- 灯光配合 -->
+      <van-cell wx:if="{{selectedScenario !== '自定义'}}" title="灯光配合" label="{{scenarioConfig.lightMode}}" />
+    </van-cell-group>
+  </view>
+
+  <!-- 高级设置 -->
+  <view class="config-card">
+    <view class="section-title">高级设置</view>
+    <van-cell-group>
+      <!-- 自动调节 -->
+      <van-cell title="自动浓度调节" value="{{autoAdjust ? '开启' : '关闭'}}">
+        <van-switch checked="{{autoAdjust}}" bind:change="onAutoAdjustChange" />
       </van-cell>
-      <van-cell title="定时释放" is-link bind:tap="selectReleaseMode">
-        <text>{{releaseMode}}</text>
+      
+      <!-- 智能间歇 -->
+      <van-cell title="智能间歇模式" value="{{smartInterval ? '开启' : '关闭'}}">
+        <van-switch checked="{{smartInterval}}" bind:change="onSmartIntervalChange" />
+      </van-cell>
+      
+      <!-- 环境监测 -->
+      <van-cell title="环境监测" value="{{environmentMonitor ? '开启' : '关闭'}}">
+        <van-switch checked="{{environmentMonitor}}" bind:change="onEnvironmentMonitorChange" />
       </van-cell>
     </van-cell-group>
   </view>
 
-  <!-- 香氛配方 -->
-  <view class="config-card">
-    <view class="section-title">香氛配方</view>
+  <!-- 运行信息 -->
+  <view class="config-card" wx:if="{{isRunning}}">
+    <view class="section-title">运行信息</view>
     <van-cell-group>
-      <van-cell title="当前配方" is-link bind:tap="selectAromaFormula">
-        <text>{{currentFormula.name}}</text>
-      </van-cell>
-      <van-cell title="配方描述" label="{{currentFormula.description}}" />
-      <van-cell title="适用场景" label="{{currentFormula.scenario}}" />
-      <van-cell title="持续时间" value="{{currentFormula.duration}}分钟" />
-    </van-cell-group>
-  </view>
-
-  <!-- 定时设置 -->
-  <view class="config-card">
-    <view class="section-title">定时设置</view>
-    <van-cell-group>
-      <van-cell title="定时开启" value="{{timerEnabled ? '开启' : '关闭'}}">
-        <van-switch checked="{{timerEnabled}}" bind:change="onTimerChange" />
-      </van-cell>
-      <van-cell wx:if="{{timerEnabled}}" title="开始时间" is-link bind:tap="selectStartTime">
-        <text>{{startTime}}</text>
-      </van-cell>
-      <van-cell wx:if="{{timerEnabled}}" title="结束时间" is-link bind:tap="selectEndTime">
-        <text>{{endTime}}</text>
-      </van-cell>
+      <van-cell title="运行时间" value="{{runningTime}}" />
       <van-cell title="剩余时间" value="{{remainingTime}}" />
+      <van-cell title="当前浓度" value="{{currentConcentration}}级" />
+      <van-cell title="扩散状态" value="{{diffusionStatus}}" />
     </van-cell-group>
   </view>
 
   <!-- 控制按钮 -->
   <view class="control-buttons">
     <van-button 
-      type="{{isRunning ? 'danger' : 'primary'}}" 
+      type="{{isRunning ? (isPaused ? 'primary' : 'warning') : 'primary'}}" 
       size="large" 
       block 
       bind:tap="toggleAromatherapy"
       loading="{{loading}}"
     >
-      {{isRunning ? '停止香氛' : '启动香氛'}}
+      {{isRunning ? (isPaused ? '继续' : '暂停') : '启动'}}
+    </van-button>
+    
+    <van-button 
+      wx:if="{{isRunning}}" 
+      type="danger" 
+      size="large" 
+      block 
+      bind:tap="stopAromatherapy"
+      style="margin-top: 10px;"
+    >
+      结束
     </van-button>
   </view>
 </view> 

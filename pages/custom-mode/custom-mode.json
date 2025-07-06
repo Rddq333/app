@@ -1,0 +1,15 @@
+{
+  "navigationBarTitleText": "自定义模式配置",
+  "navigationBarBackgroundColor": "#667eea",
+  "navigationBarTextStyle": "white",
+  "backgroundColor": "#f8f9fa",
+  "usingComponents": {
+    "van-cell": "@vant/weapp/cell/index",
+    "van-cell-group": "@vant/weapp/cell-group/index",
+    "van-slider": "@vant/weapp/slider/index",
+    "van-checkbox": "@vant/weapp/checkbox/index",
+    "van-checkbox-group": "@vant/weapp/checkbox-group/index",
+    "van-switch": "@vant/weapp/switch/index",
+    "van-button": "@vant/weapp/button/index"
+  }
+} 

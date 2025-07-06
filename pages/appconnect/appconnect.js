@@ -186,6 +186,9 @@ Page({
     // 保存状态
     wx.setStorageSync('historyDevices', historyDevices);
     wx.setStorageSync('deviceRunning', false);
+    
+    // 清除理疗模式
+    wx.removeStorageSync('currentTherapyMode');
   },
   
   // 连接设备
@@ -308,6 +311,9 @@ Page({
     wx.setStorageSync('historyDevices', historyDevices);
     wx.setStorageSync('deviceRunning', false);
     
+    // 清除理疗模式
+    wx.removeStorageSync('currentTherapyMode');
+    
     wx.showToast({
       title: '设备已断开',
       icon: 'none'
@@ -321,11 +327,15 @@ Page({
     wx.setStorageSync('deviceRunning', running);
     
     if (running) {
+      // 设备启动时，清除任何已存在的理疗模式
+      wx.removeStorageSync('currentTherapyMode');
       wx.showToast({
         title: '设备已启动',
         icon: 'success'
       });
     } else {
+      // 设备停止时，清除所有理疗模式
+      wx.removeStorageSync('currentTherapyMode');
       wx.showToast({
         title: '设备已停止',
         icon: 'none'

@@ -113,6 +113,10 @@ button {
 .mode-icon {
   margin-bottom: 16rpx;
 }
+.mode-image {
+  width: 80rpx;
+  height: 80rpx;
+}
 .mode-title {
   font-size: 32rpx;
   font-weight: bold;

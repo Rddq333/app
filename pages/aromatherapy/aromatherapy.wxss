@@ -1,14 +1,15 @@
 .page-content {
-  padding-top: 120rpx;
-  padding-bottom: 40rpx;
+  padding: 20rpx;
+  background-color: #f8f9fa;
+  min-height: 100vh;
 }
 
 /* 状态卡片 */
 .status-card {
-  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
-  border-radius: 24rpx;
-  padding: 32rpx;
-  margin-bottom: 32rpx;
+  background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%);
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
   color: white;
   box-shadow: 0 8rpx 32rpx rgba(139, 92, 246, 0.3);
 }
@@ -16,11 +17,12 @@
 .status-header {
   display: flex;
   align-items: center;
-  gap: 20rpx;
+  justify-content: space-between;
 }
 
 .status-info {
   flex: 1;
+  margin-left: 20rpx;
 }
 
 .status-title {
@@ -36,33 +38,203 @@
 
 /* 配置卡片 */
 .config-card {
-  background: #fff;
-  border-radius: 24rpx;
-  box-shadow: 0 8rpx 32rpx rgba(0,0,0,0.08);
-  padding: 32rpx;
-  margin-bottom: 32rpx;
+  background: white;
+  border-radius: 16rpx;
+  margin-bottom: 20rpx;
+  overflow: hidden;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.08);
 }
 
 .section-title {
-  font-size: 36rpx;
+  padding: 24rpx 30rpx 16rpx;
+  font-size: 32rpx;
   font-weight: bold;
-  color: #222;
-  margin-bottom: 24rpx;
-  margin-top: 0;
+  color: #333;
+  border-bottom: 1rpx solid #f0f0f0;
+  background: linear-gradient(90deg, #f8f9fa 0%, #ffffff 100%);
+}
+
+/* 浓度控制 */
+.concentration-control {
+  width: 100%;
+}
+
+.concentration-info {
+  margin-top: 16rpx;
+  text-align: center;
+  font-size: 24rpx;
+  color: #666;
+  background: #f8f9fa;
+  padding: 12rpx;
+  border-radius: 8rpx;
+}
+
+/* 情境模式特殊样式 */
+.scenario-info {
+  background: linear-gradient(135deg, #e0e7ff 0%, #f3f4f6 100%);
+  border-radius: 12rpx;
+  padding: 20rpx;
+  margin: 16rpx 0;
+}
+
+.scenario-name {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #4f46e5;
+  margin-bottom: 12rpx;
+}
+
+.scenario-desc {
+  font-size: 24rpx;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+/* 运行信息特殊样式 */
+.running-info {
+  background: linear-gradient(135deg, #dcfce7 0%, #f0fdf4 100%);
+  border-radius: 12rpx;
+  padding: 20rpx;
+  margin: 16rpx 0;
+}
+
+.running-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #16a34a;
+  margin-bottom: 12rpx;
+}
+
+.running-value {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #15803d;
 }
 
 /* 控制按钮 */
 .control-buttons {
-  padding: 0 32rpx;
-  margin-top: 40rpx;
+  padding: 20rpx 0 40rpx;
 }
 
-/* 浓度滑块样式 */
-.van-slider__bar {
+.control-buttons .van-button {
+  border-radius: 12rpx;
+  font-size: 32rpx;
+  font-weight: bold;
+  height: 88rpx;
+  line-height: 88rpx;
+}
+
+.control-buttons .van-button--primary {
+  background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%);
+  border: none;
+}
+
+.control-buttons .van-button--warning {
+  background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%);
+  border: none;
+}
+
+.control-buttons .van-button--danger {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  border: none;
+}
+
+/* 选择器样式 */
+.picker-value {
+  color: #333;
+  font-size: 28rpx;
+  text-align: right;
+  padding: 8rpx 0;
+}
+
+/* 原生picker样式 */
+picker {
+  width: 100%;
+}
+
+picker .picker-value {
+  color: #333;
+  font-size: 28rpx;
+  text-align: right;
+  padding: 8rpx 0;
+}
+
+/* 开关样式 */
+.van-switch--on {
   background-color: #8b5cf6 !important;
 }
 
+/* 滑块样式 */
 .van-slider__button {
   background-color: #8b5cf6 !important;
-  border-color: #8b5cf6 !important;
+}
+
+/* 标签样式 */
+.van-tag--success {
+  background-color: #10b981 !important;
+  color: white !important;
+}
+
+.van-tag--default {
+  background-color: #6b7280 !important;
+  color: white !important;
+}
+
+/* 响应式设计 */
+@media (max-width: 750rpx) {
+  .page-content {
+    padding: 16rpx;
+  }
+  
+  .status-card {
+    padding: 24rpx;
+  }
+  
+  .section-title {
+    padding: 20rpx 24rpx 12rpx;
+    font-size: 30rpx;
+  }
+  
+  .control-buttons .van-button {
+    height: 80rpx;
+    line-height: 80rpx;
+    font-size: 30rpx;
+  }
+}
+
+/* 动画效果 */
+.config-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.config-card:active {
+  transform: scale(0.98);
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.12);
+}
+
+/* 加载状态 */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.loading-content {
+  background: white;
+  border-radius: 16rpx;
+  padding: 40rpx;
+  text-align: center;
+}
+
+.loading-text {
+  margin-top: 20rpx;
+  font-size: 28rpx;
+  color: #666;
 } 

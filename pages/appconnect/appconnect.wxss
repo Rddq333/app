@@ -86,4 +86,40 @@ button {
   border-radius: 16rpx;
   padding: 20rpx;
   margin: 20rpx 0;
+}
+.van-button {
+  border-radius: 16rpx !important;
+  font-size: 32rpx;
+  font-weight: bold;
+  height: 88rpx;
+  line-height: 88rpx;
+  box-shadow: 0 4rpx 16rpx rgba(16, 185, 129, 0.08);
+}
+.van-button--success {
+  background: linear-gradient(135deg, #10b981 0%, #34d399 100%) !important;
+  border: none !important;
+  color: #fff !important;
+}
+.van-button--danger {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+  border: none !important;
+  color: #fff !important;
+}
+.van-button--primary {
+  background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%) !important;
+  border: none !important;
+  color: #fff !important;
+}
+.van-cell .van-button {
+  min-width: 120rpx;
+  max-width: 200rpx;
+  width: auto;
+  border-radius: 16rpx !important;
+  font-size: 28rpx;
+  font-weight: bold;
+  height: 60rpx;
+  line-height: 60rpx;
+  padding: 0 32rpx;
+  box-shadow: 0 2rpx 8rpx rgba(16, 185, 129, 0.08);
+  margin-left: 20rpx;
 } 

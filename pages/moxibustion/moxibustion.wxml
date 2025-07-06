@@ -1,28 +1,108 @@
-<navigation-bar title="艾灸功能" back="true"></navigation-bar>
+<navigation-bar title="艾灸理疗" back="true"></navigation-bar>
+<view class="status-card">
+  <view class="status-header">
+    <van-icon name="flower-o" size="40px" color="#a3c23c" />
+    <view class="status-info">
+      <view class="status-title">艾灸理疗系统</view>
+      <view class="status-desc">温和渗透，舒缓经络</view>
+    </view>
+    <van-tag type="{{status === 'running' ? 'success' : 'default'}}" size="large">
+      {{status === 'running' ? '运行中' : '已停止'}}
+    </van-tag>
+  </view>
+</view>
 <scroll-view class="page-content" scroll-y>
-  <view class="card">
-    <view class="section-title">艾灸设置</view>
-    <van-cell-group>
-      <van-cell title="当前状态" value="{{status}}" />
-      <van-cell title="温度调节">
-        <van-slider min="40" max="60" value="{{temp}}" show-value bind:change="onTempChange" />
-      </van-cell>
-      <van-cell title="时间设置">
-        <van-picker columns="{{timeOptions}}" value="{{timeOptions.indexOf(time)}}" bind:change="onTimeChange" />
-      </van-cell>
-      <van-cell title="部位选择">
-        <van-picker columns="{{partOptions}}" value="{{partOptions.indexOf(part)}}" bind:change="onPartChange" />
-      </van-cell>
-      <van-cell title="强度调节">
-        <van-picker columns="{{intensityOptions}}" value="{{intensityOptions.indexOf(intensity)}}" bind:change="onIntensityChange" />
-      </van-cell>
-      <van-cell title="艾灸模式">
-        <van-picker columns="{{modeOptions}}" value="{{modeOptions.indexOf(mode)}}" bind:change="onModeChange" />
-      </van-cell>
-    </van-cell-group>
-    <view class="btn-group">
-      <van-button type="primary" block bind:tap="startMoxibustion">启动艾灸</van-button>
-      <van-button type="danger" block bind:tap="stopMoxibustion">停止艾灸</van-button>
+  <view class="moxibustion-container">
+    <view class="section-title">核心治疗参数</view>
+    <!-- 温度 -->
+    <view class="param-row">
+      <text class="param-label">温度</text>
+      <slider min="40" max="60" step="1" value="{{params.temp}}" bindchange="onTempChange" show-value />
+      <view class="quick-btns">
+        <button wx:for="{{params.tempQuick}}" wx:key="item" size="mini" class="quick-btn" data-value="{{item}}" bindtap="onQuickTemp">{{item}}℃</button>
+      </view>
+      <text class="param-value">{{params.temp}}℃</text>
+    </view>
+    <!-- 灸距 -->
+    <view class="param-row">
+      <text class="param-label">灸距</text>
+      <slider min="2" max="5" step="0.1" value="{{params.distance}}" bindchange="onDistanceChange" show-value />
+      <text class="param-value">{{params.distance}}cm</text>
+    </view>
+    <!-- 时间 -->
+    <view class="param-row">
+      <text class="param-label">时间</text>
+      <picker mode="selector" range="{{params.timeOptions}}" value="{{timeIndex}}" bindchange="onTimeChange">
+        <view class="picker-value">{{params.time}}分钟</view>
+      </picker>
+    </view>
+    <!-- 灸法 -->
+    <view class="param-row">
+      <text class="param-label">灸法</text>
+      <radio-group bindchange="onMethodChange">
+        <label wx:for="{{params.methodOptions}}" wx:key="item">
+          <radio value="{{item}}" checked="{{params.method === item}}" />{{item}}
+        </label>
+      </radio-group>
+    </view>
+
+    <view class="section-title">安全控制参数</view>
+    <!-- 烟雾净化 -->
+    <view class="param-row">
+      <text class="param-label">烟雾净化</text>
+      <radio-group bindchange="onSmokeCleanChange">
+        <label wx:for="{{params.smokeCleanOptions}}" wx:key="item">
+          <radio value="{{item}}" checked="{{params.smokeClean === item}}" />{{item}}
+        </label>
+      </radio-group>
+    </view>
+    <!-- 温度保护 -->
+    <view class="param-row">
+      <text class="param-label">温度保护</text>
+      <switch checked="{{params.tempProtect}}" bindchange="onTempProtectChange" />
+    </view>
+    <!-- 灸材选择 -->
+    <view class="param-row">
+      <text class="param-label">灸材选择</text>
+      <radio-group bindchange="onMaterialChange">
+        <label wx:for="{{params.materialOptions}}" wx:key="item">
+          <radio value="{{item}}" checked="{{params.material === item}}" />{{item}}
+        </label>
+      </radio-group>
+    </view>
+
+    <view class="config-card" wx:if="{{status === 'running'}}">
+      <view class="section-title">运行信息</view>
+      <van-cell-group>
+        <van-cell title="运行时间" value="{{runningTime}}" />
+        <van-cell title="剩余时间" value="{{remainingTime}}" />
+        <van-cell title="当前温度" value="{{params.temp}}℃" />
+        <van-cell title="当前灸法" value="{{params.method}}" />
+        <van-cell title="当前状态" value="{{status === 'running' ? '运行中' : (status === 'paused' ? '已暂停' : '已停止')}}" />
+      </van-cell-group>
+    </view>
+    <view class="control-buttons">
+      <van-button 
+        type="{{status === 'running' ? (status === 'paused' ? 'primary' : 'warning') : 'primary'}}" 
+        size="large" 
+        block 
+        custom-class="round-btn"
+        bind:tap="onToggle"
+        loading="{{loading}}"
+      >
+        {{status === 'running' ? (status === 'paused' ? '继续' : '暂停') : '启动'}}
+      </van-button>
+      <van-button 
+        wx:if="{{status === 'running'}}" 
+        type="danger" 
+        size="large" 
+        block 
+        custom-class="round-btn"
+        bind:tap="onStop"
+        style="margin-top: 10px;"
+      >
+        结束
+      </van-button>
     </view>
   </view>
 </scroll-view> 

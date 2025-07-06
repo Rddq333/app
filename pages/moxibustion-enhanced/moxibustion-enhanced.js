@@ -1,7 +1,9 @@
 Page({
   data: {
     isRunning: false,
+    isPaused: false,
     loading: false,
+    status: 'idle', // idle, running, paused
     currentTemp: 25,
     targetTemp: 45,
     moxibustionMode: '温灸模式',
@@ -18,7 +20,9 @@ Page({
     fullCourseTime: 45,
     showSinglePointTime: false,
     showFullCourseTime: true,
+    runningTime: '00:00',
     remainingTime: '45:00',
+    elapsed: 0,
     startTime: null,
     timer: null,
     moxibustionModes: ['温灸模式', '热灸模式'],
@@ -184,98 +188,127 @@ Page({
 
   // 切换艾灸
   toggleMoxibustion() {
-    if (this.data.isRunning) {
-      this.stopMoxibustion();
-    } else {
+    if (this.data.loading) return;
+    
+    if (!this.data.isRunning) {
       this.startMoxibustion();
+    } else if (this.data.isPaused) {
+      this.resumeMoxibustion();
+    } else {
+      this.pauseMoxibustion();
     }
   },
 
   // 启动艾灸
   startMoxibustion() {
-    this.setData({ loading: true });
+    // 检查模式互斥
+    const currentTherapyMode = wx.getStorageSync('currentTherapyMode');
+    if (currentTherapyMode && currentTherapyMode.key && currentTherapyMode.key !== 'moxibustionEnhanced') {
+      wx.showModal({
+        title: '模式冲突',
+        content: `当前正在运行${currentTherapyMode.name}，请先停止当前模式后再启动艾灸理疗`,
+        confirmText: '确定',
+        showCancel: false
+      });
+      return;
+    }
 
+    this.setData({
+      loading: true,
+      isRunning: true,
+      isPaused: false,
+      status: 'running',
+      startTime: Date.now(),
+      elapsed: 0,
+      runningTime: '00:00',
+      remainingTime: this.formatTime(this.data.treatmentMode === '单穴位治疗' ? 
+        this.data.singlePointTime * 60 : this.data.fullCourseTime * 60)
+    });
+
+    // 模拟启动过程
     setTimeout(() => {
-      this.setData({
-        isRunning: true,
-        loading: false,
-        startTime: new Date().toISOString()
-      });
+      this.setData({ loading: false });
+      const totalTime = this.data.treatmentMode === '单穴位治疗' ? 
+        this.data.singlePointTime * 60 : this.data.fullCourseTime * 60;
+      this.startTimer(totalTime);
+    }, 1000);
+    
+    // 保存当前运行模式
+    wx.setStorageSync('currentTherapyMode', {
+      key: 'moxibustionEnhanced',
+      name: '增强艾灸理疗',
+      startTime: new Date().toISOString()
+    });
+    
+    wx.showToast({ title: '增强艾灸理疗已启动', icon: 'success' });
+  },
 
-      wx.setStorageSync('moxibustionEnhancedRunning', true);
-      this.startTimer();
+  // 暂停艾灸
+  pauseMoxibustion() {
+    if (this.data.timer) {
+      clearInterval(this.data.timer);
+      this.setData({ timer: null });
+    }
+    this.setData({ 
+      status: 'paused',
+      isPaused: true
+    });
+    wx.showToast({ title: '已暂停', icon: 'none' });
+  },
 
-      wx.showToast({
-        title: '艾灸理疗已启动',
-        icon: 'success'
-      });
-    }, 1500);
+  // 继续艾灸
+  resumeMoxibustion() {
+    const totalTime = this.data.treatmentMode === '单穴位治疗' ? 
+      this.data.singlePointTime * 60 : this.data.fullCourseTime * 60;
+    this.setData({
+      status: 'running',
+      isPaused: false,
+      startTime: Date.now() - this.data.elapsed * 1000
+    });
+    this.startTimer(totalTime - this.data.elapsed);
+    wx.showToast({ title: '继续理疗', icon: 'success' });
   },
 
   // 停止艾灸
   stopMoxibustion() {
-    this.setData({ loading: true });
-
-    setTimeout(() => {
-      this.setData({
-        isRunning: false,
-        loading: false,
-        remainingTime: '45:00'
-      });
-
-      wx.setStorageSync('moxibustionEnhancedRunning', false);
-      if (this.data.timer) {
-        clearInterval(this.data.timer);
-        this.setData({ timer: null });
-      }
-
-      wx.showToast({
-        title: '艾灸理疗已停止',
-        icon: 'none'
-      });
-    }, 1000);
+    if (this.data.timer) clearInterval(this.data.timer);
+    this.setData({
+      isRunning: false,
+      isPaused: false,
+      status: 'idle',
+      runningTime: '00:00',
+      remainingTime: this.formatTime(this.data.treatmentMode === '单穴位治疗' ? 
+        this.data.singlePointTime * 60 : this.data.fullCourseTime * 60),
+      elapsed: 0
+    });
+    
+    // 清除当前运行模式
+    wx.removeStorageSync('currentTherapyMode');
+    
+    wx.showToast({ title: '增强艾灸理疗已结束', icon: 'none' });
   },
 
   // 启动计时器
-  startTimer() {
-    const timer = setInterval(() => {
-      const startTime = new Date(this.data.startTime);
-      const now = new Date();
-      const elapsed = Math.floor((now - startTime) / 1000);
-      const totalTime = this.data.treatmentMode === '单穴位治疗' ? 
-        this.data.singlePointTime * 60 : this.data.fullCourseTime * 60;
-      const remaining = Math.max(0, totalTime - elapsed);
-
-      const minutes = Math.floor(remaining / 60);
-      const seconds = remaining % 60;
-      const remainingTime = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-
-      this.setData({ remainingTime });
-
-      // 时间到自动停止
+  startTimer(totalSeconds) {
+    if (this.data.timer) clearInterval(this.data.timer);
+    this.data.timer = setInterval(() => {
+      const elapsed = Math.floor((Date.now() - this.data.startTime) / 1000);
+      const remaining = Math.max(0, totalSeconds - elapsed);
+      this.setData({
+        runningTime: this.formatTime(elapsed),
+        remainingTime: this.formatTime(remaining),
+        elapsed
+      });
       if (remaining <= 0) {
         this.stopMoxibustion();
-        wx.showToast({
-          title: '艾灸理疗已完成',
-          icon: 'success'
-        });
-      }
-
-      // 模拟温度变化
-      if (this.data.isRunning && this.data.currentTemp < this.data.targetTemp) {
-        this.setData({
-          currentTemp: Math.min(this.data.currentTemp + 0.3, this.data.targetTemp)
-        });
-      }
-
-      // 模拟烟雾浓度变化
-      if (this.data.isRunning) {
-        const smokeChange = Math.random() > 0.5 ? 1 : -1;
-        const newSmokeLevel = Math.max(0, Math.min(100, this.data.smokeLevel + smokeChange));
-        this.setData({ smokeLevel: newSmokeLevel });
       }
     }, 1000);
+  },
 
-    this.setData({ timer });
+  // 格式化时间
+  formatTime(seconds) {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
   }
 }); 

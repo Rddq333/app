@@ -1,6 +1,8 @@
 .moxibustion-container {
-  padding: 40rpx;
-  font-size: 36rpx;
+  padding: 32rpx;
+  background: #f7f8fa;
+  margin-top: 0;
+  padding-top: 0;
 }
 .label {
   margin-top: 30rpx;
@@ -18,10 +20,21 @@ button {
   margin: 20rpx 0;
 }
 .btn-group {
-  margin-top: 40rpx;
   display: flex;
-  flex-direction: column;
-  gap: 32rpx;
+  gap: 24rpx;
+  margin-top: 32rpx;
+}
+.pause-btn, .resume-btn, .stop-btn {
+  flex: 1;
+  font-size: 32rpx;
+  border-radius: 16rpx;
+}
+.start-btn {
+  width: 100%;
+  font-size: 32rpx;
+  background: #f59e0b;
+  color: #fff;
+  border-radius: 16rpx;
 }
 .custom-navbar {
   display: flex;
@@ -50,6 +63,8 @@ button {
   padding-top: 120rpx;
   box-sizing: border-box;
   overflow: auto;
+  margin-top: 0;
+  padding-top: 0;
 }
 .card {
   background: #fff;
@@ -59,9 +74,71 @@ button {
   margin-bottom: 32rpx;
 }
 .section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  margin: 32rpx 0 16rpx 0;
+  color: #333;
+}
+.param-row {
+  margin-bottom: 24rpx;
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 20rpx 16rpx;
+  display: flex;
+  flex-direction: column;
+}
+.param-label {
+  font-size: 28rpx;
+  color: #222;
+  margin-bottom: 8rpx;
+}
+.param-value {
+  font-size: 24rpx;
+  color: #3b82f6;
+  margin-top: 8rpx;
+}
+.quick-btns {
+  display: flex;
+  gap: 16rpx;
+  margin: 8rpx 0;
+}
+.quick-btn {
+  background: #f3f4f6;
+  color: #333;
+  border-radius: 12rpx;
+  margin-right: 8rpx;
+}
+.picker-value {
+  font-size: 26rpx;
+  color: #222;
+  padding: 8rpx 0;
+}
+.status-card {
+  background: linear-gradient(135deg, #a3c23c 0%, #7bb661 100%);
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  color: white;
+  box-shadow: 0 8rpx 32rpx rgba(163, 194, 60, 0.18);
+}
+.status-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.status-info {
+  flex: 1;
+  margin-left: 20rpx;
+}
+.status-title {
   font-size: 36rpx;
   font-weight: bold;
-  color: #222;
-  margin-bottom: 24rpx;
-  margin-top: 0;
+  margin-bottom: 8rpx;
+}
+.status-desc {
+  font-size: 28rpx;
+  opacity: 0.9;
+}
+.control-buttons .van-button, .round-btn {
+  border-radius: 16rpx !important;
 } 

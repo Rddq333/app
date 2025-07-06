@@ -72,4 +72,9 @@
     <view class="section-title">数据可视化</view>
     <view class="chart-placeholder">[图表区域]</view>
   </view>
+</view>
+
+<view class="monitor-buttons">
+  <view class="monitor-btn refresh" bindtap="refreshMonitorData">刷新监测数据</view>
+  <view class="monitor-btn export" bindtap="exportMonitorReport">导出监测报告</view>
 </view> 

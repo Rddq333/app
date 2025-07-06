@@ -105,14 +105,29 @@
 
   <!-- 控制按钮 -->
   <view class="control-buttons">
+    <!-- 启动/暂停按钮 -->
     <van-button 
-      type="{{isRunning ? 'danger' : 'primary'}}" 
+      type="{{!isRunning ? 'primary' : (isPaused ? 'primary' : 'warning')}}" 
       size="large" 
       block 
       bind:tap="toggleMoxibustion"
       loading="{{loading}}"
+      disabled="{{loading}}"
     >
-      {{isRunning ? '停止艾灸' : '启动艾灸'}}
+      {{!isRunning ? '启动艾灸' : (isPaused ? '继续艾灸' : '暂停艾灸')}}
+    </van-button>
+    
+    <!-- 停止按钮 -->
+    <van-button 
+      wx:if="{{isRunning}}"
+      type="danger" 
+      size="large" 
+      block 
+      bind:tap="stopMoxibustion"
+      disabled="{{loading}}"
+      style="margin-top: 16px;"
+    >
+      停止艾灸
     </van-button>
   </view>
 </view> 

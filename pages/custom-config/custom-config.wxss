@@ -1,0 +1,218 @@
+/* custom-config.wxss */
+.page-content {
+  padding: 20rpx;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+}
+
+.status-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.1);
+}
+
+.status-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.status-info {
+  flex: 1;
+  margin-left: 20rpx;
+}
+
+.status-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 8rpx;
+}
+
+.status-desc {
+  font-size: 28rpx;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.config-card {
+  background: white;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.08);
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20rpx;
+  display: flex;
+  align-items: center;
+}
+
+.section-title::before {
+  content: '';
+  width: 8rpx;
+  height: 32rpx;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 4rpx;
+  margin-right: 16rpx;
+}
+
+.mode-tabs {
+  display: flex;
+  background: #f8f9fa;
+  border-radius: 16rpx;
+  padding: 8rpx;
+  margin-bottom: 20rpx;
+}
+
+.tab-item {
+  flex: 1;
+  text-align: center;
+  padding: 20rpx 16rpx;
+  border-radius: 12rpx;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.tab-item.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  box-shadow: 0 4rpx 16rpx rgba(102, 126, 234, 0.3);
+}
+
+.tab-name {
+  font-size: 28rpx;
+  font-weight: 500;
+  margin-bottom: 8rpx;
+}
+
+.tab-duration {
+  font-size: 24rpx;
+  opacity: 0.8;
+}
+
+.config-content {
+  max-height: 800rpx;
+  margin-bottom: 20rpx;
+}
+
+.mode-config {
+  display: none;
+}
+
+.mode-config.active {
+  display: block;
+}
+
+.config-section {
+  background: white;
+  border-radius: 16rpx;
+  padding: 20rpx;
+  margin-bottom: 20rpx;
+}
+
+.control-buttons {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  padding: 20rpx;
+  box-shadow: 0 -4rpx 20rpx rgba(0, 0, 0, 0.1);
+  z-index: 100;
+}
+
+.no-mode-tip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20rpx;
+  margin-bottom: 20rpx;
+  background: #f8f9fa;
+  border-radius: 12rpx;
+  color: #999;
+  font-size: 28rpx;
+}
+
+.no-mode-tip text {
+  margin-left: 10rpx;
+}
+
+/* 滑块样式优化 */
+.van-slider {
+  margin: 20rpx 0;
+}
+
+.van-slider__bar {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+}
+
+.van-slider__button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  box-shadow: 0 4rpx 12rpx rgba(102, 126, 234, 0.3) !important;
+}
+
+/* 复选框样式优化 */
+.van-checkbox__icon {
+  border-color: #ddd !important;
+}
+
+.van-checkbox__icon--checked {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  border-color: #667eea !important;
+}
+
+/* 开关样式优化 */
+.van-switch__node {
+  background: white !important;
+}
+
+.van-switch--on {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+}
+
+/* 按钮样式优化 */
+.van-button--primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  border: none !important;
+  border-radius: 16rpx !important;
+  font-weight: 500 !important;
+  box-shadow: 0 8rpx 24rpx rgba(102, 126, 234, 0.3) !important;
+}
+
+.van-button--warning {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%) !important;
+  border: none !important;
+  border-radius: 16rpx !important;
+  font-weight: 500 !important;
+  box-shadow: 0 8rpx 24rpx rgba(240, 147, 251, 0.3) !important;
+}
+
+.van-button--danger {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%) !important;
+  border: none !important;
+  border-radius: 16rpx !important;
+  font-weight: 500 !important;
+  box-shadow: 0 8rpx 24rpx rgba(255, 107, 107, 0.3) !important;
+}
+
+/* 标签样式优化 */
+.van-tag--success {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+  border: none !important;
+  border-radius: 12rpx !important;
+  font-weight: 500 !important;
+}
+
+.van-tag--default {
+  background: #f3f4f6 !important;
+  color: #6b7280 !important;
+  border: none !important;
+  border-radius: 12rpx !important;
+  font-weight: 500 !important;
+} 

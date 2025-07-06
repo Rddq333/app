@@ -1,98 +1,107 @@
 <navigation-bar title="红外理疗" back="true"></navigation-bar>
-<view class="page-content">
-  <!-- 当前状态 -->
-  <view class="status-card">
-    <view class="status-header">
-      <van-icon name="bulb-o" size="40px" color="#f59e0b" />
-      <view class="status-info">
-        <view class="status-title">红外理疗系统</view>
-        <view class="status-desc">深层加热，可达关节</view>
-      </view>
-      <van-tag type="{{isRunning ? 'success' : 'default'}}" size="large">
-        {{isRunning ? '运行中' : '已停止'}}
-      </van-tag>
+<view class="status-card">
+  <view class="status-header">
+    <van-icon name="fire" size="40px" color="#f59e42" />
+    <view class="status-info">
+      <view class="status-title">红外理疗系统</view>
+      <view class="status-desc">智能照射，深层理疗</view>
     </view>
+    <van-tag type="{{status === 'running' ? 'success' : 'default'}}" size="large">
+      {{status === 'running' ? '运行中' : '已停止'}}
+    </van-tag>
+  </view>
+</view>
+<view class="infrared-container">
+  <view class="section-title">基础治疗参数</view>
+  <!-- 温度 -->
+  <view class="param-row">
+    <text class="param-label">温度</text>
+    <slider min="40" max="60" step="1" value="{{params.temp}}" bindchange="onTempChange" show-value />
+    <view class="quick-btns">
+      <button wx:for="{{params.tempQuick}}" wx:key="item" size="mini" class="quick-btn" data-value="{{item}}" bindtap="onQuickTemp">{{item}}℃</button>
+    </view>
+    <text class="param-value">{{params.temp}}℃</text>
+  </view>
+  <!-- 波长 -->
+  <view class="param-row">
+    <text class="param-label">波长</text>
+    <radio-group bindchange="onWavelengthChange">
+      <label wx:for="{{params.wavelengthOptions}}" wx:key="item">
+        <radio value="{{item}}" checked="{{params.wavelength === item}}" />{{item}}
+      </label>
+    </radio-group>
+  </view>
+  <!-- 治疗时间 -->
+  <view class="param-row">
+    <text class="param-label">治疗时间</text>
+    <picker mode="selector" range="{{params.timeOptions}}" value="{{timeIndex}}" bindchange="onTimeChange">
+      <view class="picker-value">{{params.time}}分钟</view>
+    </picker>
+  </view>
+  <!-- 照射距离 -->
+  <view class="param-row">
+    <text class="param-label">照射距离</text>
+    <slider min="20" max="50" step="1" value="{{params.distance}}" bindchange="onDistanceChange" show-value />
+    <text class="param-value">{{params.distance}}cm</text>
   </view>
 
-  <!-- 温度控制 -->
-  <view class="config-card">
-    <view class="section-title">温度控制</view>
-    <van-cell-group>
-      <van-cell title="当前温度" value="{{currentTemp}}°C" />
-      <van-cell title="目标温度">
-        <van-slider 
-          min="40" 
-          max="{{isProfessionalMode ? 70 : 65}}" 
-          value="{{targetTemp}}" 
-          show-value 
-          bind:change="onTempChange"
-          active-color="#f59e0b"
-        />
-      </van-cell>
-      <van-cell title="专业模式" is-link bind:tap="toggleProfessionalMode">
-        <van-switch checked="{{isProfessionalMode}}" bind:change="onProfessionalModeChange" />
-      </van-cell>
-      <van-cell title="精度控制" value="±0.5°C" />
-      <van-cell title="梯度升温" value="每5分钟升温不超过5°C" />
-    </van-cell-group>
+  <view class="section-title">照射区域</view>
+  <view class="param-row">
+    <text class="param-label">照射模式</text>
+    <picker mode="selector" range="{{params.areaModeOptions}}" value="{{areaModeIndex}}" bindchange="onAreaModeChange">
+      <view class="picker-value">{{params.areaMode}}</view>
+    </picker>
+  </view>
+  <image src="/images/infrared-area.png" class="area-img" mode="widthFix" />
+
+  <view class="section-title">智能安全参数</view>
+  <!-- 皮肤温度监测 -->
+  <view class="param-row">
+    <text class="param-label">皮肤温度监测</text>
+    <switch checked="{{params.skinTempMonitor}}" bindchange="onSkinTempMonitorChange" />
+  </view>
+  <!-- 自动断电保护 -->
+  <view class="param-row">
+    <text class="param-label">自动断电保护</text>
+    <switch checked="{{params.autoPowerOff}}" bindchange="onAutoPowerOffChange" />
+  </view>
+  <!-- 使用间隔提醒 -->
+  <view class="param-row">
+    <text class="param-label">使用间隔提醒</text>
+    <switch checked="{{params.intervalRemind}}" bindchange="onIntervalRemindChange" />
   </view>
 
-  <!-- 波长选择 -->
-  <view class="config-card">
-    <view class="section-title">波长选择</view>
+  <view class="config-card" wx:if="{{isRunning}}">
+    <view class="section-title">运行信息</view>
     <van-cell-group>
-      <van-cell 
-        wx:for="{{wavelengthOptions}}" 
-        wx:key="value"
-        title="{{item.label}}" 
-        label="{{item.description}}"
-        is-link 
-        bind:tap="selectWavelength" 
-        data-wavelength="{{item.value}}"
-      >
-        <van-icon wx:if="{{selectedWavelength === item.value}}" name="success" color="#07c160" />
-      </van-cell>
-    </van-cell-group>
-  </view>
-
-  <!-- 照射区域 -->
-  <view class="config-card">
-    <view class="section-title">照射区域</view>
-    <van-cell-group>
-      <van-cell title="照射模式" is-link bind:tap="selectIrradiationMode">
-        <text>{{irradiationMode}}</text>
-      </van-cell>
-      <van-cell wx:if="{{showFocusArea}}" title="重点区域" is-link bind:tap="selectFocusArea">
-        <text>{{focusArea}}</text>
-      </van-cell>
-    </van-cell-group>
-  </view>
-
-  <!-- 安全设置 -->
-  <view class="config-card">
-    <view class="section-title">安全保护</view>
-    <van-cell-group>
-      <van-cell title="温度异常断电" value="{{safetySettings.tempProtection ? '开启' : '关闭'}}">
-        <van-switch checked="{{safetySettings.tempProtection}}" bind:change="onTempProtectionChange" />
-      </van-cell>
-      <van-cell title="人体距离检测" value="{{safetySettings.distanceDetection ? '开启' : '关闭'}}">
-        <van-switch checked="{{safetySettings.distanceDetection}}" bind:change="onDistanceDetectionChange" />
-      </van-cell>
-      <van-cell title="使用时间限制" value="单次≤60分钟" />
+      <van-cell title="运行时间" value="{{runningTime}}" />
       <van-cell title="剩余时间" value="{{remainingTime}}" />
+      <van-cell title="当前温度" value="{{params.temp}}℃" />
+      <van-cell title="当前波长" value="{{params.wavelength}}" />
+      <van-cell title="当前状态" value="{{isRunning ? '运行中' : (status === 'paused' ? '已暂停' : '已停止')}}" />
     </van-cell-group>
   </view>
-
-  <!-- 控制按钮 -->
   <view class="control-buttons">
     <van-button 
-      type="{{isRunning ? 'danger' : 'primary'}}" 
+      type="{{isRunning ? (status === 'paused' ? 'primary' : 'warning') : 'primary'}}" 
       size="large" 
       block 
-      bind:tap="toggleInfrared"
+      custom-class="round-btn"
+      bind:tap="onToggle"
       loading="{{loading}}"
     >
-      {{isRunning ? '停止红外理疗' : '启动红外理疗'}}
+      {{isRunning ? (status === 'paused' ? '继续' : '暂停') : '启动'}}
+    </van-button>
+    <van-button 
+      wx:if="{{isRunning}}" 
+      type="danger" 
+      size="large" 
+      block 
+      custom-class="round-btn"
+      bind:tap="stopInfrared"
+      style="margin-top: 10px;"
+    >
+      结束
     </van-button>
   </view>
 </view> 

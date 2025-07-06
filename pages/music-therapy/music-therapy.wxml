@@ -1,12 +1,12 @@
-<navigation-bar title="音乐疗愈" back="true"></navigation-bar>
+<navigation-bar title="音乐理疗" back="true"></navigation-bar>
 <view class="page-content">
   <!-- 当前状态 -->
   <view class="status-card">
     <view class="status-header">
       <van-icon name="music-o" size="40px" color="#10b981" />
       <view class="status-info">
-        <view class="status-title">音乐疗愈系统</view>
-        <view class="status-desc">3D环绕声，脑波同步</view>
+        <view class="status-title">音乐理疗系统</view>
+        <view class="status-desc">脑波同步，科学疗愈</view>
       </view>
       <van-tag type="{{isRunning ? 'success' : 'default'}}" size="large">
         {{isRunning ? '播放中' : '已停止'}}
@@ -14,91 +14,154 @@
     </view>
   </view>
 
-  <!-- 音频库 -->
+  <!-- 核心治疗参数 -->
   <view class="config-card">
-    <view class="section-title">音频库</view>
+    <view class="section-title">核心治疗参数</view>
     <van-cell-group>
-      <van-cell title="音频分类" is-link bind:tap="selectAudioCategory">
-        <text>{{selectedCategory}}</text>
+      <!-- 音乐类型 -->
+      <van-cell title="音乐类型">
+        <picker mode="selector" range="{{musicTypes}}" value="{{musicTypeIndex}}" bindchange="onMusicTypeChange">
+          <view class="picker-value">{{selectedMusicType}}</view>
+        </picker>
       </van-cell>
-      <van-cell title="当前曲目" is-link bind:tap="selectTrack">
-        <text>{{currentTrack.name}}</text>
+      
+      <!-- 频率范围 -->
+      <van-cell title="频率范围">
+        <view class="frequency-control">
+          <van-slider 
+            min="20" 
+            max="8000" 
+            value="{{frequency}}" 
+            show-value 
+            bind:change="onFrequencyChange"
+            active-color="#10b981"
+          />
+          <view class="frequency-info">
+            <text>{{frequency}}Hz ({{getFrequencyDesc(frequency)}})</text>
+          </view>
+        </view>
       </van-cell>
-      <van-cell title="曲目时长" value="{{currentTrack.duration}}" />
-      <van-cell title="播放模式" is-link bind:tap="selectPlayMode">
-        <text>{{playMode}}</text>
+      
+      <!-- 音量 -->
+      <van-cell title="音量">
+        <view class="volume-control">
+          <van-slider 
+            min="40" 
+            max="75" 
+            value="{{volume}}" 
+            show-value 
+            bind:change="onVolumeChange"
+            active-color="#10b981"
+          />
+          <view class="volume-info">
+            <text>{{volume}}分贝 ({{getVolumeDesc(volume)}})</text>
+          </view>
+        </view>
+      </van-cell>
+      
+      <!-- 节奏 -->
+      <van-cell title="节奏">
+        <view class="rhythm-control">
+          <van-slider 
+            min="60" 
+            max="120" 
+            value="{{rhythm}}" 
+            show-value 
+            bind:change="onRhythmChange"
+            active-color="#10b981"
+          />
+          <view class="rhythm-info">
+            <text>{{rhythm}}BPM ({{getRhythmDesc(rhythm)}})</text>
+          </view>
+        </view>
       </van-cell>
     </van-cell-group>
   </view>
 
-  <!-- 声场处理 -->
+  <!-- 情境模式参数 -->
   <view class="config-card">
-    <view class="section-title">声场处理</view>
+    <view class="section-title">情境模式参数</view>
     <van-cell-group>
+      <!-- 情境模式选择 -->
+      <van-cell title="情境模式">
+        <picker mode="selector" range="{{scenarioOptions}}" value="{{scenarioIndex}}" bindchange="onScenarioChange">
+          <view class="picker-value">{{selectedScenario}}</view>
+        </picker>
+      </van-cell>
+      
+      <!-- 推荐音乐类型 -->
+      <van-cell wx:if="{{selectedScenario !== '自定义'}}" title="推荐音乐类型" label="{{scenarioConfig.recommendedMusic}}" />
+      
+      <!-- 推荐频率 -->
+      <van-cell wx:if="{{selectedScenario !== '自定义'}}" title="推荐频率" label="{{scenarioConfig.recommendedFrequency}}Hz" />
+      
+      <!-- 推荐节奏 -->
+      <van-cell wx:if="{{selectedScenario !== '自定义'}}" title="推荐节奏" label="{{scenarioConfig.recommendedRhythm}}BPM" />
+      
+      <!-- 附加效果 -->
+      <van-cell wx:if="{{selectedScenario !== '自定义'}}" title="附加效果" label="{{scenarioConfig.additionalEffect}}" />
+    </van-cell-group>
+  </view>
+
+  <!-- 高级设置 -->
+  <view class="config-card">
+    <view class="section-title">高级设置</view>
+    <van-cell-group>
+      <!-- 脑波同步 -->
+      <van-cell title="脑波同步" value="{{brainwaveSync ? '开启' : '关闭'}}">
+        <van-switch checked="{{brainwaveSync}}" bind:change="onBrainwaveSyncChange" />
+      </van-cell>
+      
+      <!-- 3D环绕声 -->
       <van-cell title="3D环绕声" value="{{surround3d ? '开启' : '关闭'}}">
         <van-switch checked="{{surround3d}}" bind:change="onSurround3dChange" />
       </van-cell>
-      <van-cell title="水声掩蔽" value="{{waterMasking ? '开启' : '关闭'}}">
-        <van-switch checked="{{waterMasking}}" bind:change="onWaterMaskingChange" />
+      
+      <!-- 动态灯光 -->
+      <van-cell title="动态灯光" value="{{dynamicLighting ? '开启' : '关闭'}}">
+        <van-switch checked="{{dynamicLighting}}" bind:change="onDynamicLightingChange" />
       </van-cell>
-      <van-cell title="动态音量平衡" value="{{dynamicBalance ? '开启' : '关闭'}}">
-        <van-switch checked="{{dynamicBalance}}" bind:change="onDynamicBalanceChange" />
-      </van-cell>
-      <van-cell title="音量调节">
-        <van-slider 
-          min="0" 
-          max="100" 
-          value="{{volume}}" 
-          show-value 
-          bind:change="onVolumeChange"
-          active-color="#10b981"
-        />
+      
+      <!-- 座椅振动 -->
+      <van-cell title="座椅振动" value="{{seatVibration ? '开启' : '关闭'}}">
+        <van-switch checked="{{seatVibration}}" bind:change="onSeatVibrationChange" />
       </van-cell>
     </van-cell-group>
   </view>
 
-  <!-- 脑波同步 -->
-  <view class="config-card">
-    <view class="section-title">脑波同步</view>
+  <!-- 运行信息 -->
+  <view class="config-card" wx:if="{{isRunning}}">
+    <view class="section-title">运行信息</view>
     <van-cell-group>
-      <van-cell title="双耳节拍" value="{{binauralBeats ? '开启' : '关闭'}}">
-        <van-switch checked="{{binauralBeats}}" bind:change="onBinauralBeatsChange" />
-      </van-cell>
-      <van-cell title="频率选择" is-link bind:tap="selectFrequency">
-        <text>{{selectedFrequency}}Hz</text>
-      </van-cell>
-      <van-cell title="EEG反馈" value="{{eegFeedback ? '开启' : '关闭'}}">
-        <van-switch checked="{{eegFeedback}}" bind:change="onEegFeedbackChange" />
-      </van-cell>
-      <van-cell title="脑波状态" value="{{brainwaveStatus}}" />
-    </van-cell-group>
-  </view>
-
-  <!-- 播放控制 -->
-  <view class="config-card">
-    <view class="section-title">播放控制</view>
-    <van-cell-group>
-      <van-cell title="播放进度" value="{{playProgress}}%" />
+      <van-cell title="播放时间" value="{{runningTime}}" />
       <van-cell title="剩余时间" value="{{remainingTime}}" />
-      <van-cell title="自动停止" value="{{autoStop ? '开启' : '关闭'}}">
-        <van-switch checked="{{autoStop}}" bind:change="onAutoStopChange" />
-      </van-cell>
-      <van-cell wx:if="{{autoStop}}" title="停止时间" is-link bind:tap="selectStopTime">
-        <text>{{stopTime}}</text>
-      </van-cell>
+      <van-cell title="当前频率" value="{{currentFrequency}}Hz" />
+      <van-cell title="当前节奏" value="{{currentRhythm}}BPM" />
+      <van-cell title="播放状态" value="{{playStatus}}" />
     </van-cell-group>
   </view>
 
   <!-- 控制按钮 -->
   <view class="control-buttons">
     <van-button 
-      type="{{isRunning ? 'danger' : 'primary'}}" 
+      type="{{isRunning ? (isPaused ? 'primary' : 'warning') : 'primary'}}" 
       size="large" 
       block 
       bind:tap="toggleMusicTherapy"
       loading="{{loading}}"
     >
-      {{isRunning ? '停止音乐' : '播放音乐'}}
+      {{isRunning ? (isPaused ? '继续' : '暂停') : '启动'}}
+    </van-button>
+    
+    <van-button 
+      wx:if="{{isRunning}}" 
+      type="danger" 
+      size="large" 
+      block 
+      bind:tap="stopMusicTherapy"
+      style="margin-top: 10px;"
+    >
+      结束
     </van-button>
   </view>
 </view> 

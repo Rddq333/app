@@ -1,107 +1,105 @@
 <navigation-bar title="药浴理疗" back="true"></navigation-bar>
-<view class="page-content">
-  <!-- 当前状态 -->
-  <view class="status-card">
-    <view class="status-header">
-      <van-icon name="hot-o" size="40px" color="#f59e42" />
-      <view class="status-info">
-        <view class="status-title">药浴理疗系统</view>
-        <view class="status-desc">中药配方，智能制备</view>
-      </view>
-      <van-tag type="{{isRunning ? 'success' : 'default'}}" size="large">
-        {{isRunning ? '运行中' : '已停止'}}
-      </van-tag>
+<view class="status-card">
+  <view class="status-header">
+    <van-icon name="leaf" size="40px" color="#34d399" />
+    <view class="status-info">
+      <view class="status-title">药浴理疗系统</view>
+      <view class="status-desc">草本浸泡，调和身心</view>
     </view>
+    <van-tag type="{{status === 'running' ? 'success' : 'default'}}" size="large">
+      {{status === 'running' ? '运行中' : '已停止'}}
+    </van-tag>
+  </view>
+</view>
+<view class="herbal-bath-container">
+  <view class="section-title">基础治疗参数</view>
+  <!-- 药液浓度 -->
+  <view class="param-row">
+    <text class="param-label">药液浓度</text>
+    <picker mode="selector" range="{{params.concentrationOptions}}" value="{{concentrationIndex}}" bindchange="onConcentrationChange">
+      <view class="picker-value">1:{{params.concentration}}</view>
+    </picker>
+  </view>
+  <!-- 水温 -->
+  <view class="param-row">
+    <text class="param-label">水温</text>
+    <slider min="38" max="42" step="0.5" value="{{params.waterTemp}}" bindchange="onWaterTempChange" show-value />
+    <view class="quick-btns">
+      <button wx:for="{{params.waterTempQuick}}" wx:key="item" size="mini" class="quick-btn" data-value="{{item}}" bindtap="onQuickTemp">{{item}}℃</button>
+    </view>
+    <text class="param-value">{{params.waterTemp}}℃</text>
+  </view>
+  <!-- 浸泡时间 -->
+  <view class="param-row">
+    <text class="param-label">浸泡时间</text>
+    <picker mode="selector" range="{{params.soakTimeOptions}}" value="{{soakTimeIndex}}" bindchange="onSoakTimeChange">
+      <view class="picker-value">{{params.soakTime}}分钟</view>
+    </picker>
+  </view>
+  <!-- 水流强度 -->
+  <view class="param-row">
+    <text class="param-label">水流强度</text>
+    <radio-group bindchange="onFlowStrengthChange">
+      <label wx:for="{{params.flowStrengthOptions}}" wx:key="item">
+        <radio value="{{item}}" checked="{{params.flowStrength === item}}" />{{item}}
+      </label>
+    </radio-group>
   </view>
 
-  <!-- 药材选择 -->
-  <view class="config-card">
-    <view class="section-title">药材选择</view>
+  <view class="section-title">药材配方参数</view>
+  <!-- 药材类型 -->
+  <view class="param-row">
+    <text class="param-label">药材类型</text>
+    <picker mode="selector" range="{{params.herbTypeOptions}}" value="{{herbTypeIndex}}" bindchange="onHerbTypeChange">
+      <view class="picker-value">{{params.herbType}}</view>
+    </picker>
+  </view>
+  <!-- 药材形态 -->
+  <view class="param-row">
+    <text class="param-label">药材形态</text>
+    <picker mode="selector" range="{{params.herbFormOptions}}" value="{{herbFormIndex}}" bindchange="onHerbFormChange">
+      <view class="picker-value">{{params.herbForm}}</view>
+    </picker>
+  </view>
+  <!-- 药材剂量 -->
+  <view class="param-row">
+    <text class="param-label">药材剂量</text>
+    <picker mode="selector" range="{{params.herbDoseOptions}}" range-key="label" value="{{herbDoseIndex}}" bindchange="onHerbDoseChange">
+      <view class="picker-value">{{params.herbDoseOptions[herbDoseIndex].label}}</view>
+    </picker>
+  </view>
+
+  <view class="config-card" wx:if="{{status === 'running'}}">
+    <view class="section-title">运行信息</view>
     <van-cell-group>
-      <van-cell title="预设配方" is-link bind:tap="selectPresetFormula">
-        <text>{{selectedFormula.name}}</text>
-      </van-cell>
-      <van-cell title="配方功效" label="{{selectedFormula.effect}}" />
-      <van-cell title="适用症状" label="{{selectedFormula.symptoms}}" />
-      <van-cell title="自定义混合" is-link bind:tap="customizeFormula">
-        <text>{{customRatio ? '已设置' : '未设置'}}</text>
-      </van-cell>
+      <van-cell title="运行时间" value="{{runningTime}}" />
+      <van-cell title="剩余时间" value="{{remainingTime}}" />
+      <van-cell title="当前浓度" value="{{params.concentration}}" />
+      <van-cell title="当前水温" value="{{params.waterTemp}}℃" />
+      <van-cell title="当前状态" value="{{status === 'running' ? '运行中' : (status === 'paused' ? '已暂停' : '已停止')}}" />
     </van-cell-group>
   </view>
-
-  <!-- 制备过程 -->
-  <view class="config-card">
-    <view class="section-title">制备过程</view>
-    <van-cell-group>
-      <van-cell title="研磨状态" value="{{grindingStatus}}" />
-      <van-cell title="颗粒度控制" value="{{particleSize}}目" />
-      <van-cell title="萃取温度">
-        <van-slider 
-          min="55" 
-          max="65" 
-          value="{{extractionTemp}}" 
-          show-value 
-          bind:change="onExtractionTempChange"
-          active-color="#f59e42"
-        />
-      </van-cell>
-      <van-cell title="药液比例" is-link bind:tap="selectMedicineRatio">
-        <text>1:{{medicineRatio}}</text>
-      </van-cell>
-      <van-cell title="制备进度" value="{{preparationProgress}}%" />
-    </van-cell-group>
-  </view>
-
-  <!-- 循环系统 -->
-  <view class="config-card">
-    <view class="section-title">循环系统</view>
-    <van-cell-group>
-      <van-cell title="过滤级别" value="三级过滤" />
-      <van-cell title="流速控制">
-        <van-slider 
-          min="5" 
-          max="15" 
-          value="{{flowRate}}" 
-          show-value 
-          bind:change="onFlowRateChange"
-          active-color="#f59e42"
-        />
-      </van-cell>
-      <van-cell title="温度维持">
-        <van-slider 
-          min="38" 
-          max="42" 
-          value="{{maintainTemp}}" 
-          show-value 
-          bind:change="onMaintainTempChange"
-          active-color="#f59e42"
-        />
-      </van-cell>
-      <van-cell title="循环状态" value="{{circulationStatus}}" />
-    </van-cell-group>
-  </view>
-
-  <!-- 水质监测 -->
-  <view class="config-card">
-    <view class="section-title">水质监测</view>
-    <van-cell-group>
-      <van-cell title="pH值" value="{{waterQuality.ph}}" />
-      <van-cell title="药液浓度" value="{{waterQuality.concentration}}%" />
-      <van-cell title="温度" value="{{waterQuality.temp}}°C" />
-      <van-cell title="水质状态" value="{{waterQuality.status}}" />
-    </van-cell-group>
-  </view>
-
-  <!-- 控制按钮 -->
   <view class="control-buttons">
     <van-button 
-      type="{{isRunning ? 'danger' : 'primary'}}" 
+      type="{{status === 'running' ? (status === 'paused' ? 'primary' : 'warning') : 'primary'}}" 
       size="large" 
       block 
-      bind:tap="toggleHerbalBath"
+      custom-class="round-btn"
+      bind:tap="onToggle"
       loading="{{loading}}"
     >
-      {{isRunning ? '停止药浴' : '启动药浴'}}
+      {{status === 'running' ? (status === 'paused' ? '继续' : '暂停') : '启动'}}
+    </van-button>
+    <van-button 
+      wx:if="{{status === 'running'}}" 
+      type="danger" 
+      size="large" 
+      block 
+      custom-class="round-btn"
+      bind:tap="onStop"
+      style="margin-top: 10px;"
+    >
+      结束
     </van-button>
   </view>
 </view> 

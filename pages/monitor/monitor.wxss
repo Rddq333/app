@@ -131,4 +131,50 @@
   margin-top: 0;
   margin-bottom: 0;
   width: 120rpx;
+}
+
+.monitor-buttons {
+  margin: 40rpx 0 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+.monitor-buttons .van-button, .round-btn {
+  border-radius: 16rpx !important;
+  font-size: 32rpx;
+  font-weight: bold;
+  height: 88rpx;
+  line-height: 88rpx;
+  box-shadow: 0 4rpx 16rpx rgba(16, 185, 129, 0.08);
+}
+.van-button--success {
+  background: linear-gradient(135deg, #10b981 0%, #34d399 100%) !important;
+  border: none !important;
+  color: #fff !important;
+}
+.van-button--danger {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+  border: none !important;
+  color: #fff !important;
+}
+
+/* 新增美化的监测按钮样式 */
+.monitor-btn {
+  width: 80%;
+  margin: 0 auto 32rpx auto;
+  padding: 28rpx 0;
+  border-radius: 40rpx;
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #fff;
+  text-align: center;
+  box-shadow: 0 6rpx 24rpx rgba(0, 180, 120, 0.15);
+  transition: background 0.3s;
+}
+.monitor-btn.refresh {
+  background: linear-gradient(90deg, #00e676 0%, #00c853 100%);
+}
+.monitor-btn.export {
+  background: linear-gradient(90deg, #ffb88c 0%, #ff7e5f 100%);
+  margin-bottom: 0;
 } 

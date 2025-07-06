@@ -16,54 +16,64 @@
       <view class="mode-selection">
         <view class="section-title">理疗模式选择</view>
         <view class="mode-grid">
-          <!-- 经典理疗模式 -->
-          <view class="mode-card shadow" bindtap="selectMode" data-mode="classic">
+          <!-- 红外理疗模式 -->
+          <view class="mode-card shadow" bindtap="selectMode" data-mode="infrared">
             <view class="mode-icon">
-              <van-icon name="star" size="40px" color="#f59e0b" />
+              <image src="/images/infrared.gif" class="mode-image" mode="aspectFit"></image>
             </view>
-            <view class="mode-title">经典理疗</view>
-            <view class="mode-desc">艾灸 + 药浴 + 音乐</view>
-            <view class="mode-duration">60分钟</view>
-          </view>
-
-          <!-- 深度放松模式 -->
-          <view class="mode-card shadow" bindtap="selectMode" data-mode="relax">
-            <view class="mode-icon">
-              <van-icon name="flower-o" size="40px" color="#8b5cf6" />
-            </view>
-            <view class="mode-title">深度放松</view>
-            <view class="mode-desc">超音波水疗 + 香氛 + 音乐</view>
-            <view class="mode-duration">45分钟</view>
-          </view>
-
-          <!-- 康复理疗模式 -->
-          <view class="mode-card shadow" bindtap="selectMode" data-mode="recovery">
-            <view class="mode-icon">
-              <van-icon name="like" size="40px" color="#10b981" />
-            </view>
-            <view class="mode-title">康复理疗</view>
-            <view class="mode-desc">红外理疗 + 艾灸 + 药浴</view>
-            <view class="mode-duration">90分钟</view>
-          </view>
-
-          <!-- 快速舒缓模式 -->
-          <view class="mode-card shadow" bindtap="selectMode" data-mode="quick">
-            <view class="mode-icon">
-              <van-icon name="clock" size="40px" color="#3b82f6" />
-            </view>
-            <view class="mode-title">快速舒缓</view>
-            <view class="mode-desc">超音波水疗 + 香氛</view>
+            <view class="mode-title">红外理疗</view>
+            <view class="mode-desc">红外线热疗，促进血液循环</view>
             <view class="mode-duration">30分钟</view>
           </view>
 
-          <!-- 全身调理模式 -->
-          <view class="mode-card shadow" bindtap="selectMode" data-mode="fullbody">
+          <!-- 超音波水疗模式 -->
+          <view class="mode-card shadow" bindtap="selectMode" data-mode="hydrotherapy">
             <view class="mode-icon">
-              <van-icon name="user-circle-o" size="40px" color="#ef4444" />
+              <image src="/images/hydrotherapy.gif" class="mode-image" mode="aspectFit"></image>
             </view>
-            <view class="mode-title">全身调理</view>
-            <view class="mode-desc">全功能组合</view>
-            <view class="mode-duration">120分钟</view>
+            <view class="mode-title">超音波水疗</view>
+            <view class="mode-desc">超声波水疗，深层清洁</view>
+            <view class="mode-duration">45分钟</view>
+          </view>
+
+          <!-- 艾灸理疗模式 -->
+          <view class="mode-card shadow" bindtap="selectMode" data-mode="moxibustion">
+            <view class="mode-icon">
+              <image src="/images/moxibustion.gif" class="mode-image" mode="aspectFit"></image>
+            </view>
+            <view class="mode-title">艾灸理疗</view>
+            <view class="mode-desc">传统艾灸，温经通络</view>
+            <view class="mode-duration">60分钟</view>
+          </view>
+
+          <!-- 中药浴理疗模式 -->
+          <view class="mode-card shadow" bindtap="selectMode" data-mode="herbalBath">
+            <view class="mode-icon">
+              <image src="/images/herbal-bath.gif" class="mode-image" mode="aspectFit"></image>
+            </view>
+            <view class="mode-title">中药浴理疗</view>
+            <view class="mode-desc">中药浸泡，调理身体</view>
+            <view class="mode-duration">40分钟</view>
+          </view>
+
+          <!-- 香氛理疗模式 -->
+          <view class="mode-card shadow" bindtap="selectMode" data-mode="aromatherapy">
+            <view class="mode-icon">
+              <image src="/images/aromatherapy.png" class="mode-image" mode="aspectFit"></image>
+            </view>
+            <view class="mode-title">香氛理疗</view>
+            <view class="mode-desc">精油香氛，舒缓身心</view>
+            <view class="mode-duration">35分钟</view>
+          </view>
+
+          <!-- 音乐理疗模式 -->
+          <view class="mode-card shadow" bindtap="selectMode" data-mode="musicTherapy">
+            <view class="mode-icon">
+              <image src="/images/music-therapy.gif" class="mode-image" mode="aspectFit"></image>
+            </view>
+            <view class="mode-title">音乐理疗</view>
+            <view class="mode-desc">音乐疗愈，放松心情</view>
+            <view class="mode-duration">25分钟</view>
           </view>
 
           <!-- 自定义模式 -->

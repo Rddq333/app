@@ -2,6 +2,7 @@ const api = require('../../utils/api');
 
 Page({
   data: {
+    isRunning: false,
     status: '未启动',
     temp: 40,
     pressure: '中',
@@ -12,16 +13,56 @@ Page({
     timerOptions: [10, 20, 30, 40, 50, 60],
     preset: '放松',
     presetOptions: ['放松', '活力', '恢复'],
-    loading: false
+    loading: false,
+    deviceConnected: false, // 设备连接状态
+    deviceStatus: '未知', // 设备状态
+    params: {
+      waterTemp: 38,
+      waterTempQuick: [35, 38, 42],
+      waterPressure: '标准',
+      massageModes: ['脉冲'],
+      duration: 30,
+      focusAreas: [],
+      frequency: 40,
+      intensity: 0.5,
+      therapyTime: 15,
+      therapyMode: '脉冲',
+      flowMassage: '标准',
+      bubbleAmount: 50
+    },
+    waterPressureOptions: ['轻柔', '标准', '强力'],
+    massageModeOptions: ['脉冲', '气泡', '波浪', '组合'],
+    durationOptions: [10, 15, 20, 30, 45, 60],
+    focusAreaOptions: ['背部', '腰部', '腿部', '足部'],
+    showAdvanced: false,
+    therapyTimeOptions: [5, 10, 15, 20, 25, 30],
+    therapyModeOptions: ['连续', '脉冲'],
+    flowMassageOptions: ['关闭', '轻柔', '标准', '强力'],
+    durationIndex: 3,
+    therapyTimeIndex: 2,
+    therapyStatus: 'idle', // 'idle' | 'running' | 'paused'
+    runningTime: '00:00',
+    remainingTime: '30:00',
+    startTime: null,
+    elapsed: 0
   },
 
   onLoad(options) {
     console.log('水疗页面加载', options);
+    this.loadSettings();
     this.initPage();
+  },
+
+  onUnload() {
+    if (this.data.timer) {
+      clearInterval(this.data.timer);
+    }
   },
 
   onShow() {
     console.log('水疗页面显示');
+    this.loadSettings();
+    this.checkRunningStatus();
   },
 
   onReady() {
@@ -30,10 +71,6 @@ Page({
 
   onHide() {
     console.log('水疗页面隐藏');
-  },
-
-  onUnload() {
-    console.log('水疗页面卸载');
   },
 
   initPage() {
@@ -55,6 +92,58 @@ Page({
       wx.showToast({
         title: '页面加载失败',
         icon: 'error'
+      });
+    }
+  },
+
+  // 加载设置
+  loadSettings() {
+    const settings = wx.getStorageSync('hydrotherapySettings');
+    if (settings) {
+      this.setData({
+        ...settings,
+        isRunning: wx.getStorageSync('hydrotherapyRunning') || false
+      });
+    }
+  },
+
+  // 保存设置
+  saveSettings() {
+    const settings = {
+      temp: this.data.temp,
+      pressure: this.data.pressure,
+      massageMode: this.data.massageMode,
+      timer: this.data.timer,
+      preset: this.data.preset,
+      params: this.data.params
+    };
+    wx.setStorageSync('hydrotherapySettings', settings);
+  },
+
+  // 检查运行状态
+  checkRunningStatus() {
+    // 检查设备状态
+    const historyDevices = wx.getStorageSync('historyDevices') || [];
+    const deviceRunning = wx.getStorageSync('deviceRunning') || false;
+    const hasConnectedDevice = historyDevices.some(device => device.connected);
+    
+    this.setData({
+      deviceConnected: hasConnectedDevice,
+      deviceStatus: hasConnectedDevice ? (deviceRunning ? '运行中' : '已连接') : '未连接'
+    });
+
+    const currentTherapyMode = wx.getStorageSync('currentTherapyMode');
+    if (currentTherapyMode && currentTherapyMode.key === 'hydrotherapy') {
+      // 如果当前运行的是水疗，恢复运行状态
+      this.setData({
+        isRunning: true,
+        therapyStatus: 'running'
+      });
+    } else if (currentTherapyMode && currentTherapyMode.key !== 'hydrotherapy') {
+      // 如果运行的是其他模式，禁用启动按钮
+      this.setData({
+        isRunning: false,
+        therapyStatus: 'idle'
       });
     }
   },
@@ -110,64 +199,209 @@ Page({
       wx.reLaunch({ url: '/pages/index/index' });
     }
   },
-  startHydrotherapy() {
-    try {
-      this.setData({ loading: true });
-      
-      api.controlHydrotherapy({
-        action: 'start',
-        temp: this.data.temp,
-        pressure: this.data.pressure,
-        massageMode: this.data.massageMode,
-        timer: this.data.timer,
-        preset: this.data.preset
-      }).then(() => {
-        this.setData({ 
-          status: '运行中',
-          loading: false 
-        });
-        wx.showToast({
-          title: '水疗已启动',
-          icon: 'success'
-        });
-      }).catch(error => {
-        console.error('启动水疗失败:', error);
-        this.setData({ loading: false });
-        wx.showToast({
-          title: '启动失败',
-          icon: 'error'
-        });
+  onToggle() {
+    if (this.data.loading) return;
+    
+    // 检查设备连接状态
+    const historyDevices = wx.getStorageSync('historyDevices') || [];
+    const deviceRunning = wx.getStorageSync('deviceRunning') || false;
+    const hasConnectedDevice = historyDevices.some(device => device.connected);
+    
+    if (!hasConnectedDevice) {
+      wx.showModal({
+        title: '设备未连接',
+        content: '请先连接设备后再启动水疗',
+        confirmText: '去连接',
+        success: (res) => {
+          if (res.confirm) {
+            wx.navigateTo({ url: '/pages/appconnect/appconnect' });
+          }
+        }
       });
-    } catch (error) {
-      console.error('启动水疗操作失败:', error);
-      this.setData({ loading: false });
+      return;
+    }
+
+    if (!deviceRunning) {
+      wx.showModal({
+        title: '设备未启动',
+        content: '请先启动设备后再启动水疗',
+        confirmText: '去启动',
+        success: (res) => {
+          if (res.confirm) {
+            wx.navigateTo({ url: '/pages/appconnect/appconnect' });
+          }
+        }
+      });
+      return;
+    }
+
+    if (!this.data.isRunning) {
+      this.onStart();
+    } else if (this.data.isRunning && this.data.therapyStatus !== 'paused') {
+      this.onPause();
+    } else if (this.data.therapyStatus === 'paused') {
+      this.onResume();
     }
   },
+  onStart() {
+    this.setData({ loading: true });
 
-  stopHydrotherapy() {
-    try {
-      this.setData({ loading: true });
-      
-      api.controlHydrotherapy({ action: 'stop' }).then(() => {
-        this.setData({ 
-          status: '已停止',
-          loading: false 
-        });
-        wx.showToast({
-          title: '水疗已停止',
-          icon: 'success'
-        });
-      }).catch(error => {
-        console.error('停止水疗失败:', error);
-        this.setData({ loading: false });
-        wx.showToast({
-          title: '停止失败',
-          icon: 'error'
-        });
+    // 检查模式互斥
+    const currentTherapyMode = wx.getStorageSync('currentTherapyMode');
+    if (currentTherapyMode && currentTherapyMode.key && currentTherapyMode.key !== 'hydrotherapy') {
+      wx.showModal({
+        title: '模式冲突',
+        content: `当前正在运行${currentTherapyMode.name}，请先停止当前模式后再启动水疗`,
+        confirmText: '确定',
+        showCancel: false,
+        success: () => {
+          this.setData({ loading: false });
+        }
       });
-    } catch (error) {
-      console.error('停止水疗操作失败:', error);
-      this.setData({ loading: false });
+      return;
     }
+
+    const duration = this.data.params.duration || 30;
+    this.setData({
+      isRunning: true,
+      therapyStatus: 'running',
+      startTime: Date.now(),
+      runningTime: '00:00',
+      remainingTime: this.formatTime(duration * 60),
+      elapsed: 0,
+      loading: false
+    });
+    
+    this.startTimer(duration * 60);
+    wx.setStorageSync('hydrotherapyRunning', true);
+    
+    // 保存当前运行模式
+    wx.setStorageSync('currentTherapyMode', {
+      key: 'hydrotherapy',
+      name: '超音波水疗',
+      startTime: new Date().toISOString()
+    });
+    
+    wx.showToast({ title: '水疗已启动', icon: 'success' });
+  },
+  onPause() {
+    if (this.data.timer) {
+      clearInterval(this.data.timer);
+      this.setData({ timer: null });
+    }
+    this.setData({ therapyStatus: 'paused' });
+    wx.showToast({ title: '已暂停', icon: 'none' });
+  },
+  onResume() {
+    const duration = this.data.params.duration || 30;
+    this.setData({
+      therapyStatus: 'running',
+      startTime: Date.now() - this.data.elapsed * 1000
+    });
+    this.startTimer(duration * 60 - this.data.elapsed);
+    wx.showToast({ title: '继续水疗', icon: 'success' });
+  },
+  onStop() {
+    this.setData({ loading: true });
+
+    if (this.data.timer) {
+      clearInterval(this.data.timer);
+    }
+    
+    this.setData({
+      isRunning: false,
+      therapyStatus: 'idle',
+      runningTime: '00:00',
+      remainingTime: this.formatTime(this.data.params.duration * 60 || 1800),
+      elapsed: 0,
+      loading: false
+    });
+    
+    wx.setStorageSync('hydrotherapyRunning', false);
+    
+    // 清除当前运行模式
+    wx.removeStorageSync('currentTherapyMode');
+    
+    wx.showToast({ title: '水疗已结束', icon: 'none' });
+  },
+  startTimer(totalSeconds) {
+    if (this.data.timer) clearInterval(this.data.timer);
+    this.data.timer = setInterval(() => {
+      const elapsed = Math.floor((Date.now() - this.data.startTime) / 1000);
+      const remaining = Math.max(0, totalSeconds - elapsed);
+      this.setData({
+        runningTime: this.formatTime(elapsed),
+        remainingTime: this.formatTime(remaining),
+        elapsed
+      });
+      if (remaining <= 0) {
+        this.onStop();
+      }
+    }, 1000);
+  },
+  formatTime(seconds) {
+    const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+    const s = (seconds % 60).toString().padStart(2, '0');
+    return `${m}:${s}`;
+  },
+  // 水温滑块
+  onWaterTempChange(e) {
+    this.setData({ 'params.waterTemp': Number(e.detail.value) });
+  },
+  // 水温快捷按钮
+  onQuickTemp(e) {
+    this.setData({ 'params.waterTemp': Number(e.currentTarget.dataset.value) });
+  },
+  // 水压强度
+  onWaterPressureChange(e) {
+    this.setData({ 'params.waterPressure': e.detail.value });
+  },
+  // 按摩模式
+  onMassageModesChange(e) {
+    this.setData({ 'params.massageModes': e.detail.value });
+  },
+  // 持续时间
+  onDurationChange(e) {
+    const idx = Number(e.detail.value);
+    this.setData({
+      'params.duration': this.data.durationOptions[idx],
+      durationIndex: idx
+    });
+  },
+  // 重点部位
+  onFocusAreasChange(e) {
+    this.setData({ 'params.focusAreas': e.detail.value });
+  },
+  // 频率
+  onFrequencyChange(e) {
+    this.setData({ 'params.frequency': Number(e.detail.value) });
+  },
+  // 强度
+  onIntensityChange(e) {
+    this.setData({ 'params.intensity': Number(e.detail.value) });
+  },
+  // 治疗时间
+  onTherapyTimeChange(e) {
+    const idx = Number(e.detail.value);
+    this.setData({
+      'params.therapyTime': this.data.therapyTimeOptions[idx],
+      therapyTimeIndex: idx
+    });
+  },
+  // 超声模式
+  onTherapyModeChange(e) {
+    this.setData({ 'params.therapyMode': e.detail.value });
+  },
+  // 水流按摩
+  onFlowMassageChange(e) {
+    this.setData({ 'params.flowMassage': e.detail.value });
+  },
+  // 气泡量
+  onBubbleAmountChange(e) {
+    this.setData({ 'params.bubbleAmount': Number(e.detail.value) });
+  },
+  // 折叠/展开专业参数
+  toggleAdvanced() {
+    this.setData({ showAdvanced: !this.data.showAdvanced });
   }
 }); 

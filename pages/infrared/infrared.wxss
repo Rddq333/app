@@ -44,17 +44,20 @@
 }
 
 .section-title {
-  font-size: 36rpx;
+  font-size: 32rpx;
   font-weight: bold;
-  color: #222;
-  margin-bottom: 24rpx;
-  margin-top: 0;
+  margin: 32rpx 0 16rpx 0;
+  color: #333;
 }
 
 /* 控制按钮 */
 .control-buttons {
   padding: 0 32rpx;
   margin-top: 40rpx;
+}
+
+.control-buttons .van-button, .round-btn {
+  border-radius: 16rpx !important;
 }
 
 /* 温度滑块样式 */
@@ -65,4 +68,77 @@
 .van-slider__button {
   background-color: #f59e0b !important;
   border-color: #f59e0b !important;
+}
+
+.infrared-container {
+  padding: 32rpx;
+  background: #f7f8fa;
+}
+
+.param-row {
+  margin-bottom: 24rpx;
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 20rpx 16rpx;
+  display: flex;
+  flex-direction: column;
+}
+
+.param-label {
+  font-size: 28rpx;
+  color: #222;
+  margin-bottom: 8rpx;
+}
+
+.param-value {
+  font-size: 24rpx;
+  color: #3b82f6;
+  margin-top: 8rpx;
+}
+
+.quick-btns {
+  display: flex;
+  gap: 16rpx;
+  margin: 8rpx 0;
+}
+
+.quick-btn {
+  background: #f3f4f6;
+  color: #333;
+  border-radius: 12rpx;
+  margin-right: 8rpx;
+}
+
+.picker-value {
+  font-size: 26rpx;
+  color: #222;
+  padding: 8rpx 0;
+}
+
+.btn-group {
+  display: flex;
+  gap: 24rpx;
+  margin-top: 32rpx;
+}
+
+.pause-btn, .resume-btn, .stop-btn {
+  flex: 1;
+  font-size: 32rpx;
+  border-radius: 16rpx;
+}
+
+.start-btn {
+  width: 100%;
+  font-size: 32rpx;
+  background: #ef4444;
+  color: #fff;
+  border-radius: 16rpx;
+}
+
+.area-img {
+  width: 100%;
+  max-width: 500rpx;
+  margin: 16rpx 0 24rpx 0;
+  border-radius: 18rpx;
+  display: block;
 } 

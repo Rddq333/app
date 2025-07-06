@@ -1,0 +1,274 @@
+<!--custom-config.wxml-->
+<navigation-bar title="自定义模式配置" back="true"></navigation-bar>
+<view class="page-content">
+  <!-- 当前状态 -->
+  <view class="status-card">
+    <view class="status-header">
+      <van-icon name="setting-o" size="40px" color="#10b981" />
+      <view class="status-info">
+        <view class="status-title">自定义模式</view>
+        <view class="status-desc">组合功能：{{modeConfigs.length}}个模式</view>
+      </view>
+      <van-tag type="{{isRunning ? 'success' : 'default'}}" size="large">
+        {{isRunning ? (isPaused ? '已暂停' : '运行中') : '已停止'}}
+      </van-tag>
+    </view>
+  </view>
+
+  <!-- 运行信息 -->
+  <view class="config-card" wx:if="{{isRunning}}">
+    <view class="section-title">运行信息</view>
+    <van-cell-group>
+      <van-cell title="运行时间" value="{{runningTime}}" />
+      <van-cell title="剩余时间" value="{{remainingTime}}" />
+      <van-cell title="总时长" value="{{totalDuration}}分钟" />
+      <van-cell title="当前模式" value="{{modeConfigs[currentModeIndex].name}}" />
+    </van-cell-group>
+  </view>
+
+  <!-- 模式切换标签 -->
+  <view class="config-card">
+    <view class="section-title">模式配置</view>
+    <view class="mode-tabs">
+      <view class="tab-item {{currentModeIndex === index ? 'active' : ''}}" 
+            wx:for="{{modeConfigs}}" 
+            wx:key="key"
+            bindtap="switchMode"
+            data-index="{{index}}">
+        <view class="tab-name">{{item.name}}</view>
+        <view class="tab-duration">{{modeParams[item.key].duration}}分钟</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 模式配置内容 -->
+  <scroll-view class="config-content" scroll-y>
+    <view wx:for="{{modeConfigs}}" 
+          wx:key="key" 
+          class="mode-config {{currentModeIndex === index ? 'active' : ''}}">
+      
+      <!-- 红外理疗配置 -->
+      <view wx:if="{{item.key === 'infrared'}}" class="config-section">
+        <view class="section-title">红外理疗参数</view>
+        <van-cell-group>
+          <van-cell title="温度设置" value="{{modeParams.infrared.temperature}}°C">
+            <van-slider value="{{modeParams.infrared.temperature}}" 
+                       min="35" max="60" 
+                       bind:change="onParamChange"
+                       data-mode="infrared" data-param="temperature" />
+          </van-cell>
+          <van-cell title="治疗时长" value="{{modeParams.infrared.duration}}分钟">
+            <van-slider value="{{modeParams.infrared.duration}}" 
+                       min="10" max="60" 
+                       bind:change="onParamChange"
+                       data-mode="infrared" data-param="duration" />
+          </van-cell>
+          <van-cell title="强度等级" value="{{modeParams.infrared.intensity}}级">
+            <van-slider value="{{modeParams.infrared.intensity}}" 
+                       min="1" max="5" 
+                       bind:change="onParamChange"
+                       data-mode="infrared" data-param="intensity" />
+          </van-cell>
+          <van-cell title="治疗部位" value="{{modeParams.infrared.area}}" />
+        </van-cell-group>
+      </view>
+
+      <!-- 水疗配置 -->
+      <view wx:if="{{item.key === 'hydrotherapy'}}" class="config-section">
+        <view class="section-title">超音波水疗参数</view>
+        <van-cell-group>
+          <van-cell title="水温设置" value="{{modeParams.hydrotherapy.waterTemp}}°C">
+            <van-slider value="{{modeParams.hydrotherapy.waterTemp}}" 
+                       min="30" max="45" 
+                       bind:change="onParamChange"
+                       data-mode="hydrotherapy" data-param="waterTemp" />
+          </van-cell>
+          <van-cell title="水压强度" value="{{modeParams.hydrotherapy.pressure}}级">
+            <van-slider value="{{modeParams.hydrotherapy.pressure}}" 
+                       min="1" max="5" 
+                       bind:change="onParamChange"
+                       data-mode="hydrotherapy" data-param="pressure" />
+          </van-cell>
+          <van-cell title="按摩模式">
+            <van-checkbox-group value="{{modeParams.hydrotherapy.massageMode}}" 
+                               bind:change="onMultiParamChange"
+                               data-mode="hydrotherapy" data-param="massageMode">
+              <van-checkbox name="脉冲">脉冲</van-checkbox>
+              <van-checkbox name="旋转">旋转</van-checkbox>
+              <van-checkbox name="振动">振动</van-checkbox>
+            </van-checkbox-group>
+          </van-cell>
+          <van-cell title="重点部位">
+            <van-checkbox-group value="{{modeParams.hydrotherapy.focusArea}}" 
+                               bind:change="onMultiParamChange"
+                               data-mode="hydrotherapy" data-param="focusArea">
+              <van-checkbox name="背部">背部</van-checkbox>
+              <van-checkbox name="腰部">腰部</van-checkbox>
+              <van-checkbox name="颈部">颈部</van-checkbox>
+            </van-checkbox-group>
+          </van-cell>
+        </van-cell-group>
+      </view>
+
+      <!-- 艾灸配置 -->
+      <view wx:if="{{item.key === 'moxibustion'}}" class="config-section">
+        <view class="section-title">艾灸理疗参数</view>
+        <van-cell-group>
+          <van-cell title="艾灸温度" value="{{modeParams.moxibustion.temperature}}°C">
+            <van-slider value="{{modeParams.moxibustion.temperature}}" 
+                       min="40" max="80" 
+                       bind:change="onParamChange"
+                       data-mode="moxibustion" data-param="temperature" />
+          </van-cell>
+          <van-cell title="治疗时长" value="{{modeParams.moxibustion.duration}}分钟">
+            <van-slider value="{{modeParams.moxibustion.duration}}" 
+                       min="20" max="90" 
+                       bind:change="onParamChange"
+                       data-mode="moxibustion" data-param="duration" />
+          </van-cell>
+          <van-cell title="强度等级" value="{{modeParams.moxibustion.intensity}}级">
+            <van-slider value="{{modeParams.moxibustion.intensity}}" 
+                       min="1" max="5" 
+                       bind:change="onParamChange"
+                       data-mode="moxibustion" data-param="intensity" />
+          </van-cell>
+          <van-cell title="治疗部位" value="{{modeParams.moxibustion.area}}" />
+          <van-cell title="艾灸模式" value="{{modeParams.moxibustion.mode}}" />
+        </van-cell-group>
+      </view>
+
+      <!-- 中药浴配置 -->
+      <view wx:if="{{item.key === 'herbalBath'}}" class="config-section">
+        <view class="section-title">中药浴理疗参数</view>
+        <van-cell-group>
+          <van-cell title="水温设置" value="{{modeParams.herbalBath.waterTemp}}°C">
+            <van-slider value="{{modeParams.herbalBath.waterTemp}}" 
+                       min="35" max="45" 
+                       bind:change="onParamChange"
+                       data-mode="herbalBath" data-param="waterTemp" />
+          </van-cell>
+          <van-cell title="中药类型" value="{{modeParams.herbalBath.herbType}}" />
+          <van-cell title="浓度等级" value="{{modeParams.herbalBath.concentration}}级">
+            <van-slider value="{{modeParams.herbalBath.concentration}}" 
+                       min="1" max="5" 
+                       bind:change="onParamChange"
+                       data-mode="herbalBath" data-param="concentration" />
+          </van-cell>
+          <van-cell title="浸泡时长" value="{{modeParams.herbalBath.duration}}分钟">
+            <van-slider value="{{modeParams.herbalBath.duration}}" 
+                       min="20" max="60" 
+                       bind:change="onParamChange"
+                       data-mode="herbalBath" data-param="duration" />
+          </van-cell>
+          <van-cell title="浸泡模式" value="{{modeParams.herbalBath.mode}}" />
+        </van-cell-group>
+      </view>
+
+      <!-- 香氛配置 -->
+      <view wx:if="{{item.key === 'aromatherapy'}}" class="config-section">
+        <view class="section-title">香氛理疗参数</view>
+        <van-cell-group>
+          <van-cell title="精油类型" value="{{modeParams.aromatherapy.oilType}}" />
+          <van-cell title="浓度等级" value="{{modeParams.aromatherapy.concentration}}级">
+            <van-slider value="{{modeParams.aromatherapy.concentration}}" 
+                       min="1" max="5" 
+                       bind:change="onParamChange"
+                       data-mode="aromatherapy" data-param="concentration" />
+          </van-cell>
+          <van-cell title="喷雾时长" value="{{modeParams.aromatherapy.duration}}分钟">
+            <van-slider value="{{modeParams.aromatherapy.duration}}" 
+                       min="15" max="60" 
+                       bind:change="onParamChange"
+                       data-mode="aromatherapy" data-param="duration" />
+          </van-cell>
+          <van-cell title="喷雾模式" value="{{modeParams.aromatherapy.mode}}" />
+          <van-cell title="强度等级" value="{{modeParams.aromatherapy.intensity}}级">
+            <van-slider value="{{modeParams.aromatherapy.intensity}}" 
+                       min="1" max="5" 
+                       bind:change="onParamChange"
+                       data-mode="aromatherapy" data-param="intensity" />
+          </van-cell>
+        </van-cell-group>
+      </view>
+
+      <!-- 音乐配置 -->
+      <view wx:if="{{item.key === 'musicTherapy'}}" class="config-section">
+        <view class="section-title">音乐理疗参数</view>
+        <van-cell-group>
+          <van-cell title="音乐类型" value="{{modeParams.musicTherapy.genre}}" />
+          <van-cell title="音量大小" value="{{modeParams.musicTherapy.volume}}%">
+            <van-slider value="{{modeParams.musicTherapy.volume}}" 
+                       min="0" max="100" 
+                       bind:change="onParamChange"
+                       data-mode="musicTherapy" data-param="volume" />
+          </van-cell>
+          <van-cell title="频率设置" value="{{modeParams.musicTherapy.frequency}}Hz">
+            <van-slider value="{{modeParams.musicTherapy.frequency}}" 
+                       min="200" max="800" 
+                       bind:change="onParamChange"
+                       data-mode="musicTherapy" data-param="frequency" />
+          </van-cell>
+          <van-cell title="节奏BPM" value="{{modeParams.musicTherapy.rhythm}}">
+            <van-slider value="{{modeParams.musicTherapy.rhythm}}" 
+                       min="40" max="120" 
+                       bind:change="onParamChange"
+                       data-mode="musicTherapy" data-param="rhythm" />
+          </van-cell>
+          <van-cell title="脑波同步" value="{{modeParams.musicTherapy.brainwaveSync ? '开启' : '关闭'}}">
+            <van-switch checked="{{modeParams.musicTherapy.brainwaveSync}}" 
+                       bind:change="onParamChange"
+                       data-mode="musicTherapy" data-param="brainwaveSync" />
+          </van-cell>
+          <van-cell title="3D环绕声" value="{{modeParams.musicTherapy.surround3d ? '开启' : '关闭'}}">
+            <van-switch checked="{{modeParams.musicTherapy.surround3d}}" 
+                       bind:change="onParamChange"
+                       data-mode="musicTherapy" data-param="surround3d" />
+          </van-cell>
+          <van-cell title="动态灯光" value="{{modeParams.musicTherapy.dynamicLighting ? '开启' : '关闭'}}">
+            <van-switch checked="{{modeParams.musicTherapy.dynamicLighting}}" 
+                       bind:change="onParamChange"
+                       data-mode="musicTherapy" data-param="dynamicLighting" />
+          </van-cell>
+          <van-cell title="座椅振动" value="{{modeParams.musicTherapy.seatVibration ? '开启' : '关闭'}}">
+            <van-switch checked="{{modeParams.musicTherapy.seatVibration}}" 
+                       bind:change="onParamChange"
+                       data-mode="musicTherapy" data-param="seatVibration" />
+          </van-cell>
+        </van-cell-group>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 控制按钮 -->
+  <view class="control-buttons">
+    <!-- 提示信息 -->
+    <view wx:if="{{!modeConfigs || modeConfigs.length === 0}}" class="no-mode-tip">
+      <van-icon name="info-o" size="40rpx" color="#999" />
+      <text>请先选择理疗模式</text>
+    </view>
+    
+    <!-- 启动/暂停/继续按钮 -->
+    <van-button 
+      type="{{isRunning ? (isPaused ? 'primary' : 'warning') : 'primary'}}" 
+      size="large" 
+      block 
+      bind:tap="toggleCustomMode"
+      loading="{{loading}}"
+      disabled="{{loading || (!modeConfigs || modeConfigs.length === 0)}}"
+    >
+      {{isRunning ? (isPaused ? '继续' : '暂停') : '启动'}}
+    </van-button>
+    
+    <!-- 结束按钮 - 只在运行或暂停时显示 -->
+    <van-button 
+      wx:if="{{isRunning}}" 
+      type="danger" 
+      size="large" 
+      block 
+      bind:tap="stopCustomMode"
+      style="margin-top: 10px;"
+    >
+      结束
+    </van-button>
+  </view>
+</view> 
