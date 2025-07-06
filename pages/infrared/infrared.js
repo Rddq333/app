@@ -68,10 +68,17 @@ Page({
     areaModeIndex: 0,
     status: 'idle', // 'idle' | 'running' | 'paused'
     deviceStatus: '未知',
-    deviceConnected: false
+    deviceConnected: false,
+    StatusBar: 0,
+    CustomBar: 0
   },
 
-  onLoad() {
+  onLoad(options) {
+    const app = getApp();
+    this.setData({
+      StatusBar: app.globalData.StatusBar,
+      CustomBar: app.globalData.CustomBar
+    });
     this.loadSettings();
     this.checkRunningStatus();
   },

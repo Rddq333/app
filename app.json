@@ -35,6 +35,7 @@
   "sitemapLocation": "sitemap.json",
   "lazyCodeLoading": "requiredComponents",
   "usingComponents": {
+    "cu-custom":"/colorui/components/cu-custom/cu-custom",
     "van-button": "@vant/weapp/button/index",
     "van-slider": "@vant/weapp/slider/index",
     "van-picker": "@vant/weapp/picker/index",

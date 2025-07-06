@@ -1,4 +1,7 @@
-<navigation-bar title="红外理疗" back="true"></navigation-bar>
+<cu-custom bgColor="bg-white" isBack="{{true}}">
+    <view slot="content">红外理疗</view>
+</cu-custom>
+
 <view class="status-card">
   <view class="status-header">
     <van-icon name="fire" size="40px" color="#f59e42" />
@@ -88,7 +91,7 @@
       <van-cell title="当前状态" value="{{isRunning ? '运行中' : (status === 'paused' ? '已暂停' : '已停止')}}" />
     </van-cell-group>
   </view>
-  
+
   <view class="control-buttons">
     <van-button 
       type="{{isRunning ? (status === 'paused' ? 'primary' : 'warning') : 'primary'}}" 

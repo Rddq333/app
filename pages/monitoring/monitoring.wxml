@@ -1,4 +1,7 @@
-<navigation-bar title="实时监测" back="true"></navigation-bar>
+<cu-custom bgColor="bg-white" isBack="{{true}}">
+    <view slot="content">实时监测</view>
+</cu-custom>
+
 <view class="page-content">
   <!-- 系统状态概览 -->
   <view class="overview-card">

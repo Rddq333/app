@@ -1,4 +1,7 @@
-<navigation-bar title="音乐理疗" back="true"></navigation-bar>
+<cu-custom bgColor="bg-white" isBack="{{true}}">
+    <view slot="content">音乐理疗</view>
+</cu-custom>
+
 <view class="page-content">
   <!-- 当前状态 -->
   <view class="status-card">

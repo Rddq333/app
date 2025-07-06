@@ -79,7 +79,7 @@
           <!-- 自定义模式 -->
           <view class="mode-card shadow" bindtap="selectMode" data-mode="custom">
             <view class="mode-icon">
-              <van-icon name="setting-o" size="40px" color="#6b7280" />
+              <image src="/images/set.png" class="mode-image" mode="aspectFit"></image>
             </view>
             <view class="mode-title">自定义模式</view>
             <view class="mode-desc">自由组合功能</view>
@@ -93,11 +93,15 @@
         <view class="section-title">快捷功能</view>
         <view class="action-grid">
           <view class="action-card shadow" bindtap="goToMonitor">
-            <van-icon name="eye-o" size="28px" color="#3b82f6" />
+            <view class="mode-icon">
+              <image src="/images/monitor.png" class="mode-image" mode="aspectFit"></image>
+            </view>
             <text>实时监测</text>
           </view>
           <view class="action-card shadow" bindtap="goToAppConnect">
-            <van-icon name="link-o" size="28px" color="#10b981" />
+            <view class="mode-icon">
+              <image src="/images/connect.png" class="mode-image" mode="aspectFit"></image>
+            </view>
             <text>设备连接</text>
           </view>
         </view>

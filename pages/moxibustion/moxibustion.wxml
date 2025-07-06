@@ -1,4 +1,7 @@
-<navigation-bar title="艾灸理疗" back="true"></navigation-bar>
+<cu-custom bgColor="bg-white" isBack="{{true}}">
+    <view slot="content">艾灸理疗</view>
+</cu-custom>
+
 <view class="status-card">
   <view class="status-header">
     <van-icon name="fire" size="40px" color="#a3c23c" />

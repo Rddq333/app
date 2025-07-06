@@ -4,9 +4,11 @@
     "navigation-bar": "/components/navigation-bar/navigation-bar",
     "van-icon": "@vant/weapp/icon/index",
     "van-tag": "@vant/weapp/tag/index",
-    "van-button": "@vant/weapp/button/index"
+    "van-button": "@vant/weapp/button/index",
+    "cu-custom": "/colorui/components/cu-custom/cu-custom"
   },
   "enablePullDownRefresh": true,
   "backgroundTextStyle": "dark",
-  "backgroundColor": "#f5f5f5"
+  "backgroundColor": "#f5f5f5",
+  "navigationStyle": "custom"
 } 

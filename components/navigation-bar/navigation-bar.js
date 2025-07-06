@@ -50,26 +50,36 @@ Component({
       type: Number,
       value: 1
     },
+    bgColor: {
+      type: String,
+      value: ''
+    },
+    isBack: {
+      type: Boolean,
+      value: false
+    }
   },
   /**
    * 组件的初始数据
    */
   data: {
-    displayStyle: ''
+    displayStyle: '',
+    statusBarHeight: 20, // 默认
+    navBarHeight: 44,    // 默认
+    menuButtonRect: null
   },
   lifetimes: {
     attached() {
-      const rect = wx.getMenuButtonBoundingClientRect()
-      const platform = (wx.getDeviceInfo() || wx.getSystemInfoSync()).platform
-      const isAndroid = platform === 'android'
-      const isDevtools = platform === 'devtools'
-      const { windowWidth, safeArea: { top = 0, bottom = 0 } = {} } = wx.getWindowInfo() || wx.getSystemInfoSync()
+      const sysInfo = wx.getSystemInfoSync();
+      let menuButtonRect = null;
+      try {
+        menuButtonRect = wx.getMenuButtonBoundingClientRect();
+      } catch (e) {}
       this.setData({
-        ios: !isAndroid,
-        innerPaddingRight: `padding-right: ${windowWidth - rect.left}px`,
-        leftWidth: `width: ${windowWidth - rect.left}px`,
-        safeAreaTop: isDevtools || isAndroid ? `height: calc(var(--height) + ${top}px); padding-top: ${top}px` : ``
-      })
+        statusBarHeight: sysInfo.statusBarHeight,
+        navBarHeight: menuButtonRect ? menuButtonRect.height + (menuButtonRect.top - sysInfo.statusBarHeight) * 2 : 44,
+        menuButtonRect
+      });
     },
   },
   /**

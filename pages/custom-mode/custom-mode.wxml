@@ -1,3 +1,7 @@
+<cu-custom bgColor="bg-white" isBack="{{true}}">
+    <view slot="content">自定义模式</view>
+</cu-custom>
+
 <view class="custom-back-btn" bindtap="onBack">
   <van-icon name="arrow-left" size="32rpx" />
 </view>

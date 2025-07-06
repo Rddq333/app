@@ -1,4 +1,7 @@
-<navigation-bar title="App连接" back="true"></navigation-bar>
+<cu-custom bgColor="bg-white" isBack="{{true}}">
+    <view slot="content">设备连接</view>
+</cu-custom>
+
 <view class="page-content">
   <!-- 蓝牙开关 -->
   <view class="bluetooth-section">

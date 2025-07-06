@@ -1,6 +1,8 @@
 {
   "usingComponents": {
-    "navigation-bar": "/components/navigation-bar/navigation-bar"
+    "navigation-bar": "/components/navigation-bar/navigation-bar",
+    "cu-custom": "/colorui/components/cu-custom/cu-custom",
+    "van-icon": "@vant/weapp/icon/index"
   },
   "navigationBarTitleText": "智能洗浴机器人"
 }

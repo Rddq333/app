@@ -1,4 +1,7 @@
-<navigation-bar title="超音波水疗" back="true"></navigation-bar>
+<cu-custom bgColor="bg-white" isBack="{{true}}">
+    <view slot="content">红外理疗</view>
+</cu-custom>
+
 <view class="status-card">
   <view class="status-header">
     <van-icon name="waves" size="40px" color="#38bdf8" />
