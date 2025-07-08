@@ -62,7 +62,7 @@
       <view class="picker-value">{{params.areaMode}}</view>
     </picker>
   </view>
-  <image src="/images/infrared-area.png" class="area-img" mode="widthFix" />
+ 
 
   <view class="section-title">智能安全参数</view>
   <!-- 皮肤温度监测 -->

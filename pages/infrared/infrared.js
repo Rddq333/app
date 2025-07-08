@@ -1,6 +1,7 @@
 Page({
   data: {
     isRunning: false,
+    isPaused: false,
     loading: false,
     currentTemp: 25,
     targetTemp: 45,
@@ -92,6 +93,7 @@ Page({
   onShow() {
     this.loadSettings();
     this.checkRunningStatus();
+    this.restoreRunningState();
   },
 
   // 加载设置
@@ -101,6 +103,7 @@ Page({
       this.setData({
         ...settings,
         isRunning: wx.getStorageSync('infraredRunning') || false,
+        status: wx.getStorageSync('infraredStatus') || 'idle',
         showFocusArea: settings.irradiationMode === '局部重点加热'
       });
     }
@@ -198,9 +201,9 @@ Page({
     if (this.data.loading) return;
     if (!this.data.isRunning) {
       this.startInfrared();
-    } else if (this.data.isRunning && this.data.status !== 'paused') {
+    } else if (this.data.isRunning && !this.data.isPaused) {
       this.pauseInfrared();
-    } else if (this.data.status === 'paused') {
+    } else if (this.data.isPaused) {
       this.resumeInfrared();
     }
   },
@@ -222,6 +225,7 @@ Page({
     const duration = this.data.params.time || 60;
     this.setData({
       isRunning: true,
+      isPaused: false,
       status: 'running',
       startTime: Date.now(),
       runningTime: '00:00',
@@ -230,6 +234,7 @@ Page({
     });
     this.startTimer(duration * 60);
     wx.setStorageSync('infraredRunning', true);
+    wx.setStorageSync('infraredStatus', 'running');
     
     // 保存当前运行模式
     wx.setStorageSync('currentTherapyMode', {
@@ -247,7 +252,11 @@ Page({
       clearInterval(this.data.timer);
       this.setData({ timer: null });
     }
-    this.setData({ status: 'paused' });
+    this.setData({
+      status: 'paused',
+      isPaused: true
+    });
+    wx.setStorageSync('infraredStatus', 'paused');
     wx.showToast({ title: '已暂停', icon: 'none' });
   },
 
@@ -256,8 +265,10 @@ Page({
     const duration = this.data.params.time || 60;
     this.setData({
       status: 'running',
+      isPaused: false,
       startTime: Date.now() - this.data.elapsed * 1000
     });
+    wx.setStorageSync('infraredStatus', 'running');
     this.startTimer(duration * 60 - this.data.elapsed);
     wx.showToast({ title: '继续理疗', icon: 'success' });
   },
@@ -267,12 +278,14 @@ Page({
     if (this.data.timer) clearInterval(this.data.timer);
     this.setData({
       isRunning: false,
+      isPaused: false,
       status: 'idle',
       runningTime: '00:00',
       remainingTime: this.formatTime(this.data.params.time * 60 || 3600),
       elapsed: 0
     });
     wx.setStorageSync('infraredRunning', false);
+    wx.setStorageSync('infraredStatus', 'idle');
     
     // 清除当前运行模式
     wx.removeStorageSync('currentTherapyMode');
@@ -349,5 +362,24 @@ Page({
     const m = Math.floor(seconds / 60).toString().padStart(2, '0');
     const s = (seconds % 60).toString().padStart(2, '0');
     return `${m}:${s}`;
+  },
+
+  restoreRunningState() {
+    const currentTherapyMode = wx.getStorageSync('currentTherapyMode');
+    const isRunning = wx.getStorageSync('infraredRunning') || false;
+    const status = wx.getStorageSync('infraredStatus') || 'idle';
+    if (currentTherapyMode && currentTherapyMode.key === 'infrared' && isRunning) {
+      this.setData({
+        isRunning: true,
+        isPaused: status === 'paused',
+        status: status
+      });
+    } else {
+      this.setData({
+        isRunning: false,
+        isPaused: false,
+        status: 'idle'
+      });
+    }
   }
 }); 

@@ -53,11 +53,11 @@
       <!-- 按摩模式 -->
       <view class="param-row">
         <text class="param-label">按摩模式</text>
-        <checkbox-group value="{{params.massageModes}}" bindchange="onMassageModesChange">
+        <radio-group value="{{params.massageMode}}" bindchange="onMassageModeChange">
           <label wx:for="{{massageModeOptions}}" wx:key="item">
-            <checkbox value="{{item}}" />{{item}}
+            <radio value="{{item}}" checked="{{params.massageMode === item}}" />{{item}}
           </label>
-        </checkbox-group>
+        </radio-group>
       </view>
 
       <!-- 持续时间 -->
@@ -125,7 +125,7 @@
       <van-cell title="剩余时间" value="{{remainingTime}}" />
       <van-cell title="水温" value="{{params.waterTemp}}℃" />
       <van-cell title="水压" value="{{params.waterPressure}}" />
-      <van-cell title="按摩模式" value="{{params.massageModes.join(', ')}}" />
+      <van-cell title="按摩模式" value="{{params.massageMode}}" />
       <van-cell title="当前状态" value="{{therapyStatus === 'running' ? '运行中' : (therapyStatus === 'paused' ? '已暂停' : '已停止')}}" />
     </van-cell-group>
   </view>

@@ -91,6 +91,7 @@ Page({
    */
   onShow() {
     this.checkRunningStatus();
+    this.restoreRunningState();
   },
 
   /**
@@ -251,9 +252,12 @@ Page({
       startTime: Date.now(),
       elapsedTime: 0,
       runningTime: '00:00',
-      remainingTime: this.formatTime(30 * 60) // 30分钟默认时长
+      remainingTime: this.formatTime(30 * 60)
     });
-
+    wx.setStorageSync('musicTherapyRunning', true);
+    wx.setStorageSync('musicTherapyPaused', false);
+    wx.setStorageSync('musicTherapyStatus', '播放中');
+    
     // 模拟启动过程
     setTimeout(() => {
       this.setData({ loading: false });
@@ -276,6 +280,8 @@ Page({
       isPaused: true,
       playStatus: '已暂停'
     });
+    wx.setStorageSync('musicTherapyPaused', true);
+    wx.setStorageSync('musicTherapyStatus', '已暂停');
     this.clearTimer();
     wx.showToast({ title: '已暂停', icon: 'none' });
   },
@@ -286,6 +292,8 @@ Page({
       isPaused: false,
       playStatus: '播放中'
     });
+    wx.setStorageSync('musicTherapyPaused', false);
+    wx.setStorageSync('musicTherapyStatus', '播放中');
     this.startTimer();
     wx.showToast({ title: '继续理疗', icon: 'success' });
   },
@@ -297,8 +305,11 @@ Page({
       isPaused: false,
       playStatus: '已停止',
       runningTime: '00:00',
-      remainingTime: this.formatTime(30 * 60) // 30分钟默认时长
+      remainingTime: this.formatTime(30 * 60)
     });
+    wx.setStorageSync('musicTherapyRunning', false);
+    wx.setStorageSync('musicTherapyPaused', false);
+    wx.setStorageSync('musicTherapyStatus', '已停止');
     this.clearTimer();
     
     // 清除当前运行模式
@@ -377,5 +388,25 @@ Page({
       deviceConnected: hasConnectedDevice,
       deviceStatus: hasConnectedDevice ? (deviceRunning ? '运行中' : '已连接') : '未连接'
     });
+  },
+
+  restoreRunningState() {
+    const currentTherapyMode = wx.getStorageSync('currentTherapyMode');
+    const isRunning = wx.getStorageSync('musicTherapyRunning') || false;
+    const isPaused = wx.getStorageSync('musicTherapyPaused') || false;
+    const playStatus = wx.getStorageSync('musicTherapyStatus') || '待启动';
+    if (currentTherapyMode && currentTherapyMode.key === 'musicTherapy' && isRunning) {
+      this.setData({
+        isRunning: true,
+        isPaused: isPaused,
+        playStatus: playStatus
+      });
+    } else {
+      this.setData({
+        isRunning: false,
+        isPaused: false,
+        playStatus: '待启动'
+      });
+    }
   }
 });

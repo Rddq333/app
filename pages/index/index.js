@@ -292,8 +292,13 @@ Page({
         wx.navigateTo({ url: '/pages/music-therapy/music-therapy' });
         break;
       case 'custom':
-        // 自定义模式 - 显示功能选择
-        this.showCustomModeSelection();
+        // 自定义模式 - 判断是否已有配置
+        const modeConfigs = wx.getStorageSync('customModeConfigs') || [];
+        if (modeConfigs.length > 0) {
+          wx.navigateTo({ url: '/pages/custom-mode/custom-mode' });
+        } else {
+          this.showCustomModeSelection();
+        }
         break;
       default:
         wx.navigateTo({ url: '/pages/monitor/monitor' });

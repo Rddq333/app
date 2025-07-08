@@ -44,6 +44,7 @@ Page({
   onShow() {
     this.loadSettings();
     this.checkRunningStatus();
+    this.restoreRunningState();
   },
 
   // 加载设置
@@ -133,6 +134,8 @@ Page({
     });
     this.startTimer(duration * 60);
     wx.setStorageSync('moxibustionRunning', true);
+    wx.setStorageSync('moxibustionPaused', false);
+    wx.setStorageSync('moxibustionStatus', 'running');
     
     // 保存当前运行模式
     wx.setStorageSync('currentTherapyMode', {
@@ -153,6 +156,8 @@ Page({
       status: 'paused',
       isPaused: true
     });
+    wx.setStorageSync('moxibustionPaused', true);
+    wx.setStorageSync('moxibustionStatus', 'paused');
     wx.showToast({ title: '已暂停', icon: 'none' });
   },
   // 继续
@@ -163,6 +168,8 @@ Page({
       isPaused: false,
       startTime: Date.now() - this.data.elapsed * 1000
     });
+    wx.setStorageSync('moxibustionPaused', false);
+    wx.setStorageSync('moxibustionStatus', 'running');
     this.startTimer(duration * 60 - this.data.elapsed);
     wx.showToast({ title: '继续艾灸', icon: 'success' });
   },
@@ -178,6 +185,8 @@ Page({
       elapsed: 0
     });
     wx.setStorageSync('moxibustionRunning', false);
+    wx.setStorageSync('moxibustionPaused', false);
+    wx.setStorageSync('moxibustionStatus', 'idle');
     
     // 清除当前运行模式
     wx.removeStorageSync('currentTherapyMode');
@@ -261,5 +270,25 @@ Page({
     const deviceConnected = wx.getStorageSync('deviceConnected') || false;
     const deviceStatus = deviceConnected ? '运行正常' : '未连接';
     this.setData({ deviceConnected, deviceStatus });
+  },
+
+  restoreRunningState() {
+    const currentTherapyMode = wx.getStorageSync('currentTherapyMode');
+    const isRunning = wx.getStorageSync('moxibustionRunning') || false;
+    const isPaused = wx.getStorageSync('moxibustionPaused') || false;
+    const status = wx.getStorageSync('moxibustionStatus') || 'idle';
+    if (currentTherapyMode && currentTherapyMode.key === 'moxibustion' && isRunning) {
+      this.setData({
+        isRunning: true,
+        isPaused: isPaused,
+        status: status
+      });
+    } else {
+      this.setData({
+        isRunning: false,
+        isPaused: false,
+        status: 'idle'
+      });
+    }
   }
 }); 

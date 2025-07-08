@@ -444,5 +444,23 @@ Page({
 
   onBack() {
     wx.navigateBack();
+  },
+
+  // 重新选择模式
+  onReselectModes() {
+    wx.showModal({
+      title: '重新选择模式',
+      content: '确定要重新选择理疗模式吗？当前配置将被清空。',
+      confirmText: '确定',
+      cancelText: '取消',
+      success: (res) => {
+        if (res.confirm) {
+          // 清空当前配置
+          wx.removeStorageSync('customModeConfigs');
+          // 跳转回首页
+          wx.reLaunch({ url: '/pages/index/index' });
+        }
+      }
+    });
   }
 }); 

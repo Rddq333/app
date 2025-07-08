@@ -100,6 +100,7 @@ Page({
    */
   onShow() {
     this.checkRunningStatus();
+    this.restoreRunningState();
   },
 
   /**
@@ -260,7 +261,10 @@ Page({
       runningTime: '00:00',
       remainingTime: this.formatTime(this.data.duration * 60)
     });
-
+    wx.setStorageSync('aromatherapyRunning', true);
+    wx.setStorageSync('aromatherapyPaused', false);
+    wx.setStorageSync('aromatherapyStatus', '运行中');
+    
     // 模拟启动过程
     setTimeout(() => {
       this.setData({ loading: false });
@@ -283,6 +287,8 @@ Page({
       isPaused: true,
       diffusionStatus: '已暂停'
     });
+    wx.setStorageSync('aromatherapyPaused', true);
+    wx.setStorageSync('aromatherapyStatus', '已暂停');
     this.clearTimer();
     wx.showToast({ title: '已暂停', icon: 'none' });
   },
@@ -293,6 +299,8 @@ Page({
       isPaused: false,
       diffusionStatus: '运行中'
     });
+    wx.setStorageSync('aromatherapyPaused', false);
+    wx.setStorageSync('aromatherapyStatus', '运行中');
     this.startTimer();
     wx.showToast({ title: '继续理疗', icon: 'success' });
   },
@@ -306,6 +314,9 @@ Page({
       runningTime: '00:00',
       remainingTime: this.formatTime(this.data.duration * 60)
     });
+    wx.setStorageSync('aromatherapyRunning', false);
+    wx.setStorageSync('aromatherapyPaused', false);
+    wx.setStorageSync('aromatherapyStatus', '已停止');
     this.clearTimer();
     
     // 清除当前运行模式
@@ -358,5 +369,25 @@ Page({
       deviceConnected: hasConnectedDevice,
       deviceStatus: hasConnectedDevice ? (deviceRunning ? '运行中' : '已连接') : '未连接'
     });
+  },
+
+  restoreRunningState() {
+    const currentTherapyMode = wx.getStorageSync('currentTherapyMode');
+    const isRunning = wx.getStorageSync('aromatherapyRunning') || false;
+    const isPaused = wx.getStorageSync('aromatherapyPaused') || false;
+    const diffusionStatus = wx.getStorageSync('aromatherapyStatus') || '待启动';
+    if (currentTherapyMode && currentTherapyMode.key === 'aromatherapy' && isRunning) {
+      this.setData({
+        isRunning: true,
+        isPaused: isPaused,
+        diffusionStatus: diffusionStatus
+      });
+    } else {
+      this.setData({
+        isRunning: false,
+        isPaused: false,
+        diffusionStatus: '待启动'
+      });
+    }
   }
 });

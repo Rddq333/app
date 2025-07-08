@@ -2,13 +2,19 @@
     <view slot="content">自定义模式</view>
 </cu-custom>
 
-<view class="custom-back-btn" bindtap="onBack">
-  <van-icon name="arrow-left" size="32rpx" />
-</view>
 
 <view class="custom-header">
   <view class="custom-title">自定义模式配置</view>
   <view class="custom-subtitle">组合功能：{{modeConfigs.length}}个模式</view>
+  <van-button 
+    wx:if="{{modeConfigs.length > 0}}"
+    type="default" 
+    size="small" 
+    bind:tap="onReselectModes"
+    style="margin-top: 16rpx;"
+  >
+    重新选择模式
+  </van-button>
 </view>
 
 <scroll-view class="mode-tab-scroll" scroll-x>
@@ -207,9 +213,19 @@
 
 <!-- 提示信息 -->
 <view class="tip-info" wx:if="{{!isRunning && modeConfigs.length === 0}}">
-  <van-cell-group>
-    <van-cell title="提示" value="请先选择理疗模式" />
-  </van-cell-group>
+  <view class="empty-state">
+    <van-icon name="info-o" size="80rpx" color="#999" />
+    <view class="empty-text">您还没有选择任何理疗模式</view>
+    <view class="empty-desc">请点击下方按钮开始选择您需要的理疗模式</view>
+    <van-button 
+      type="primary" 
+      size="large" 
+      bind:tap="onReselectModes"
+      style="margin-top: 40rpx;"
+    >
+      选择理疗模式
+    </van-button>
+  </view>
 </view>
 
 <!-- 控制按钮 -->

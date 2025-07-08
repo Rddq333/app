@@ -71,6 +71,7 @@ Page({
   onShow() {
     this.loadSettings();
     this.checkRunningStatus();
+    this.restoreRunningState();
   },
 
   // 加载设置
@@ -212,6 +213,8 @@ Page({
     });
     this.startTimer(duration * 60);
     wx.setStorageSync('herbalBathRunning', true);
+    wx.setStorageSync('herbalBathPaused', false);
+    wx.setStorageSync('herbalBathStatus', 'running');
     
     // 保存当前运行模式
     wx.setStorageSync('currentTherapyMode', {
@@ -232,6 +235,8 @@ Page({
       status: 'paused',
       isPaused: true
     });
+    wx.setStorageSync('herbalBathPaused', true);
+    wx.setStorageSync('herbalBathStatus', 'paused');
     wx.showToast({ title: '已暂停', icon: 'none' });
   },
 
@@ -242,6 +247,8 @@ Page({
       isPaused: false,
       startTime: Date.now() - this.data.elapsed * 1000
     });
+    wx.setStorageSync('herbalBathPaused', false);
+    wx.setStorageSync('herbalBathStatus', 'running');
     this.startTimer(duration * 60 - this.data.elapsed);
     wx.showToast({ title: '继续药浴', icon: 'success' });
   },
@@ -257,6 +264,8 @@ Page({
       elapsed: 0
     });
     wx.setStorageSync('herbalBathRunning', false);
+    wx.setStorageSync('herbalBathPaused', false);
+    wx.setStorageSync('herbalBathStatus', 'idle');
     
     // 清除当前运行模式
     wx.removeStorageSync('currentTherapyMode');
@@ -306,5 +315,25 @@ Page({
       deviceConnected: hasConnectedDevice,
       deviceStatus: hasConnectedDevice ? (deviceRunning ? '运行中' : '已连接') : '未连接'
     });
+  },
+
+  restoreRunningState() {
+    const currentTherapyMode = wx.getStorageSync('currentTherapyMode');
+    const isRunning = wx.getStorageSync('herbalBathRunning') || false;
+    const isPaused = wx.getStorageSync('herbalBathPaused') || false;
+    const status = wx.getStorageSync('herbalBathStatus') || 'idle';
+    if (currentTherapyMode && currentTherapyMode.key === 'herbalBath' && isRunning) {
+      this.setData({
+        isRunning: true,
+        isPaused: isPaused,
+        status: status
+      });
+    } else {
+      this.setData({
+        isRunning: false,
+        isPaused: false,
+        status: 'idle'
+      });
+    }
   }
 })

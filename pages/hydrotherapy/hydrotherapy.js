@@ -364,8 +364,8 @@ Page({
     this.setData({ 'params.waterPressure': e.detail.value });
   },
   // 按摩模式
-  onMassageModesChange(e) {
-    this.setData({ 'params.massageModes': e.detail.value });
+  onMassageModeChange(e) {
+    this.setData({ 'params.massageMode': e.detail.value });
   },
   // 持续时间
   onDurationChange(e) {
