@@ -1,5 +1,5 @@
 <cu-custom bgColor="bg-white" isBack="{{true}}">
-    <view slot="content">红外理疗</view>
+    <view slot="content">超音波水疗</view>
 </cu-custom>
 
 <view class="status-card">
@@ -23,14 +23,13 @@
   </van-cell-group>
 </view>
 
-<view class="page-content">
+
   <view wx:if="{{loading}}" class="loading-container">
     <view class="loading">加载中...</view>
   </view>
-  <view class="card">
-    <view class="section-title">水疗设置</view>
+  
     <view class="hydrotherapy-container">
-      <view class="section-title">基础参数</view>
+      <view class="section-title">基础水疗参数</view>
       <!-- 水温 -->
       <view class="param-row">
         <text class="param-label">水温</text>
@@ -79,8 +78,7 @@
         </checkbox-group>
       </view>
 
-      <!-- 专业参数直接展示 -->
-      <view class="section-title">专业参数</view>
+      <view class="section-title">专业水疗参数</view>
       <!-- 频率 -->
       <view class="param-row">
         <text class="param-label">频率</text>
@@ -93,7 +91,7 @@
         <slider min="0.1" max="3.0" step="0.1" value="{{params.intensity}}" bindchange="onIntensityChange" show-value />
         <text class="param-value">{{params.intensity}} W/cm²</text>
       </view>
-      <!-- 模式 -->
+      <!-- 超声模式 -->
       <view class="param-row">
         <text class="param-label">超声模式</text>
         <radio-group bindchange="onTherapyModeChange">
@@ -103,8 +101,8 @@
         </radio-group>
       </view>
 
-      <!-- 增强体验参数 -->
-      <view class="section-title">增强体验</view>
+      <view class="section-title">增强体验参数</view>
+      <!-- 水流按摩 -->
       <view class="param-row">
         <text class="param-label">水流按摩</text>
         <radio-group bindchange="onFlowMassageChange">
@@ -113,16 +111,14 @@
           </label>
         </radio-group>
       </view>
+      <!-- 气泡量 -->
       <view class="param-row">
         <text class="param-label">气泡量</text>
         <slider min="0" max="100" step="1" value="{{params.bubbleAmount}}" bindchange="onBubbleAmountChange" show-value />
         <text class="param-value">{{params.bubbleAmount}}%</text>
       </view>
 
-
-    </view>
-  </view>
-  <view class="config-card" wx:if="{{isRunning}}">
+      <view class="config-card" wx:if="{{isRunning}}">
     <view class="section-title">运行信息</view>
     <van-cell-group>
       <van-cell title="运行时间" value="{{runningTime}}" />
@@ -156,4 +152,6 @@
       结束
     </van-button>
   </view>
-</view> 
+    </view>
+
+ 

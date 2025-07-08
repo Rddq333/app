@@ -84,6 +84,17 @@
     </view>
   </view>
 
+  <!-- 人体红外温度图子系统 -->
+  <view class="monitor-card">
+    <view class="card-header">
+      <van-icon name="fire" size="24px" color="#f59e42" />
+      <text class="card-title">人体红外温度图</text>
+    </view>
+    <view class="body-infrared-img-container">
+      <image src="/images/body.gif" mode="widthFix" class="body-infrared-img" />
+    </view>
+  </view>
+
   <!-- 健康监测子系统 -->
   <view class="monitor-card">
     <view class="card-header">
