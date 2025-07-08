@@ -94,6 +94,24 @@ Page({
     this.loadSettings();
     this.checkRunningStatus();
     this.restoreRunningState();
+    // 实时刷新运行时间
+    const currentTherapyMode = wx.getStorageSync('currentTherapyMode');
+    const isRunning = wx.getStorageSync('infraredRunning') || false;
+    const status = wx.getStorageSync('infraredStatus') || 'idle';
+    if (currentTherapyMode && currentTherapyMode.key === 'infrared' && isRunning && status === 'running') {
+      // 恢复计时
+      const startTime = new Date(currentTherapyMode.startTime).getTime();
+      const totalSeconds = (this.data.params.time || 60) * 60;
+      this.setData({ startTime });
+      this.startTimer(totalSeconds);
+    }
+  },
+
+  onHide() {
+    if (this.data.timer) {
+      clearInterval(this.data.timer);
+      this.setData({ timer: null });
+    }
   },
 
   // 加载设置

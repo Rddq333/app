@@ -24,9 +24,7 @@
 </view>
 
 
-  <view wx:if="{{loading}}" class="loading-container">
-    <view class="loading">加载中...</view>
-  </view>
+  
   
     <view class="hydrotherapy-container">
       <view class="section-title">基础水疗参数</view>

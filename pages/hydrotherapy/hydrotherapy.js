@@ -57,6 +57,7 @@ Page({
   onUnload() {
     if (this.data.timer) {
       clearInterval(this.data.timer);
+      this.setData({ timer: null });
     }
   },
 
@@ -64,6 +65,17 @@ Page({
     console.log('水疗页面显示');
     this.loadSettings();
     this.checkRunningStatus();
+    this.restoreRunningState && this.restoreRunningState();
+    // 实时刷新运行时间
+    const currentTherapyMode = wx.getStorageSync('currentTherapyMode');
+    const isRunning = wx.getStorageSync('hydrotherapyRunning') || false;
+    const status = this.data.therapyStatus || 'idle';
+    if (currentTherapyMode && currentTherapyMode.key === 'hydrotherapy' && isRunning && status === 'running') {
+      const startTime = new Date(currentTherapyMode.startTime).getTime();
+      const totalSeconds = (this.data.params.duration || 30) * 60;
+      this.setData({ startTime });
+      this.startTimer(totalSeconds);
+    }
   },
 
   onReady() {
@@ -72,30 +84,13 @@ Page({
 
   onHide() {
     console.log('水疗页面隐藏');
-  },
-
-  initPage() {
-    try {
-      // 初始化页面数据
-      this.setData({
-        loading: false
-      });
-      
-      // 测试页面是否正常加载
-      console.log('水疗页面初始化成功');
-      wx.showToast({
-        title: '页面加载成功',
-        icon: 'success',
-        duration: 1000
-      });
-    } catch (error) {
-      console.error('页面初始化失败:', error);
-      wx.showToast({
-        title: '页面加载失败',
-        icon: 'error'
-      });
+    if (this.data.timer) {
+      clearInterval(this.data.timer);
+      this.setData({ timer: null });
     }
   },
+
+  
 
   // 加载设置
   loadSettings() {

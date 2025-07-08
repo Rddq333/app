@@ -45,6 +45,23 @@ Page({
     this.loadSettings();
     this.checkRunningStatus();
     this.restoreRunningState();
+    // 实时刷新运行时间
+    const currentTherapyMode = wx.getStorageSync('currentTherapyMode');
+    const isRunning = wx.getStorageSync('moxibustionRunning') || false;
+    const status = this.data.status || 'idle';
+    if (currentTherapyMode && currentTherapyMode.key === 'moxibustion' && isRunning && status === 'running') {
+      const startTime = new Date(currentTherapyMode.startTime).getTime();
+      const totalSeconds = (this.data.params.time || 30) * 60;
+      this.setData({ startTime });
+      this.startTimer(totalSeconds);
+    }
+  },
+
+  onHide() {
+    if (this.data.timer) {
+      clearInterval(this.data.timer);
+      this.setData({ timer: null });
+    }
   },
 
   // 加载设置

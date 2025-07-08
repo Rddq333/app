@@ -55,6 +55,7 @@ Page({
   onUnload() {
     if (this.data.timer) {
       clearInterval(this.data.timer);
+      this.setData({ timer: null });
     }
   },
 
@@ -72,6 +73,16 @@ Page({
     this.loadSettings();
     this.checkRunningStatus();
     this.restoreRunningState();
+    // 实时刷新运行时间
+    const currentTherapyMode = wx.getStorageSync('currentTherapyMode');
+    const isRunning = wx.getStorageSync('herbalBathRunning') || false;
+    const status = this.data.status || 'idle';
+    if (currentTherapyMode && currentTherapyMode.key === 'herbalBath' && isRunning && status === 'running') {
+      const startTime = new Date(currentTherapyMode.startTime).getTime();
+      const totalSeconds = (this.data.params.soakTime || 30) * 60;
+      this.setData({ startTime });
+      this.startTimer(totalSeconds);
+    }
   },
 
   // 加载设置
@@ -103,7 +114,10 @@ Page({
    * 生命周期函数--监听页面隐藏
    */
   onHide() {
-
+    if (this.data.timer) {
+      clearInterval(this.data.timer);
+      this.setData({ timer: null });
+    }
   },
 
   /**

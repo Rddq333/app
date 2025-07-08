@@ -101,20 +101,37 @@ Page({
   onShow() {
     this.checkRunningStatus();
     this.restoreRunningState();
+    // 实时刷新运行时间
+    const currentTherapyMode = wx.getStorageSync('currentTherapyMode');
+    const isRunning = wx.getStorageSync('aromatherapyRunning') || false;
+    const status = this.data.diffusionStatus || '待启动';
+    if (currentTherapyMode && currentTherapyMode.key === 'aromatherapy' && isRunning && status === '运行中') {
+      const startTime = new Date(currentTherapyMode.startTime).getTime();
+      const totalSeconds = (this.data.duration || 30) * 60;
+      this.setData({ startTime });
+      this.startTimer(totalSeconds);
+    }
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
   onHide() {
-
+    if (this.data.timer) {
+      clearInterval(this.data.timer);
+      this.setData({ timer: null });
+    }
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
   onUnload() {
-    this.clearTimer();
+    this.clearTimer && this.clearTimer();
+    if (this.data.timer) {
+      clearInterval(this.data.timer);
+      this.setData({ timer: null });
+    }
   },
 
   /**
@@ -326,12 +343,12 @@ Page({
   },
 
   // 启动定时器
-  startTimer() {
+  startTimer(totalSeconds) {
     this.clearTimer();
     this.data.timer = setInterval(() => {
       const now = Date.now();
       const elapsed = Math.floor((now - this.data.startTime) / 1000);
-      const remaining = Math.max(0, this.data.duration * 60 - elapsed);
+      const remaining = Math.max(0, totalSeconds - elapsed);
       
       this.setData({
         elapsedTime: elapsed,

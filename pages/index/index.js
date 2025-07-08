@@ -89,6 +89,12 @@ Page({
     this.checkDeviceStatus();
   },
 
+  onHide() {
+  },
+
+  onUnload() {
+  },
+
   // 清理无效的理疗模式状态
   cleanupInvalidTherapyMode() {
     const deviceRunning = wx.getStorageSync('deviceRunning') || false;
@@ -434,5 +440,5 @@ Page({
   },
   goToAppConnect() {
     wx.navigateTo({ url: '/pages/appconnect/appconnect' });
-  }
+  },
 });
